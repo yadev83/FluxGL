@@ -11,6 +11,12 @@
             }
         },
         {
+            "label": "build release",
+            "type": "shell",
+            "command": "scripts/build.sh Release",
+            "group": "build"
+        },
+        {
             "label": "clean",
             "type": "shell",
             "command": "scripts/clean.sh",

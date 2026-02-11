@@ -1,5 +1,3 @@
 #pragma once
 
-namespace fluxgl {
-    void fluxgl_init();
-}
+#include "core/error.h"

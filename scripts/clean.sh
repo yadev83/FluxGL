@@ -5,9 +5,11 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$SCRIPT_DIR/.."
 # dossier build
-BUILD_DIR="$ROOT_DIR/build"
+DEBUG_BUILD_DIR="$ROOT_DIR/build/Debug"
+RELEASE_BUILD_DIR="$ROOT_DIR/build/Release"
 
 # Remove the build directory
 echo "🚮 Cleaning build artifacts..."
-cmake --build "$BUILD_DIR" --target clean || true
+cmake --build "$DEBUG_BUILD_DIR" --target clean || true
+cmake --build "$RELEASE_BUILD_DIR" --target clean || true
 echo "✅ Clean complete!"
