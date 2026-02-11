@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-02-11
+
+### Fixed
+- Fixed a bug that caused the program to crash on startup
+
 ## [0.1.0] - 2026-02-11
 
 Initial development release. Contains the basics needed to build/run the library on Windows.

@@ -11,7 +11,7 @@ namespace fluxgl {
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
         mWindow = glfwCreateWindow(width, height, title, nullptr, nullptr);
-        if(mWindow) {
+        if(!mWindow) {
             glfwTerminate();
             throw Error{ErrorCode::WindowCreationFailed, "Failed to create GLFW window"};
         }
