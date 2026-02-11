@@ -1,0 +1,21 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.1.0] - 2026-02-11
+
+Initial development release. Contains the basics needed to build/run the library on Windows.
+
+### Added
+- Readme Template
+- Changelog Template
+- Build/Config Scripts
+- vcpkg integration via git submodules
+- Basic window creation
+- Basic Error Handling and debug logging
+- Hello World example program

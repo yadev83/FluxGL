@@ -33,6 +33,8 @@ endif()
 
 # C++23 is required for std::excepted<T, E>
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Include dirs
 include_directories(
@@ -46,6 +48,7 @@ find_package(glm CONFIG REQUIRED)
 
 # Build the library
 add_library(FluxGL STATIC 
+    src/core/window.cpp
     src/core/error.cpp
 )
 target_link_libraries(FluxGL 

@@ -24,7 +24,7 @@ namespace fluxgl {
 
     // Error category for fluxgl
     const std::error_category& fluxgl_error_category() noexcept;
-    
+
     // Helper to create an error code from ErrorCode enum
     std::error_code make_error_code(ErrorCode code) noexcept;
 }
