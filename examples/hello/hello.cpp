@@ -14,14 +14,19 @@ int main() {
         
         // Shader + Hello World Meshes
         fluxgl::Shader shader = fluxgl::Shader::fromFiles("vertex.glsl", "fragment.glsl");
-        fluxgl::Mesh rectangle = fluxgl::Mesh::quad();
+
+        fluxgl::Mesh triangle = fluxgl::Mesh::fromVertices({ 
+            {.position = {-0.5f, -0.5f, 0.0f}, .color = {1.0f, 0.0f, 0.0f}}, 
+            {.position = {0.0f, 0.5f, 0.0f}, .color = {0.0f, 1.0f, 0.0f}},
+            {.position = {0.5f, -0.5f, 0.0f}, .color = {0.0f, 0.0f, 1.0f}}
+        });
 
         // Basic render loop
         while (!window.shouldClose()) {
             window.pollEvents();
 
-            fluxgl::Renderer::clear({0.2f, 0.3f, 0.3f, 1.0f}); 
-            fluxgl::Renderer::draw(rectangle, shader);
+            fluxgl::Renderer::clear({0.2f, 0.3f, 0.3f, 1.0f});
+            fluxgl::Renderer::draw(triangle, shader);
 
             window.swapBuffers();
         }
