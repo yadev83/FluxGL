@@ -37,7 +37,7 @@ namespace fluxgl {
         return ss.str();
     }
 
-    void Logger::init() {
+    void Logger::init(const std::string& logFileName) {
         {
             std::lock_guard<std::mutex> lock(g_mutex);
             namespace fs = std::filesystem;
@@ -50,7 +50,7 @@ namespace fluxgl {
                 }
             }
 
-            std::string logFilePath = (logDir / ("log-" + timestamp(true) + ".log")).string();
+            std::string logFilePath = (logDir / (logFileName + "-" + timestamp(true) + ".log")).string();
             
             g_file.open(logFilePath, std::ios::out | std::ios::app);
             if (!g_file.is_open()) {

@@ -13,7 +13,7 @@ namespace fluxgl {
 
     class Logger {
         public: 
-            static void init();
+            static void init(const std::string& logFileName = "log");
             static void shutdown();
 
             static void log(LogLevel level,
