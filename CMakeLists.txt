@@ -58,9 +58,10 @@ add_library(FluxGL STATIC
     src/core/window.cpp
     src/core/error.cpp
     src/core/log.cpp
+    src/utils/file.cpp
     src/graphics/mesh.cpp
     src/graphics/shader.cpp
-    src/utils/file.cpp
+    src/graphics/renderer.cpp
 )
 target_link_libraries(FluxGL 
     PUBLIC  glfw

@@ -47,18 +47,18 @@ namespace fluxgl {
         if(mEBO) glDeleteBuffers(1, &mEBO); 
         if(mVBO) glDeleteBuffers(1, &mVBO); 
         if(mVAO) glDeleteVertexArrays(1, &mVAO); 
-    } 
-    
-    void Mesh::draw() const { 
-        glBindVertexArray(mVAO); 
-        
-        if (mIndexCount > 0) { 
-            glDrawElements(GL_TRIANGLES, mIndexCount, GL_UNSIGNED_INT, 0); 
-        } else { 
-            glDrawArrays(GL_TRIANGLES, 0, mVerticesCount); 
-        } 
-        
-        glBindVertexArray(0); // Unbind after drawing
+    }
+
+    unsigned int Mesh::getVAO() const {
+        return mVAO;
+    }
+
+    size_t Mesh::getVerticesCount() const {
+        return mVerticesCount;
+    }
+
+    size_t Mesh::getIndexCount() const { 
+        return mIndexCount; 
     }
 
     Mesh Mesh::fromVertices(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {

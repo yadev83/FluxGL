@@ -16,7 +16,11 @@ namespace fluxgl {
         public:
             Mesh() = default;
             ~Mesh();
-            void draw() const;
+
+            // Getters
+            unsigned int getVAO() const;
+            size_t getVerticesCount() const;
+            size_t getIndexCount() const;
 
             // Builders
             static Mesh fromVertices(
