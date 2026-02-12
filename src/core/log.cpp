@@ -16,6 +16,7 @@ namespace fluxgl {
 
     const char* logLevelToString(LogLevel level) {
         switch (level) {
+            case LogLevel::Trace: return "TRACE";
             case LogLevel::Debug: return "DEBUG";
             case LogLevel::Info: return "INFO";
             case LogLevel::Warning: return "WARNING";
