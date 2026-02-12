@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.20)
 project(FluxGL)
 
 # Function definitions
-function(add_gui_executable name)
+function(add_gui_executable name path)
     cmake_parse_arguments(ARG "" "" "" ${ARGN})
-    add_executable(${name} ${ARG_UNPARSED_ARGUMENTS})
+    add_executable(${name} ${path})
 
     if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
         if(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -15,9 +15,9 @@ function(add_gui_executable name)
     endif()
 
     target_link_libraries(${name} PRIVATE FluxGL)
-    set_target_properties(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples)
+    set_target_properties(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples/${name})
     
-    list(GET ARG_UNPARSED_ARGUMENTS 0 first_source)
+    list(GET path 0 first_source)
     get_filename_component(source_dir ${first_source} PATH)
     add_custom_command(TARGET ${name} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
