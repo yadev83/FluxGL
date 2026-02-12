@@ -5,12 +5,18 @@
 
 int main() {
     try {
-        fluxgl::Logger::init("hello");
+        // Logger initialisation (based on build type)
+        if(FLUXGL_DEBUG) fluxgl::Logger::init(fluxgl::LogLevel::Trace);
+        else fluxgl::Logger::init(fluxgl::LogLevel::Info);
+
+        // Create a window
         fluxgl::Window window = fluxgl::Window(800, 600, "Hello FluxGL");
         
+        // Shader + Hello World Meshes
         fluxgl::Shader shader = fluxgl::Shader::fromFiles("vertex.glsl", "fragment.glsl");
         fluxgl::Mesh rectangle = fluxgl::Mesh::quad();
 
+        // Basic render loop
         while (!window.shouldClose()) {
             window.pollEvents();
 

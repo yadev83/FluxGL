@@ -5,6 +5,7 @@
 
 namespace fluxgl {
     enum class LogLevel {
+        Trace,
         Debug,
         Info,
         Warning,
@@ -12,8 +13,12 @@ namespace fluxgl {
     };
 
     class Logger {
+        private:
+            Logger() = default; ~Logger() = default;
+            static LogLevel s_logLevel;
+
         public: 
-            static void init(const std::string& logFileName = "log");
+            static void init(LogLevel logLevel = LogLevel::Info, const std::string& logFileName = "log");
             static void shutdown();
 
             static void log(LogLevel level,
@@ -22,6 +27,7 @@ namespace fluxgl {
     };
 }
 
+#define FLUXGL_LOG_TRACE(msg) ::fluxgl::Logger::log(::fluxgl::LogLevel::Trace, msg)
 #define FLUXGL_LOG_DEBUG(msg)   ::fluxgl::Logger::log(::fluxgl::LogLevel::Debug, msg)
 #define FLUXGL_LOG_INFO(msg)    ::fluxgl::Logger::log(::fluxgl::LogLevel::Info, msg)
 #define FLUXGL_LOG_WARNING(msg) ::fluxgl::Logger::log(::fluxgl::LogLevel::Warning, msg)

@@ -12,6 +12,7 @@
 namespace fluxgl {
     std::ofstream g_file;
     std::mutex g_mutex;
+    LogLevel Logger::s_logLevel = LogLevel::Info;
 
     const char* logLevelToString(LogLevel level) {
         switch (level) {
@@ -37,7 +38,9 @@ namespace fluxgl {
         return ss.str();
     }
 
-    void Logger::init(const std::string& logFileName) {
+    void Logger::init(LogLevel logLevel, const std::string& logFileName) {
+        s_logLevel = logLevel;
+
         {
             std::lock_guard<std::mutex> lock(g_mutex);
             namespace fs = std::filesystem;
@@ -58,8 +61,7 @@ namespace fluxgl {
             }
         }
 
-        log(LogLevel::Info, "Logger initialized");
-        if(FLUXGL_DEBUG) log(LogLevel::Debug, "Running in debug mode");
+        log(LogLevel::Info, "Logger initialized with log level: " + std::string(logLevelToString(s_logLevel)));
     }
 
     void Logger::shutdown() {
@@ -71,9 +73,7 @@ namespace fluxgl {
     }
 
     void Logger::log(LogLevel level, const std::string& message, const std::source_location& location) {
-        if(!FLUXGL_DEBUG && level == LogLevel::Debug) {
-            return; // Skip debug messages in release builds
-        }
+        if(level < s_logLevel) return; // Skip messages below the current log level
 
         // Build message
         std::ostringstream oss;
@@ -82,10 +82,10 @@ namespace fluxgl {
             << location.file_name() << ":" << location.line() << " - "
             << message;
 
-        if(FLUXGL_DEBUG) {
-            std::cerr << oss.str() << std::endl;
-        }
+        // Console output if available
+        if(FLUXGL_DEBUG) { std::cerr << oss.str() << std::endl;}
 
+        // Write to file
         std::lock_guard<std::mutex> lock(g_mutex);
         if (g_file.is_open()) {
             g_file << oss.str() << std::endl;
