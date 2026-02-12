@@ -1,19 +1,20 @@
 #include <fluxgl/graphics/mesh.h>
+#include <fluxgl/core/log.h>
 
 #include <glad/glad.h>
 
 namespace fluxgl {
     void Mesh::build(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {
-        mVerticesCount = vertices.size();
-        mIndexCount = indices.size();
+        m_verticesCount = vertices.size();
+        m_indexCount = indices.size();
 
         // VAO generation + Bind
-        glGenVertexArrays(1, &mVAO);
-        glBindVertexArray(mVAO);
+        glGenVertexArrays(1, &m_VAO);
+        glBindVertexArray(m_VAO);
 
         // VBO generation + Bind + Data
-        glGenBuffers(1, &mVBO); 
-        glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+        glGenBuffers(1, &m_VBO); 
+        glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
         glBufferData(
             GL_ARRAY_BUFFER, 
             vertices.size() * sizeof(Vertex),
@@ -29,8 +30,8 @@ namespace fluxgl {
 
         // EBO Generation + Bind + Data (if indices are provided) 
         if (!indices.empty()) { 
-            glGenBuffers(1, &mEBO); 
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO); 
+            glGenBuffers(1, &m_EBO); 
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO); 
             glBufferData(
                 GL_ELEMENT_ARRAY_BUFFER, 
                 indices.size() * sizeof(unsigned int), 
@@ -41,24 +42,25 @@ namespace fluxgl {
         
         // Unbind VAO (optional but good practice) 
         glBindVertexArray(0);
+        FLUXGL_LOG_DEBUG("Mesh built (VAO ID: " + std::to_string(m_VAO) + ")");
     }
     
     Mesh::~Mesh() { 
-        if(mEBO) glDeleteBuffers(1, &mEBO); 
-        if(mVBO) glDeleteBuffers(1, &mVBO); 
-        if(mVAO) glDeleteVertexArrays(1, &mVAO); 
+        if(m_EBO) glDeleteBuffers(1, &m_EBO); 
+        if(m_VBO) glDeleteBuffers(1, &m_VBO); 
+        if(m_VAO) glDeleteVertexArrays(1, &m_VAO); 
     }
 
     unsigned int Mesh::getVAO() const {
-        return mVAO;
+        return m_VAO;
     }
 
     size_t Mesh::getVerticesCount() const {
-        return mVerticesCount;
+        return m_verticesCount;
     }
 
     size_t Mesh::getIndexCount() const { 
-        return mIndexCount; 
+        return m_indexCount; 
     }
 
     Mesh Mesh::fromVertices(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {
@@ -80,8 +82,6 @@ namespace fluxgl {
             2, 3, 0
         };
         
-        Mesh mesh;
-        mesh.build(vertices, indices);
-        return mesh;
+        return Mesh::fromVertices(vertices, indices);
     }
 }

@@ -4,7 +4,7 @@
 
 namespace fluxgl {
     Window::Window(int width, int height, const char* title) {
-        FLUXGL_LOG_INFO("Creating GLFW window");
+        FLUXGL_LOG_INFO("Creating GLFW window...");
 
         if(!glfwInit()) {
             throw Error{ErrorCode::WindowCreationFailed, "Failed to initialize GLFW"};
@@ -13,15 +13,15 @@ namespace fluxgl {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        mWindow = glfwCreateWindow(width, height, title, nullptr, nullptr);
-        if(!mWindow) {
+        m_window = glfwCreateWindow(width, height, title, nullptr, nullptr);
+        if(!m_window) {
             glfwTerminate();
             throw Error{ErrorCode::WindowCreationFailed, "Failed to create GLFW window"};
         }
-        glfwMakeContextCurrent(mWindow);
+        glfwMakeContextCurrent(m_window);
 
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-            glfwDestroyWindow(mWindow);
+            glfwDestroyWindow(m_window);
             glfwTerminate();
             throw Error{ErrorCode::OpenGLError, "Failed to initialize GLAD"};
         }
@@ -31,12 +31,12 @@ namespace fluxgl {
     }
 
     Window::~Window() {
-        glfwDestroyWindow(mWindow);
+        glfwDestroyWindow(m_window);
         glfwTerminate();
     }
 
     void Window::swapBuffers() {
-        glfwSwapBuffers(mWindow);
+        glfwSwapBuffers(m_window);
     }
 
     void Window::pollEvents() {
@@ -44,6 +44,6 @@ namespace fluxgl {
     }
 
     bool Window::shouldClose() const {
-        return glfwWindowShouldClose(mWindow);
+        return glfwWindowShouldClose(m_window);
     }
 }

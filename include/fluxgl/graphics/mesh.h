@@ -6,10 +6,10 @@
 namespace fluxgl {
     class Mesh {
         private:
-            unsigned int mVAO = 0; 
-            unsigned int mVBO = 0;
-            unsigned int mEBO = 0;
-            size_t mVerticesCount, mIndexCount;
+            unsigned int m_VAO = 0; 
+            unsigned int m_VBO = 0;
+            unsigned int m_EBO = 0;
+            size_t m_verticesCount, m_indexCount;
 
             void build(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 

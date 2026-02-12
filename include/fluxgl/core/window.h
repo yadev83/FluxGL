@@ -8,7 +8,7 @@
 namespace fluxgl {
     class Window {
         private:
-            GLFWwindow* mWindow = nullptr;
+            GLFWwindow* m_window = nullptr;
 
         public:
             Window(int width, int height, const char* title);

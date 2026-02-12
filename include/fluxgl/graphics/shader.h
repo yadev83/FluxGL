@@ -6,7 +6,7 @@
 namespace fluxgl {
     class Shader {
         private:
-            unsigned int mID = 0;
+            unsigned int m_ID = 0;
             void compile(const std::string& vertexSrc, const std::string& fragmentSrc);
 
         public:
