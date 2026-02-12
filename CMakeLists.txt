@@ -62,6 +62,7 @@ add_library(FluxGL STATIC
     src/graphics/mesh.cpp
     src/graphics/shader.cpp
     src/graphics/renderer.cpp
+    src/graphics/texture.cpp
 )
 target_link_libraries(FluxGL 
     PUBLIC  glfw
