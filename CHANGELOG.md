@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Minimal logging system with debug, info, warning, and error levels
+
 ## [0.1.1] - 2026-02-11
 
 ### Fixed

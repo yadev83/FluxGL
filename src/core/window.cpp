@@ -1,8 +1,11 @@
 #include <fluxgl/core/window.h>
 #include <fluxgl/core/error.h>
+#include <fluxgl/core/log.h>
 
 namespace fluxgl {
     Window::Window(int width, int height, const char* title) {
+        FLUXGL_LOG_INFO("Creating GLFW window");
+
         if(!glfwInit()) {
             throw Error{ErrorCode::WindowCreationFailed, "Failed to initialize GLFW"};
         }
@@ -22,8 +25,9 @@ namespace fluxgl {
             glfwTerminate();
             throw Error{ErrorCode::OpenGLError, "Failed to initialize GLAD"};
         }
-
         glViewport(0, 0, width, height);
+
+        FLUXGL_LOG_INFO("GLFW window created successfully");
     }
 
     Window::~Window() {

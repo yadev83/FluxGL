@@ -1,25 +1,26 @@
 #include <fluxgl/fluxgl.h>
 #include <iostream>
+#include <sstream>
 
 int main() {
-    #if FLUXGL_DEBUG
-        std::cout << "Running in debug mode" << std::endl;
-    #endif
-
     try {
+        fluxgl::Logger::init();
+
         fluxgl::Window window = fluxgl::Window(800, 600, "Hello FluxGL");
         while (!window.shouldClose()) {
             window.pollEvents();
             window.swapBuffers();
         }
     } catch (const fluxgl::Error& error) {
-        std::cerr << "fluxGL error: " << error.code << " - " << error.message << std::endl;
+        std::stringstream oss;
+        oss << "Error: " << error.code << " - " << error.message;
+        FLUXGL_LOG_ERROR(oss.str());
         return 1;
     } catch (const std::exception& e) {
-        std::cerr << "std::exception: " << e.what() << std::endl;
+        FLUXGL_LOG_ERROR("std::exception: " + std::string(e.what()));
         return 1;
     } catch (...) {
-        std::cerr << "Unknown error occurred" << std::endl;
+        FLUXGL_LOG_ERROR("Unknown error occurred");
         return 1;
     }
 

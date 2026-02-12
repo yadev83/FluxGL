@@ -50,6 +50,7 @@ find_package(glm CONFIG REQUIRED)
 add_library(FluxGL STATIC 
     src/core/window.cpp
     src/core/error.cpp
+    src/core/log.cpp
 )
 target_link_libraries(FluxGL 
     PUBLIC  glfw
