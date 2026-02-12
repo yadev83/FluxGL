@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Minimal logging system with debug, info, warning, and error levels
 - Mesh class with vertex and index buffers
+- Shader class with vertex and fragment shaders
+- File reading system for assets (to string only for now)
 
 ## [0.1.1] - 2026-02-11
 

@@ -16,6 +16,13 @@ function(add_gui_executable name)
 
     target_link_libraries(${name} PRIVATE FluxGL)
     set_target_properties(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples)
+    
+    list(GET ARG_UNPARSED_ARGUMENTS 0 first_source)
+    get_filename_component(source_dir ${first_source} PATH)
+    add_custom_command(TARGET ${name} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/${source_dir}/assets $<TARGET_FILE_DIR:${name}>/assets
+    )
 endfunction()
 
 # Build type
@@ -52,6 +59,8 @@ add_library(FluxGL STATIC
     src/core/error.cpp
     src/core/log.cpp
     src/graphics/mesh.cpp
+    src/graphics/shader.cpp
+    src/utils/file.cpp
 )
 target_link_libraries(FluxGL 
     PUBLIC  glfw
@@ -60,4 +69,4 @@ target_link_libraries(FluxGL
 )
 
 # Build the examples
-add_gui_executable(hello examples/hello.cpp)
+add_gui_executable(hello examples/hello/hello.cpp)
