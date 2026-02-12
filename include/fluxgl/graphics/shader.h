@@ -13,6 +13,14 @@ namespace fluxgl {
             Shader() = default;
             ~Shader();
 
+            // Delete copy constructor and copy assignment operator to prevent copying 
+            Shader(const Shader&) = delete; 
+            Shader& operator=(const Shader&) = delete;
+
+            // Instead, allow move
+            Shader(Shader&& other) noexcept;
+            Shader& operator=(Shader&& other) noexcept;
+
             void bind() const;
             void unbind() const;
 

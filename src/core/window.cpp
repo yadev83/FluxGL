@@ -31,8 +31,13 @@ namespace fluxgl {
     }
 
     Window::~Window() {
-        glfwDestroyWindow(m_window);
-        glfwTerminate();
+        if(m_window) {
+            FLUXGL_LOG_INFO("Destroying GLFW window...");
+            glfwDestroyWindow(m_window);
+            glfwTerminate();
+        } else { 
+            FLUXGL_LOG_ERROR("Attempted to destroy window, but m_window is nullptr"); 
+        }
     }
 
     void Window::swapBuffers() {

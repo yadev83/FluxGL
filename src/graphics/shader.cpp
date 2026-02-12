@@ -51,7 +51,27 @@ namespace fluxgl {
     }
 
     Shader::~Shader() {
-        glDeleteProgram(m_ID);
+        if(m_ID) {
+            FLUXGL_LOG_DEBUG("Deleting shader program (ID: " + std::to_string(m_ID) + ")");
+            glDeleteProgram(m_ID);
+        }
+    }
+
+    Shader::Shader(Shader&& other) noexcept {
+        m_ID = other.m_ID; 
+        other.m_ID = 0; // Prevent deletion of the moved-from shader
+    }
+
+    Shader& Shader::operator=(Shader&& other) noexcept {
+        if (this != &other) {
+            if(m_ID) {
+                glDeleteProgram(m_ID);
+            }
+            
+            m_ID = other.m_ID;
+            other.m_ID = 0;
+        }
+        return *this;
     }
 
     void Shader::bind() const {

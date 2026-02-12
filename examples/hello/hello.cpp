@@ -13,7 +13,8 @@ int main() {
         fluxgl::Window window = fluxgl::Window(800, 600, "Hello FluxGL");
         
         // Shader + Hello World Meshes
-        fluxgl::Shader shader = fluxgl::Shader::fromFiles("vertex.glsl", "fragment.glsl");
+        fluxgl::Material material;
+        material.shader = fluxgl::Shader::fromFiles("vertex.glsl", "fragment.glsl");
 
         fluxgl::Mesh triangle = fluxgl::Mesh::fromVertices({ 
             {.position = {-0.5f, -0.5f, 0.0f}, .color = {1.0f, 0.0f, 0.0f}}, 
@@ -25,8 +26,8 @@ int main() {
         while (!window.shouldClose()) {
             window.pollEvents();
 
-            fluxgl::Renderer::clear({0.2f, 0.3f, 0.3f, 1.0f});
-            fluxgl::Renderer::draw(triangle, shader);
+            fluxgl::Renderer::clear({0.2f, 0.3f, 0.3f});
+            fluxgl::Renderer::draw(triangle, material);
 
             window.swapBuffers();
         }

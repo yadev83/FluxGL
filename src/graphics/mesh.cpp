@@ -26,9 +26,9 @@ namespace fluxgl {
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position)); 
         glEnableVertexAttribArray(1); 
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
-        glEnableVertexAttribArray(2); 
-        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 
         // EBO Generation + Bind + Data (if indices are provided) 
         if (!indices.empty()) { 
@@ -47,7 +47,8 @@ namespace fluxgl {
         FLUXGL_LOG_DEBUG("Mesh built (VAO ID: " + std::to_string(m_VAO) + ")");
     }
     
-    Mesh::~Mesh() { 
+    Mesh::~Mesh() {
+        FLUXGL_LOG_DEBUG("Destroying mesh (VAO ID: " + std::to_string(m_VAO) + ")");
         if(m_EBO) glDeleteBuffers(1, &m_EBO); 
         if(m_VBO) glDeleteBuffers(1, &m_VBO); 
         if(m_VAO) glDeleteVertexArrays(1, &m_VAO); 
@@ -73,10 +74,10 @@ namespace fluxgl {
 
     Mesh Mesh::quad() {
         std::vector<Vertex> vertices = {
-            {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f}},
-            {{0.5f, -0.5f, 0.0f}, {1.0f, 0.0f}},
-            {{0.5f, 0.5f, 0.0f}, {1.0f, 1.0f}},
-            {{-0.5f, 0.5f, 0.0f}, {0.0f, 1.0f}}
+            {{-0.5f, -0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
+            {{0.5f, -0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
+            {{0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
+            {{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
         };
         
         std::vector<unsigned int> indices = {

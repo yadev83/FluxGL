@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "shader.h"
+#include "material.h"
 #include "mesh.h"
 
 namespace fluxgl {
@@ -12,7 +12,7 @@ namespace fluxgl {
             ~Renderer() = default;
 
         public:
-            static void clear(const glm::vec4& color);
-            static void draw(const Mesh& mesh, const Shader& shader);
+            static void clear(const glm::vec3& color);
+            static void draw(const Mesh& mesh, const Material& material);
     };
 }

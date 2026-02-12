@@ -2,13 +2,13 @@
 #include <glad/glad.h>
 
 namespace fluxgl {
-    void Renderer::clear(const glm::vec4& color) {
-        glClearColor(color.r, color.g, color.b, color.a);
+    void Renderer::clear(const glm::vec3& color) {
+        glClearColor(color.r, color.g, color.b, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void Renderer::draw(const Mesh& mesh, const Shader& shader) {
-        shader.bind();
+    void Renderer::draw(const Mesh& mesh, const Material& material) {
+        material.shader.bind();
 
         unsigned int vao = mesh.getVAO();
         size_t indexCount = mesh.getIndexCount();
@@ -24,6 +24,6 @@ namespace fluxgl {
         }
         
         glBindVertexArray(0); // Unbind after drawing
-        shader.unbind();
+        material.shader.unbind();
     }
 }
