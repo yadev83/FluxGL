@@ -12,7 +12,9 @@ class TextureExample : public fluxgl::App {
     protected:
         void onInit() override {
             material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/texture.vert", "assets/shaders/texture.frag");
-            material.texture = fluxgl::Texture::loadFromFile("assets/textures/container.jpg");
+            material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
+            material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
+            
             quad = fluxgl::Mesh::quad();
         }
 
