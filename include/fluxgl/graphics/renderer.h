@@ -1,9 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
-
-#include "material.h"
-#include "mesh.h"
+#include <fluxgl/components/renderable.h>
 
 namespace fluxgl {
     class Renderer {
@@ -13,6 +11,6 @@ namespace fluxgl {
 
         public:
             static void clear(const glm::vec3& color = {0.1f, 0.1f, 0.1f});
-            static void draw(const Mesh& mesh, const Material& material);
+            static void draw(const Renderable& renderable);
     };
 }

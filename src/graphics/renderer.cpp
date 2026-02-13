@@ -8,7 +8,11 @@ namespace fluxgl {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void Renderer::draw(const Mesh& mesh, const Material& material) {
+    void Renderer::draw(const Renderable& renderable) {
+        const Material& material = renderable.material;
+        const Mesh& mesh = renderable.mesh;
+        const Transform& transform = renderable.transform;
+
         // Binding shader
         if(material.shader.isValid()) material.shader.bind();
 
@@ -56,6 +60,10 @@ namespace fluxgl {
         material.shader.setUniform("u_Metallic", material.metallic);
         material.shader.setUniform("u_Roughness", material.roughness);
         material.shader.setUniform("u_AmbientOcclusion", material.ambientOcclusion);
+
+        // Binding model matrix
+        glm::mat4 model = transform.getModelMatrix();
+        material.shader.setUniform("model", model);
 
         // DRAW CALL
         unsigned int vao = mesh.getVAO();

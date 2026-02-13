@@ -7,13 +7,12 @@ class HelloApp : public fluxgl::App {
     public: using fluxgl::App::App; // Inherit constructors
 
     private:
-        fluxgl::Mesh triangle;
-        fluxgl::Material material;
+        fluxgl::Renderable entity;
 
     protected:
         void onInit() override {
-            material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
-            triangle = fluxgl::Mesh::fromVertices({ 
+            entity.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
+            entity.mesh = fluxgl::Mesh::fromVertices({ 
                 {.position = {-0.5f, -0.5f, 0.0f}, .color = {1.0f, 0.0f, 0.0f}}, 
                 {.position = {0.0f, 0.5f, 0.0f}, .color = {0.0f, 1.0f, 0.0f}},
                 {.position = {0.5f, -0.5f, 0.0f}, .color = {0.0f, 0.0f, 1.0f}}
@@ -22,7 +21,7 @@ class HelloApp : public fluxgl::App {
 
         void onRender() override {
             fluxgl::Renderer::clear({0.2f, 0.3f, 0.3f});
-            fluxgl::Renderer::draw(triangle, material);
+            fluxgl::Renderer::draw(entity);
         }
 };
 

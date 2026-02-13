@@ -13,3 +13,6 @@
 #include "graphics/texture.h"
 #include "graphics/material.h"
 #include "graphics/renderer.h"
+
+#include "components/transform.h"
+#include "components/renderable.h"
