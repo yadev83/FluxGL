@@ -13,7 +13,7 @@ namespace fluxgl {
 
         glm::mat4 getModelMatrix() const {
             glm::mat4 t = glm::translate(glm::mat4(1.0f), position);
-            glm::mat4 r = glm::yawPitchRoll(rotation.y, rotation.x, rotation.z);
+            glm::mat4 r = glm::yawPitchRoll(glm::radians(rotation.y), glm::radians(rotation.x), glm::radians(rotation.z));
             glm::mat4 s = glm::scale(glm::mat4(1.0f), scale);
 
             return t * r * s;

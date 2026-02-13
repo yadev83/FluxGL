@@ -9,6 +9,7 @@ class TransformExample : public fluxgl::App {
 
     private:
         fluxgl::Renderable entity;
+        fluxgl::Camera camera;
 
     protected:
         void onInit() override {
@@ -19,12 +20,18 @@ class TransformExample : public fluxgl::App {
             entity.mesh = fluxgl::Mesh::quad();
 
             entity.transform.scale = {0.5f, 0.5f, 0.5f};
-            entity.transform.rotation = glm::vec3(0.0f, 0.0f, 45.0f);
+            entity.transform.rotation = glm::vec3(-55.0f, 0.0f, 0.0f);
+
+            camera.transform.position = {0.0f, 0.0f, 3.0f};
+        }
+
+        void onUpdate(float deltaTime) override {
+            entity.transform.rotation.z += 20.0f * deltaTime; // Rotate around Z-axis
         }
 
         void onRender() override {
             fluxgl::Renderer::clear();
-            fluxgl::Renderer::draw(entity);
+            fluxgl::Renderer::draw(entity, &camera);
         }
 };
 

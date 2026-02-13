@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Keep in mind : there is still a fair amount of coupling between shaders and renderer/materials. the API will evolve over time
 - Addded an "App" class to wrap the fluxgl functionnality (and updated examples to use this)
 - Added a "Transform" component, and a "Renderable" component to hold Transform/Mesh/Material and improve the Renderer pipeline
+- Added a "Camera" component to hold a Transform and build projection/view matrices
 
 ## [0.1.1] - 2026-02-11
 

@@ -16,3 +16,4 @@
 
 #include "components/transform.h"
 #include "components/renderable.h"
+#include "components/camera.h"
