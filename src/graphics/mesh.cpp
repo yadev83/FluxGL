@@ -48,10 +48,12 @@ namespace fluxgl {
     }
     
     Mesh::~Mesh() {
-        FLUXGL_LOG_DEBUG("Destroying mesh (VAO ID: " + std::to_string(m_VAO) + ")");
-        if(m_EBO) glDeleteBuffers(1, &m_EBO); 
-        if(m_VBO) glDeleteBuffers(1, &m_VBO); 
-        if(m_VAO) glDeleteVertexArrays(1, &m_VAO); 
+        if(m_EBO || m_VBO || m_VAO) {
+            FLUXGL_LOG_DEBUG("Destroying mesh (VAO ID: " + std::to_string(m_VAO) + ")");
+            if(m_EBO) glDeleteBuffers(1, &m_EBO); 
+            if(m_VBO) glDeleteBuffers(1, &m_VBO); 
+            if(m_VAO) glDeleteVertexArrays(1, &m_VAO); 
+        }
     }
 
     unsigned int Mesh::getVAO() const {
@@ -86,5 +88,41 @@ namespace fluxgl {
         };
         
         return Mesh::fromVertices(vertices, indices);
+    }
+
+    // MOVE-ONLY
+    Mesh::Mesh(Mesh&& other) noexcept {
+        m_VAO = other.m_VAO;
+        m_VBO = other.m_VBO;
+        m_EBO = other.m_EBO;
+        m_verticesCount = other.m_verticesCount;
+        m_indexCount = other.m_indexCount;
+
+        other.m_VAO = 0;
+        other.m_VBO = 0;
+        other.m_EBO = 0;
+        other.m_verticesCount = 0;
+        other.m_indexCount = 0;
+    }
+
+    Mesh& Mesh::operator=(Mesh&& other) noexcept {
+        if (this != &other) {
+            if(m_VAO) {
+                glDeleteVertexArrays(1, &m_VAO);
+            }
+            
+            m_VAO = other.m_VAO;
+            m_VBO = other.m_VBO;
+            m_EBO = other.m_EBO;
+            m_verticesCount = other.m_verticesCount;
+            m_indexCount = other.m_indexCount;
+
+            other.m_VAO = 0;
+            other.m_VBO = 0;
+            other.m_EBO = 0;
+            other.m_verticesCount = 0;
+            other.m_indexCount = 0;
+        }
+        return *this;
     }
 }

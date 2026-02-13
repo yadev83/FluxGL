@@ -28,5 +28,13 @@ namespace fluxgl {
                 const std::vector<unsigned int>& indices = {}
             );
             static Mesh quad();
+            
+            // MOVE-ONLY
+            // Delete copy constructor and copy assignment operator to prevent copying 
+            Mesh(const Mesh&) = delete; 
+            Mesh& operator=(const Mesh&) = delete;
+            // Instead, allow move
+            Mesh(Mesh&& other) noexcept;
+            Mesh& operator=(Mesh&& other) noexcept;
     };
 }
