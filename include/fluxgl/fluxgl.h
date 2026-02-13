@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/app.h"
 #include "core/window.h"
 #include "core/error.h"
 #include "core/log.h"

@@ -3,46 +3,32 @@
 
 #include <fluxgl/fluxgl.h>
 
-int main() {
-    try {
-        // Logger initialisation (based on build type)
-        if(FLUXGL_DEBUG) fluxgl::Logger::init(fluxgl::LogLevel::Trace);
-        else fluxgl::Logger::init(fluxgl::LogLevel::Info);
+class HelloApp : public fluxgl::App {
+    public: using fluxgl::App::App; // Inherit constructors
 
-        // Create a window
-        fluxgl::Window window = fluxgl::Window(800, 600, "Hello FluxGL");
-        
-        // Shader + Hello World Meshes
+    private:
+        fluxgl::Mesh triangle;
         fluxgl::Material material;
-        material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
 
-        fluxgl::Mesh triangle = fluxgl::Mesh::fromVertices({ 
-            {.position = {-0.5f, -0.5f, 0.0f}, .color = {1.0f, 0.0f, 0.0f}}, 
-            {.position = {0.0f, 0.5f, 0.0f}, .color = {0.0f, 1.0f, 0.0f}},
-            {.position = {0.5f, -0.5f, 0.0f}, .color = {0.0f, 0.0f, 1.0f}}
-        });
+    protected:
+        void onInit() override {
+            material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
+            triangle = fluxgl::Mesh::fromVertices({ 
+                {.position = {-0.5f, -0.5f, 0.0f}, .color = {1.0f, 0.0f, 0.0f}}, 
+                {.position = {0.0f, 0.5f, 0.0f}, .color = {0.0f, 1.0f, 0.0f}},
+                {.position = {0.5f, -0.5f, 0.0f}, .color = {0.0f, 0.0f, 1.0f}}
+            });
+        }
 
-        // Basic render loop
-        while (!window.shouldClose()) {
-            window.pollEvents();
-
+        void onRender() override {
             fluxgl::Renderer::clear({0.2f, 0.3f, 0.3f});
             fluxgl::Renderer::draw(triangle, material);
-
-            window.swapBuffers();
         }
-    } catch (const fluxgl::Error& error) {
-        std::stringstream oss;
-        oss << "Error: " << error.code << " - " << error.message;
-        FLUXGL_LOG_ERROR(oss.str());
-        return 1;
-    } catch (const std::exception& e) {
-        FLUXGL_LOG_ERROR("std::exception: " + std::string(e.what()));
-        return 1;
-    } catch (...) {
-        FLUXGL_LOG_ERROR("Unknown error occurred");
-        return 1;
-    }
+};
+
+int main() {
+    HelloApp app(800, 600, "Hello FluxGL");
+    app.run();
 
     return 0;
 }

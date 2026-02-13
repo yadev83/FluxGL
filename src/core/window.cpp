@@ -4,6 +4,14 @@
 
 namespace fluxgl {
     Window::Window(int width, int height, const char* title) {
+        // Logger initialisation (based on build type)
+        #if FLUXGL_DEBUG
+            fluxgl::Logger::init(fluxgl::LogLevel::Trace);
+        #else
+            fluxgl::Logger::init(fluxgl::LogLevel::Info);
+        #endif
+
+
         FLUXGL_LOG_INFO("Creating GLFW window...");
 
         if(!glfwInit()) {
