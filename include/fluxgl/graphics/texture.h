@@ -3,7 +3,7 @@
 namespace fluxgl {
     class Texture {
         private:
-            unsigned int m_ID;
+            unsigned int m_ID = 0;
             int m_width, m_height, m_channels;
 
             void load(const char *data, int width, int height, int channels);
@@ -14,7 +14,7 @@ namespace fluxgl {
 
             bool isValid() const { return m_ID != 0; }
             void bind(unsigned int slot = 0) const; 
-            void unbind() const; 
+            void unbind(unsigned int slot = 0) const; 
             
             inline int getWidth() const { return m_width; } 
             inline int getHeight() const { return m_height; }

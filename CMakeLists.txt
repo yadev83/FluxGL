@@ -55,6 +55,7 @@ find_package(glm CONFIG REQUIRED)
 
 # Build the library
 add_library(FluxGL STATIC 
+    src/core/app.cpp
     src/core/window.cpp
     src/core/error.cpp
     src/core/log.cpp

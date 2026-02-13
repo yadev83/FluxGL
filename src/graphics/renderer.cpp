@@ -25,7 +25,7 @@ namespace fluxgl {
         }
         
         glBindVertexArray(0); // Unbind after drawing
+        if(material.texture.isValid()) material.texture.unbind(0);
         if(material.shader.isValid()) material.shader.unbind();
-        if(material.texture.isValid()) material.texture.unbind();
     }
 }

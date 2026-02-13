@@ -38,6 +38,10 @@ namespace fluxgl {
 
     Texture::Texture(Texture&& other) noexcept {
         m_ID = other.m_ID; 
+        m_width = other.m_width;
+        m_height = other.m_height;
+        m_channels = other.m_channels;
+
         other.m_ID = 0; // Prevent deletion of the moved-from Texture
     }
 
@@ -48,6 +52,10 @@ namespace fluxgl {
             }
             
             m_ID = other.m_ID;
+            m_width = other.m_width;
+            m_height = other.m_height;
+            m_channels = other.m_channels;
+
             other.m_ID = 0;
         }
         return *this;
@@ -58,9 +66,8 @@ namespace fluxgl {
         glBindTexture(GL_TEXTURE_2D, m_ID);
     }
 
-    void Texture::unbind() const {
-        // TODO : Store current slot for this texture so we can unbind from the correct slot instead of always unbinding from slot 0
-        glActiveTexture(GL_TEXTURE0);
+    void Texture::unbind(unsigned int slot) const {
+        glActiveTexture(GL_TEXTURE0 + slot);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
