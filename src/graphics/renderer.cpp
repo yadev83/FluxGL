@@ -8,7 +8,8 @@ namespace fluxgl {
     }
 
     void Renderer::draw(const Mesh& mesh, const Material& material) {
-        material.shader.bind();
+        if(material.shader.isValid()) material.shader.bind();
+        if(material.texture.isValid()) material.texture.bind(0);
 
         unsigned int vao = mesh.getVAO();
         size_t indexCount = mesh.getIndexCount();
@@ -24,6 +25,7 @@ namespace fluxgl {
         }
         
         glBindVertexArray(0); // Unbind after drawing
-        material.shader.unbind();
+        if(material.shader.isValid()) material.shader.unbind();
+        if(material.texture.isValid()) material.texture.unbind();
     }
 }

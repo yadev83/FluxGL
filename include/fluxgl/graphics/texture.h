@@ -12,6 +12,7 @@ namespace fluxgl {
             Texture() = default;
             ~Texture();
 
+            bool isValid() const { return m_ID != 0; }
             void bind(unsigned int slot = 0) const; 
             void unbind() const; 
             
@@ -27,7 +28,7 @@ namespace fluxgl {
             Texture& operator=(Texture&& other) noexcept;
 
             // Builders
-            static Texture fromFile(const char *path);
-            static Texture fromMemory(const char *data, int width, int height, int channels); 
+            static Texture loadFromFile(const char *path);
+            static Texture loadFromMemory(const char *data, int width, int height, int channels); 
     };
 }

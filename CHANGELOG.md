@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Shader class with vertex and fragment shaders
 - File reading system for assets (to string only for now)
 - Renderer class for meshes with shaders while still decoupling stuff
+- Texture class for loading images as textures
+- Material struct used by a renderer to draw meshes (geometry) with a given material (shader, texture, color...)
+    - Keep in mind : there is still a fair amount of coupling between shaders and renderer/materials. the API will evolve over time
 
 ## [0.1.1] - 2026-02-11
 

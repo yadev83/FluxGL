@@ -12,7 +12,7 @@ namespace fluxgl {
             ~Renderer() = default;
 
         public:
-            static void clear(const glm::vec3& color);
+            static void clear(const glm::vec3& color = {0.1f, 0.1f, 0.1f});
             static void draw(const Mesh& mesh, const Material& material);
     };
 }

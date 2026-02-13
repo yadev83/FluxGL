@@ -98,14 +98,14 @@ namespace fluxgl {
         glUniformMatrix4fv(glGetUniformLocation(m_ID, name.c_str()), 1, GL_FALSE, &value[0][0]);
     }
 
-    Shader Shader::fromFiles(const std::string& vertexPath, const std::string& fragmentPath) {
+    Shader Shader::loadFromFiles(const std::string& vertexPath, const std::string& fragmentPath) {
         FLUXGL_LOG_DEBUG("Loading shader from files: " + vertexPath + ", " + fragmentPath);
-        std::string vertexSrc = readFileToString("assets/shaders/" + vertexPath);
-        std::string fragmentSrc = readFileToString("assets/shaders/" + fragmentPath);
-        return Shader::fromSource(vertexSrc, fragmentSrc);
+        std::string vertexSrc = readFileToString(vertexPath);
+        std::string fragmentSrc = readFileToString(fragmentPath);
+        return Shader::loadFromSource(vertexSrc, fragmentSrc);
     }
 
-    Shader Shader::fromSource(const std::string& vertexSrc, const std::string& fragmentSrc) {
+    Shader Shader::loadFromSource(const std::string& vertexSrc, const std::string& fragmentSrc) {
         Shader shader; 
         shader.compile(vertexSrc, fragmentSrc); 
         return shader; 

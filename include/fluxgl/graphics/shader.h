@@ -21,6 +21,7 @@ namespace fluxgl {
             Shader(Shader&& other) noexcept;
             Shader& operator=(Shader&& other) noexcept;
 
+            bool isValid() const { return m_ID != 0; }
             void bind() const;
             void unbind() const;
 
@@ -31,7 +32,7 @@ namespace fluxgl {
             void setUniform(const std::string& name, const glm::mat4& value) const;
 
             // builders
-            static Shader fromFiles(const std::string& vertexPath, const std::string& fragmentPath);
-            static Shader fromSource(const std::string& vertexSrc, const std::string& fragmentSrc);
+            static Shader loadFromFiles(const std::string& vertexPath, const std::string& fragmentPath);
+            static Shader loadFromSource(const std::string& vertexSrc, const std::string& fragmentSrc);
     };
 }

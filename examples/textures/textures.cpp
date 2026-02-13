@@ -1,7 +1,6 @@
+#include <fluxgl/fluxgl.h>
 #include <iostream>
 #include <sstream>
-
-#include <fluxgl/fluxgl.h>
 
 int main() {
     try {
@@ -9,25 +8,21 @@ int main() {
         if(FLUXGL_DEBUG) fluxgl::Logger::init(fluxgl::LogLevel::Trace);
         else fluxgl::Logger::init(fluxgl::LogLevel::Info);
 
-        // Create a window
-        fluxgl::Window window = fluxgl::Window(800, 600, "Hello FluxGL");
-        
-        // Shader + Hello World Meshes
+        fluxgl::Window window(800, 600, "Texture Example");
+
+        // Load texture
+        fluxgl::Mesh quad = fluxgl::Mesh::quad();
         fluxgl::Material material;
-        material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
+        material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/texture.vert", "assets/shaders/texture.frag");
+        material.texture = fluxgl::Texture::loadFromFile("assets/textures/container.jpg");
 
-        fluxgl::Mesh triangle = fluxgl::Mesh::fromVertices({ 
-            {.position = {-0.5f, -0.5f, 0.0f}, .color = {1.0f, 0.0f, 0.0f}}, 
-            {.position = {0.0f, 0.5f, 0.0f}, .color = {0.0f, 1.0f, 0.0f}},
-            {.position = {0.5f, -0.5f, 0.0f}, .color = {0.0f, 0.0f, 1.0f}}
-        });
-
-        // Basic render loop
         while (!window.shouldClose()) {
             window.pollEvents();
 
-            fluxgl::Renderer::clear({0.2f, 0.3f, 0.3f});
-            fluxgl::Renderer::draw(triangle, material);
+            fluxgl::Renderer::clear();
+
+            // Draw your textured object here (e.g., a quad)
+            fluxgl::Renderer::draw(quad, material);
 
             window.swapBuffers();
         }

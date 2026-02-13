@@ -1,10 +1,12 @@
 #include <fluxgl/graphics/texture.h>
 #include <fluxgl/core/log.h>
+#include <fluxgl/core/error.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <glad/glad.h>
 
+#include <filesystem>
 #include <string>
 
 namespace fluxgl {
@@ -52,30 +54,32 @@ namespace fluxgl {
     }
 
     void Texture::bind(unsigned int slot) const {
-        FLUXGL_LOG_DEBUG("Binding texture (ID: " + std::to_string(m_ID) + ") to slot " + std::to_string(slot));
         glActiveTexture(GL_TEXTURE0 + slot);
         glBindTexture(GL_TEXTURE_2D, m_ID);
     }
 
     void Texture::unbind() const {
-        FLUXGL_LOG_DEBUG("Unbinding texture (ID: " + std::to_string(m_ID) + ")"); glBindTexture(GL_TEXTURE_2D, 0);
         // TODO : Store current slot for this texture so we can unbind from the correct slot instead of always unbinding from slot 0
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    Texture Texture::fromFile(const char *path) {
+    Texture Texture::loadFromFile(const char *path) {
+        if(!std::filesystem::exists(path)) {
+            throw Error{ErrorCode::IOError, "Texture File does not exist: " + std::string(path)};
+        }
+
         int width, height, channels;
-        stbi_set_flip_vertically_on_load(true);  
+        stbi_set_flip_vertically_on_load(true);
         unsigned char *data = stbi_load(path, &width, &height, &channels, 0);
         
-        Texture texture = fromMemory(reinterpret_cast<const char*>(data), width, height, channels);
+        Texture texture = loadFromMemory(reinterpret_cast<const char*>(data), width, height, channels);
         stbi_image_free(data);
 
         return texture;
     }
 
-    Texture Texture::fromMemory(const char *data, int width, int height, int channels) {
+    Texture Texture::loadFromMemory(const char *data, int width, int height, int channels) {
         Texture texture;
         texture.load(data, width, height, channels); 
         return texture;
