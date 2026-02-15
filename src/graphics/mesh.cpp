@@ -2,6 +2,7 @@
 #include <fluxgl/core/log.h>
 
 #include <glad/glad.h>
+#include <glm/gtc/constants.hpp>
 
 namespace fluxgl {
     void Mesh::build(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices) {
@@ -86,6 +87,86 @@ namespace fluxgl {
             0, 1, 2,
             2, 3, 0
         };
+        
+        return Mesh::fromVertices(vertices, indices);
+    }
+
+    Mesh Mesh::cube() {
+        std::vector<Vertex> vertices = {
+            {{-0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
+            {{0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
+            {{0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
+            {{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+
+            {{-0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
+            {{0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
+            {{0.5f, -0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
+            {{-0.5f, -0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+
+            {{-0.5f, -0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
+            {{0.5f, -0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
+            {{0.5f, 0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
+            {{-0.5f, 0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+
+            {{-0.5f, -0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
+            {{-0.5f, 0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
+            {{-0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
+            {{-0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+
+            {{0.5f, -0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
+            {{0.5f, 0.5f, 0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
+            {{0.5f, 0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
+            {{0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}},
+        };
+        
+        std::vector<unsigned int> indices = {
+            0, 1, 2, 2, 3, 0,
+            4, 5, 6, 6, 7, 4,
+            8, 9, 10, 10, 11, 8,
+            12, 13, 14, 14, 15, 12,
+            16, 17, 18, 18, 19, 16,
+            20, 21, 22, 22, 23, 20
+        };
+        
+        return Mesh::fromVertices(vertices, indices);
+    }
+
+    Mesh Mesh::sphere(size_t stacks, size_t sectors) {
+        std::vector<Vertex> vertices = {};
+        std::vector<unsigned int> indices = {};
+
+        for(int i = 0; i <= stacks; i++) {
+            float v = (float)i / stacks;
+            float phi = v * glm::pi<float>();
+
+            for (int j = 0; j <= sectors; j++) {
+                float u = (float)j / sectors;
+                float theta = u * glm::two_pi<float>();
+
+                float x = 0.5f * std::cos(theta) * std::sin(phi);
+                float y = 0.5f * std::cos(phi);
+                float z = 0.5f * std::sin(theta) * std::sin(phi);
+
+                vertices.push_back({
+                    {x, y, z}, {1.0f, 1.0f, 1.0f}, {u, v}
+                });
+            }
+        }
+
+        for (int i = 0; i < stacks; ++i) {
+            for (int j = 0; j < sectors; ++j) {
+                int first  = i * (sectors + 1) + j;
+                int second = first + sectors + 1;
+
+                indices.push_back(first);
+                indices.push_back(second);
+                indices.push_back(first + 1);
+
+                indices.push_back(second);
+                indices.push_back(second + 1);
+                indices.push_back(first + 1);
+            }
+        }
         
         return Mesh::fromVertices(vertices, indices);
     }

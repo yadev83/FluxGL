@@ -75,3 +75,4 @@ target_link_libraries(FluxGL
 add_gui_executable(hello examples/hello/hello.cpp)
 add_gui_executable(textures examples/textures/textures.cpp)
 add_gui_executable(transform examples/transform/transform.cpp)
+add_gui_executable(3d examples/3d/3d.cpp)

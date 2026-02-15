@@ -33,8 +33,11 @@ namespace fluxgl {
             throw Error{ErrorCode::OpenGLError, "Failed to initialize GLAD"};
         }
         glViewport(0, 0, width, height);
+        
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
 
         FLUXGL_LOG_INFO("GLFW window created successfully");
     }

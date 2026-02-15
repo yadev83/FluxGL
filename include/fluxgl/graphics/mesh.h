@@ -28,6 +28,8 @@ namespace fluxgl {
                 const std::vector<unsigned int>& indices = {}
             );
             static Mesh quad();
+            static Mesh cube();
+            static Mesh sphere(size_t stacks = 16, size_t sectors = 32);
             
             // MOVE-ONLY
             // Delete copy constructor and copy assignment operator to prevent copying 
