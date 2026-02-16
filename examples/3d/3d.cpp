@@ -3,36 +3,48 @@
 
 #include <iostream>
 #include <sstream>
+#include <vector>
+
+#define MAX_ENTITIES 10
 
 class ThreeDimensionsExample : public fluxgl::App {
     public: using fluxgl::App::App; // Inherit constructors
 
     private:
-        fluxgl::Renderable entity;
+        std::vector<fluxgl::Renderable> entities;
         fluxgl::Camera camera;
 
     protected:
-        void onInit() override {
-            entity.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
-            entity.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
-            entity.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
+        void onInit() override {           
+            for(int i = 0; i < MAX_ENTITIES; i++) {
+                entities.emplace_back();
+                auto& entity = entities.back();
+                
+                bool isEven = i % 2 == 0;
+
+                entity.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
+                entity.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
+                if(isEven) entity.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
+                
+                entity.mesh = isEven ? fluxgl::Mesh::sphere() : fluxgl::Mesh::cube();
+                // Randomize position
+                entity.transform.position = glm::vec3((float)rand() / (float)RAND_MAX * 6.0f - 3.0f, (float)rand() / (float)RAND_MAX * 6.0f - 3.0f, (float)rand() / (float)RAND_MAX * 6.0f - 3.0f);
+                //entity.transform.scale = glm::vec3((float)rand() / (float)RAND_MAX * 2.0f + 0.5f, (float)rand() / (float)RAND_MAX * 2.0f + 0.5f, (float)rand() / (float)RAND_MAX * 2.0f + 0.5f);
+            }
             
-            entity.mesh = fluxgl::Mesh::cube();
-
-            entity.transform.scale = {0.5f, 0.5f, 0.5f};
-            entity.transform.rotation = glm::vec3(-55.0f, 0.0f, 0.0f);
-
-            camera.transform.position = {0.0f, 0.0f, 3.0f};
+            camera.transform.position = {0.0f, 0.0f, 10.0f};
         }
 
         void onUpdate(float deltaTime) override {
-            entity.transform.rotation.x += 20.0f * deltaTime; // Rotate around Z-axis
-            entity.transform.rotation.z += 20.0f * deltaTime; // Rotate around Z-axis
+            for(fluxgl::Renderable& entity : entities) {
+                entity.transform.rotation.x += 20.0f * deltaTime; // Rotate around X-axis
+                entity.transform.rotation.z += 20.0f * deltaTime; // Rotate around Z-axis
+            }
         }
 
         void onRender() override {
             fluxgl::Renderer::clear();
-            fluxgl::Renderer::draw(entity, &camera);
+            for(fluxgl::Renderable& entity : entities) fluxgl::Renderer::draw(entity, &camera);
         }
 };
 
