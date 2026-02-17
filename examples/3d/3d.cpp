@@ -36,6 +36,10 @@ class ThreeDimensionsExample : public fluxgl::App {
         }
 
         void onUpdate(float deltaTime) override {
+            if(getInput().isKeyPressed(GLFW_KEY_ESCAPE)) {
+                getWindow().quit();
+            }
+
             for(fluxgl::Renderable& entity : entities) {
                 entity.transform.rotation.x += 20.0f * deltaTime; // Rotate around X-axis
                 entity.transform.rotation.z += 20.0f * deltaTime; // Rotate around Z-axis

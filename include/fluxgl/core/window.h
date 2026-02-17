@@ -1,11 +1,13 @@
 #pragma once
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
+#include <fluxgl/input/input_manager.h>
 #include "error.h"
 
+struct GLFWwindow;
+
 namespace fluxgl {
+    class App;
+
     class Window {
         private:
             GLFWwindow* m_window = nullptr;
@@ -23,6 +25,9 @@ namespace fluxgl {
     
             void swapBuffers();
             void pollEvents();
+            void bindApp(App& app);
             bool shouldClose() const;
+
+            void quit();
     };
 }

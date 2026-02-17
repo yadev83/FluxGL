@@ -19,6 +19,12 @@ class HelloApp : public fluxgl::App {
             });
         }
 
+        void onUpdate(float deltaTime) override {
+            if(getInput().isKeyPressed(GLFW_KEY_ESCAPE)) {
+                getWindow().quit();
+            }
+        }
+
         void onRender() override {
             fluxgl::Renderer::clear({0.2f, 0.3f, 0.3f});
             fluxgl::Renderer::draw(entity);

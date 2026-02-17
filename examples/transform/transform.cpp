@@ -26,6 +26,10 @@ class TransformExample : public fluxgl::App {
         }
 
         void onUpdate(float deltaTime) override {
+            if(getInput().isKeyPressed(GLFW_KEY_ESCAPE)) {
+                getWindow().quit();
+            }
+
             entity.transform.rotation.z += 20.0f * deltaTime; // Rotate around Z-axis
         }
 

@@ -59,6 +59,7 @@ add_library(FluxGL STATIC
     src/core/window.cpp
     src/core/error.cpp
     src/core/log.cpp
+    src/input/input_manager.cpp
     src/utils/file.cpp
     src/graphics/mesh.cpp
     src/graphics/shader.cpp

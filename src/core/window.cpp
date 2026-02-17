@@ -1,6 +1,10 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include <fluxgl/core/window.h>
 #include <fluxgl/core/error.h>
 #include <fluxgl/core/log.h>
+#include <fluxgl/core/app.h>
 
 namespace fluxgl {
     Window::Window(int width, int height, const char* title) {
@@ -67,8 +71,16 @@ namespace fluxgl {
         glfwPollEvents();
     }
 
+    void Window::bindApp(App& app) {
+        glfwSetWindowUserPointer(m_window, &app);
+    }
+
     bool Window::shouldClose() const {
         return glfwWindowShouldClose(m_window);
+    }
+
+    void Window::quit() {
+        glfwSetWindowShouldClose(m_window, true);
     }
 
     /** STATIC callbacks */
@@ -81,18 +93,43 @@ namespace fluxgl {
     }
 
     void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-        // TODO
+        auto* app = static_cast<App*>(glfwGetWindowUserPointer(window));
+        if(!app) return;
+
+        if(action == GLFW_PRESS) {
+            FLUXGL_LOG_TRACE("Pressed key: " + std::to_string(key));
+            app->getInput().setKey(key, true);
+        } else if(action == GLFW_RELEASE) {
+            FLUXGL_LOG_TRACE("Released key: " + std::to_string(key));
+            app->getInput().setKey(key, false);
+        }
     }
 
     void Window::cursorPositionCallback(GLFWwindow* window, double xpos, double ypos) {
-        // TODO
+        auto* app = static_cast<App*>(glfwGetWindowUserPointer(window));
+        if(!app) return;
+        
+        app->getInput().setMousePosition(xpos, ypos);
     }
     
     void Window::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-        // TODO
+        auto* app = static_cast<App*>(glfwGetWindowUserPointer(window));
+        if(!app) return;
+
+        if(action == GLFW_PRESS) {
+            FLUXGL_LOG_TRACE("Pressed mouse button: " + std::to_string(button) + ": " + std::to_string(app->getInput().getMouseX()) + ", " + std::to_string(app->getInput().getMouseY()));
+            app->getInput().setMouseButton(button, true);
+        } else if(action == GLFW_RELEASE) {
+            FLUXGL_LOG_TRACE("Released mouse button: " + std::to_string(button) + ": " + std::to_string(app->getInput().getMouseX()) + ", " + std::to_string(app->getInput().getMouseY()));
+            app->getInput().setMouseButton(button, false);
+        }
     }
 
     void Window::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
-        // TODO
+        auto* app = static_cast<App*>(glfwGetWindowUserPointer(window));
+        if(!app) return;
+
+        FLUXGL_LOG_TRACE("Mouse scrolled: (" + std::to_string(xoffset) + ", " + std::to_string(yoffset) + ")");
+        app->getInput().addScroll(xoffset, yoffset);
     }
 }

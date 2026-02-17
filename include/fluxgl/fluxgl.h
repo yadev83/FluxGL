@@ -7,6 +7,8 @@
 
 #include "utils/file.h"
 
+#include "input/input_manager.h"
+
 #include "graphics/vertex.h"
 #include "graphics/shader.h"
 #include "graphics/mesh.h"

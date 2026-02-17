@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a "Transform" component, and a "Renderable" component to hold Transform/Mesh/Material and improve the Renderer pipeline
 - Added a "Camera" component to hold a Transform and build projection/view matrices
 - Added a "Cube" mesh and a "Sphere" mesh with a "3d" example file to show these off
+- Window glfw callbacks and input manager
 
 ## [0.1.1] - 2026-02-11
 

@@ -17,6 +17,12 @@ class TextureExample : public fluxgl::App {
             entity.mesh = fluxgl::Mesh::quad();
         }
 
+        void onUpdate(float deltaTime) override {
+            if(getInput().isKeyPressed(GLFW_KEY_ESCAPE)) {
+                getWindow().quit();
+            }
+        }
+
         void onRender() override {
             fluxgl::Renderer::clear();
             fluxgl::Renderer::draw(entity);
