@@ -27,6 +27,14 @@ namespace fluxgl {
         }
         glfwMakeContextCurrent(m_window);
 
+        // Setup callbacks
+        glfwSetErrorCallback(errorCallback);
+        glfwSetFramebufferSizeCallback(m_window, framebufferResizeCallback);
+        glfwSetKeyCallback(m_window, keyCallback);
+        glfwSetCursorPosCallback(m_window, cursorPositionCallback);
+        glfwSetMouseButtonCallback(m_window, mouseButtonCallback);
+        glfwSetScrollCallback(m_window, scrollCallback);
+
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
             glfwDestroyWindow(m_window);
             glfwTerminate();
@@ -61,5 +69,30 @@ namespace fluxgl {
 
     bool Window::shouldClose() const {
         return glfwWindowShouldClose(m_window);
+    }
+
+    /** STATIC callbacks */
+    void Window::framebufferResizeCallback(GLFWwindow* window, int width, int height) {
+        glViewport(0, 0, width, height);
+    }
+
+    void Window::errorCallback(int error, const char* description) {
+        FLUXGL_LOG_ERROR("GLFW error (" + std::to_string(error) + "): " + std::string(description));
+    }
+
+    void Window::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+        // TODO
+    }
+
+    void Window::cursorPositionCallback(GLFWwindow* window, double xpos, double ypos) {
+        // TODO
+    }
+    
+    void Window::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+        // TODO
+    }
+
+    void Window::scrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
+        // TODO
     }
 }
