@@ -19,3 +19,4 @@
 #include "components/transform.h"
 #include "components/renderable.h"
 #include "components/camera.h"
+#include "components/light.h"

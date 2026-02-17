@@ -8,13 +8,17 @@ namespace fluxgl {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void Renderer::draw(const Renderable& renderable, const Camera* camera) {
+    void Renderer::draw(const Renderable& renderable, const Camera* camera, const Light* light) {
         const Material& material = renderable.material;
         const Mesh& mesh = renderable.mesh;
         const Transform& transform = renderable.transform;
 
         // Binding shader
         if(material.shader.isValid()) material.shader.bind();
+
+        // Global bindings
+        // Lights
+        if(light) material.shader.setUniform("u_LightColor", light->color);
 
         // Binding textures/maps
         int slot = 0;
