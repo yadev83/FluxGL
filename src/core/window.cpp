@@ -79,6 +79,14 @@ namespace fluxgl {
         return glfwWindowShouldClose(m_window);
     }
 
+    bool Window::isMouseLocked() const {
+        return glfwGetInputMode(m_window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED;
+    }
+
+    void Window::setMouseLocked(bool value) {
+        glfwSetInputMode(m_window, GLFW_CURSOR, value ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+    }
+
     void Window::quit() {
         glfwSetWindowShouldClose(m_window, true);
     }

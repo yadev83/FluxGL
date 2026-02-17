@@ -36,8 +36,28 @@ class ThreeDimensionsExample : public fluxgl::App {
         }
 
         void onUpdate(float deltaTime) override {
-            if(getInput().isKeyPressed(GLFW_KEY_ESCAPE)) {
-                getWindow().quit();
+            if(getInput().isKeyPressed(GLFW_KEY_ESCAPE)) getWindow().isMouseLocked() ? getWindow().setMouseLocked(false) : getWindow().quit();
+            if(getInput().isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) getWindow().setMouseLocked(true);
+
+            float velocity = 5.0f * deltaTime;
+            if(getInput().isKeyDown(GLFW_KEY_W)) camera.transform.position += camera.transform.front() * velocity;
+            if(getInput().isKeyDown(GLFW_KEY_S)) camera.transform.position -= camera.transform.front() * velocity;
+            if(getInput().isKeyDown(GLFW_KEY_A)) camera.transform.position -= camera.transform.right() * velocity;
+            if(getInput().isKeyDown(GLFW_KEY_D)) camera.transform.position += camera.transform.right() * velocity;
+
+            if(getWindow().isMouseLocked()) {
+                static double lastX = getInput().getMouseX(), lastY = getInput().getMouseY();
+                double offsetX = getInput().getMouseX() - lastX;
+                double offsetY = lastY - getInput().getMouseY();
+                lastX = getInput().getMouseX();
+                lastY = getInput().getMouseY();
+                float sensitivity = 0.1f;
+
+                camera.transform.rotation.y += offsetX * sensitivity;
+                camera.transform.rotation.x += offsetY * sensitivity;
+
+                if(camera.transform.rotation.x > 89.0f) camera.transform.rotation.x = 89.0f;
+                if(camera.transform.rotation.x < -89.0f) camera.transform.rotation.x = -89.0f;
             }
 
             for(fluxgl::Renderable& entity : entities) {

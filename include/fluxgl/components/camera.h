@@ -14,8 +14,7 @@ namespace fluxgl {
         bool isOrthographic = false;
 
         glm::mat4 getViewMatrix() const {
-            glm::mat4 model = transform.getModelMatrix();
-            return glm::inverse(model);
+            return glm::lookAt(transform.position, transform.position + transform.front(), transform.up());
         }
 
         glm::mat4 getProjectionMatrix() const {

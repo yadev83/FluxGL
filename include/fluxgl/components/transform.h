@@ -18,5 +18,23 @@ namespace fluxgl {
 
             return t * r * s;
         }
+
+        glm::vec3 front() const {
+            float yaw   = glm::radians(rotation.y - 90.0f);
+            float pitch = glm::radians(rotation.x);
+            return glm::normalize(glm::vec3(
+                cos(yaw) * cos(pitch),
+                sin(pitch),
+                sin(yaw) * cos(pitch)
+            ));
+        }
+
+        glm::vec3 right() const {
+            return glm::normalize(glm::cross(front(), glm::vec3(0.0f, 1.0f, 0.0f)));
+        }
+
+        glm::vec3 up() const {
+            return glm::normalize(glm::cross(right(), front()));
+        }
     };
 }

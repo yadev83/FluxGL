@@ -27,7 +27,9 @@ namespace fluxgl {
             void pollEvents();
             void bindApp(App& app);
             bool shouldClose() const;
+            bool isMouseLocked() const;
 
+            void setMouseLocked(bool value);
             void quit();
     };
 }
