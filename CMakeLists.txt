@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.20)
 project(FluxGL)
 
 # Function definitions
-function(add_gui_executable name)
+function(add_gui_executable name path)
     cmake_parse_arguments(ARG "" "" "" ${ARGN})
-    add_executable(${name} ${ARG_UNPARSED_ARGUMENTS})
+    add_executable(${name} ${path})
 
     if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
         if(CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -15,7 +15,14 @@ function(add_gui_executable name)
     endif()
 
     target_link_libraries(${name} PRIVATE FluxGL)
-    set_target_properties(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples)
+    set_target_properties(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples/${name})
+    
+    list(GET path 0 first_source)
+    get_filename_component(source_dir ${first_source} PATH)
+    add_custom_command(TARGET ${name} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_CURRENT_SOURCE_DIR}/${source_dir}/assets $<TARGET_FILE_DIR:${name}>/assets
+    )
 endfunction()
 
 # Build type
@@ -48,8 +55,16 @@ find_package(glm CONFIG REQUIRED)
 
 # Build the library
 add_library(FluxGL STATIC 
+    src/core/app.cpp
     src/core/window.cpp
     src/core/error.cpp
+    src/core/log.cpp
+    src/input/input_manager.cpp
+    src/utils/file.cpp
+    src/graphics/mesh.cpp
+    src/graphics/shader.cpp
+    src/graphics/renderer.cpp
+    src/graphics/texture.cpp
 )
 target_link_libraries(FluxGL 
     PUBLIC  glfw
@@ -58,4 +73,7 @@ target_link_libraries(FluxGL
 )
 
 # Build the examples
-add_gui_executable(hello examples/hello.cpp)
+add_gui_executable(hello examples/hello/hello.cpp)
+add_gui_executable(textures examples/textures/textures.cpp)
+add_gui_executable(transform examples/transform/transform.cpp)
+add_gui_executable(3d examples/3d/3d.cpp)
