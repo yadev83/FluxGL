@@ -8,6 +8,7 @@ namespace fluxgl {
         Success = 0,
         InvalidArgument,
         FileNotFound,
+        IOError,
         OpenGLError,
         ShaderCompilationFailed,
         WindowCreationFailed
