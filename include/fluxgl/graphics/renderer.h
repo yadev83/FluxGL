@@ -1,8 +1,8 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <fluxgl/components/renderable.h>
-#include <fluxgl/components/camera.h>
+#include "mesh.h"
+#include "material.h"
 
 namespace fluxgl {
     class Renderer {
@@ -12,6 +12,12 @@ namespace fluxgl {
 
         public:
             static void clear(const glm::vec3& color = {0.1f, 0.1f, 0.1f});
-            static void draw(const Renderable& renderable, const Camera* camera = nullptr);
+            static void drawMesh(
+                const Mesh& mesh, 
+                const Material& material,
+
+                glm::mat4 modelMatrix = glm::mat4(1.0f), 
+                glm::mat4 viewMatrix = glm::mat4(1.0f), 
+                glm::mat4 projectionMatrix = glm::mat4(1.0f));
     };
 }

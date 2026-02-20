@@ -59,6 +59,12 @@ add_library(FluxGL STATIC
     src/core/window.cpp
     src/core/error.cpp
     src/core/log.cpp
+    src/core/scene.cpp
+    src/core/scene_manager.cpp
+    src/ecs/registry.cpp
+    src/ecs/entity.cpp
+    src/ecs/behavior.cpp
+    src/ecs/systems/render_system.cpp
     src/input/input_manager.cpp
     src/utils/file.cpp
     src/graphics/mesh.cpp

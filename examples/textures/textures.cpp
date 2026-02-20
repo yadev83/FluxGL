@@ -2,35 +2,35 @@
 #include <iostream>
 #include <sstream>
 
-class TextureExample : public fluxgl::App {
-    public: using fluxgl::App::App; // Inherit constructors
+class Texture : public fluxgl::Scene {
+    fluxgl::Entity entity;
 
-    private:
-        fluxgl::Renderable entity;
-
-    protected:
+    public:
         void onInit() override {
-            entity.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/texture.vert", "assets/shaders/texture.frag");
-            entity.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
-            entity.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
+            entity = createEntity();
+            auto& meshRenderer = entity.addComponent<fluxgl::MeshRenderer>();
+            meshRenderer.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/texture.vert", "assets/shaders/texture.frag");
+            meshRenderer.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
+            meshRenderer.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
             
-            entity.mesh = fluxgl::Mesh::quad();
+            meshRenderer.mesh = fluxgl::Mesh::quad();
         }
 
         void onUpdate(float deltaTime) override {
-            if(getInput().isKeyPressed(GLFW_KEY_ESCAPE)) {
-                getWindow().quit();
+            if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
+                context->window.quit();
             }
-        }
 
-        void onRender() override {
+            auto& meshRenderer = entity.getComponent<fluxgl::MeshRenderer>();
             fluxgl::Renderer::clear();
-            fluxgl::Renderer::draw(entity);
+            fluxgl::Renderer::drawMesh(meshRenderer.mesh, meshRenderer.material);
         }
 };
 
 int main() {
-    TextureExample app(800, 600, "Texture Example");
+    fluxgl::App app(800, 600, "Texture Example");
+
+    fluxgl::SceneManager::get().registerScene<Texture>("Texture");
     app.run();
 
     return 0;

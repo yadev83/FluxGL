@@ -4,7 +4,6 @@
 
 namespace fluxgl {
     struct Camera {
-        Transform transform;
         float fov = 45.0f;
         float nearPlane = 0.1f;
         float farPlane = 100.0f;
@@ -13,7 +12,7 @@ namespace fluxgl {
         int height = 600;
         bool isOrthographic = false;
 
-        glm::mat4 getViewMatrix() const {
+        glm::mat4 getViewMatrix(Transform& transform) const {
             return glm::lookAt(transform.position, transform.position + transform.front(), transform.up());
         }
 

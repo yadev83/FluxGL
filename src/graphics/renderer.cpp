@@ -8,11 +8,7 @@ namespace fluxgl {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    void Renderer::draw(const Renderable& renderable, const Camera* camera) {
-        const Material& material = renderable.material;
-        const Mesh& mesh = renderable.mesh;
-        const Transform& transform = renderable.transform;
-
+    void Renderer::drawMesh(const Mesh& mesh, const Material& material, glm::mat4 modelMatrix, glm::mat4 viewMatrix, glm::mat4 projectionMatrix) {
         // Binding shader
         if(material.shader.isValid()) material.shader.bind();
 
@@ -62,13 +58,9 @@ namespace fluxgl {
         material.shader.setUniform("u_AmbientOcclusion", material.ambientOcclusion);
 
         // Binding MVP matrices
-        glm::mat4 model = transform.getModelMatrix();
-        glm::mat4 view = camera ? camera->getViewMatrix() : glm::mat4(1.0f);
-        glm::mat4 projection = camera ? camera->getProjectionMatrix() : glm::mat4(1.0f);
-
-        material.shader.setUniform("u_View", view);
-        material.shader.setUniform("u_Projection", projection);
-        material.shader.setUniform("u_Model", model);
+        material.shader.setUniform("u_View", viewMatrix);
+        material.shader.setUniform("u_Projection", projectionMatrix);
+        material.shader.setUniform("u_Model", modelMatrix);
 
         // DRAW CALL
         unsigned int vao = mesh.getVAO();
