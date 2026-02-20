@@ -11,6 +11,10 @@ ROOT_DIR="$SCRIPT_DIR/.."
 BUILD_DIR="$ROOT_DIR/build/$BUILD_TYPE"
 
 echo "🚧 Configuring build..."
+
+export VCPKG_DEFAULT_TRIPLET=x64-mingw-static
+export VCPKG_DEFAULT_HOST_TRIPLET=x64-mingw-static
+
 cmake -S . -G "MinGW Makefiles" -B "$BUILD_DIR" \
     -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
     -DVCPKG_TARGET_TRIPLET=x64-mingw-static \
