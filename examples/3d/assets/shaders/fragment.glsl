@@ -1,7 +1,5 @@
 #version 330 core
 out vec4 FragColor;
-
-in vec3 Color;
 in vec2 TexCoord;
 
 uniform vec3 u_AlbedoColor;

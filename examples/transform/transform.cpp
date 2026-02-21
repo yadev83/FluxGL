@@ -32,12 +32,12 @@ class TransformExample : public fluxgl::Scene {
 
         void onUpdate(float deltaTime) override {
             if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
-                context->window.quit();
+                context->window.setWindowShouldClose();
             }
 
             entity.getComponent<fluxgl::Transform>().rotation.z += 20.0f * deltaTime; // Rotate around Z-axis
 
-            fluxgl::Renderer::clear();
+            fluxgl::Renderer::beginFrame();
 
             auto& cameraComponent = camera.getComponent<fluxgl::Camera>();
             auto& cameraTransform = camera.getComponent<fluxgl::Transform>();
@@ -45,12 +45,11 @@ class TransformExample : public fluxgl::Scene {
             auto& meshTransform = entity.getComponent<fluxgl::Transform>();
             auto& meshRenderer = entity.getComponent<fluxgl::MeshRenderer>();
 
+            fluxgl::Renderer::setCamera(cameraComponent.getViewMatrix(cameraTransform), cameraComponent.getProjectionMatrix(), cameraTransform.position);
             fluxgl::Renderer::drawMesh(
                 meshRenderer.mesh,
                 meshRenderer.material,
-                meshTransform.getModelMatrix(),
-                cameraComponent.getViewMatrix(cameraTransform),
-                cameraComponent.getProjectionMatrix()
+                meshTransform.getModelMatrix()
             );
         }
 };

@@ -18,11 +18,11 @@ class Texture : public fluxgl::Scene {
 
         void onUpdate(float deltaTime) override {
             if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
-                context->window.quit();
+                context->window.setWindowShouldClose();
             }
 
             auto& meshRenderer = entity.getComponent<fluxgl::MeshRenderer>();
-            fluxgl::Renderer::clear();
+            fluxgl::Renderer::beginFrame();
             fluxgl::Renderer::drawMesh(meshRenderer.mesh, meshRenderer.material);
         }
 };

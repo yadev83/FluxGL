@@ -12,9 +12,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - SceneManager and Scene classes for scene management
 - Systems implementation with the ECS (used only in generic rendering for now)
 - Behaviors system for "custom" actions without going through the whole systems/components loop. (Imagine MonoBehaviors from Unity and similar stuff)
+- Lighting system with different light types and a heavy shader update
 
 ### Changed
 - App lifecycle now goes through scenes and App should not be inherited directly
+- Letterboxing and aspect ratio respect in rendering system
 
 ## [0.2.0] - 2026-02-18
 

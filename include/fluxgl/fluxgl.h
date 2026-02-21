@@ -11,10 +11,11 @@
 #include "ecs/registry.h"
 #include "ecs/system.h"
 #include "ecs/behavior.h"
+#include "ecs/systems/render_system.h"
 #include "ecs/components/transform.h"
 #include "ecs/components/mesh_renderer.h"
 #include "ecs/components/camera.h"
-#include "ecs/systems/render_system.h"
+#include "ecs/components/light.h"
 
 #include "utils/file.h"
 

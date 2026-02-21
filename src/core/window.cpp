@@ -6,6 +6,8 @@
 #include <fluxgl/core/log.h>
 #include <fluxgl/core/app.h>
 
+#include <fluxgl/graphics/renderer.h>
+
 namespace fluxgl {
     Window::Window(int width, int height, const char* title) {
         // Logger initialisation (based on build type)
@@ -44,11 +46,14 @@ namespace fluxgl {
             glfwTerminate();
             throw Error{ErrorCode::OpenGLError, "Failed to initialize GLAD"};
         }
-        glViewport(0, 0, width, height);
         
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_DEPTH_TEST);
+
+        int fbWidth, fbHeight;
+        glfwGetFramebufferSize(m_window, &fbWidth, &fbHeight);
+        Renderer::setFramebufferSize(fbWidth, fbHeight);
 
         FLUXGL_LOG_INFO("GLFW window created successfully");
     }
@@ -78,6 +83,10 @@ namespace fluxgl {
     bool Window::shouldClose() const {
         return glfwWindowShouldClose(m_window);
     }
+    
+    void Window::setWindowShouldClose(bool value) {
+        glfwSetWindowShouldClose(m_window, value);
+    }
 
     bool Window::isMouseLocked() const {
         return glfwGetInputMode(m_window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED;
@@ -87,13 +96,12 @@ namespace fluxgl {
         glfwSetInputMode(m_window, GLFW_CURSOR, value ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
     }
 
-    void Window::quit() {
-        glfwSetWindowShouldClose(m_window, true);
-    }
-
     /** STATIC callbacks */
     void Window::framebufferResizeCallback(GLFWwindow* window, int width, int height) {
-        glViewport(0, 0, width, height);
+        auto* app = static_cast<App*>(glfwGetWindowUserPointer(window));
+        if(!app) return;
+
+        Renderer::setFramebufferSize(width, height);
     }
 
     void Window::errorCallback(int error, const char* description) {

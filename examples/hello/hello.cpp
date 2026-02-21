@@ -22,11 +22,11 @@ class Hello : public fluxgl::Scene {
 
         void onUpdate(float deltaTime) override {
             if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
-                context->window.quit();
+                context->window.setWindowShouldClose();
             }
 
             auto& entityRenderer = entity.getComponent<fluxgl::MeshRenderer>();
-            fluxgl::Renderer::clear({0.2f, 0.3f, 0.3f});
+            fluxgl::Renderer::beginFrame();
             fluxgl::Renderer::drawMesh(entityRenderer.mesh, entityRenderer.material);
         }
 };
