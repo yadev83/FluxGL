@@ -96,7 +96,7 @@ void main()
 
 		// Compute distance attenuation
 		float distance = length(u_PointLights[i].position - FragPos);
-		float attenuation = 1.0f / (u_PointLights[i].intensity * (1.0f + (0.09f * distance) + (0.032f * distance * distance)));
+		float attenuation = u_PointLights[i].intensity / (distance * distance);
 
 		// Diffuse
         float diff = max(dot(normal, lightDir), 0.0);

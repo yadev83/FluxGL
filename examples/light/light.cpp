@@ -70,7 +70,7 @@ class Example : public fluxgl::Scene {
             auto& sunLightComponent = sunLight.addComponent<fluxgl::Light>();
             sunLightComponent.type = fluxgl::LightType::Directional;
             sunLightComponent.color = ambientLightColor;
-            sunLightComponent.intensity = 0.3f;
+            sunLightComponent.intensity = 0.5f;
 
             pointLightA = createEntity();
             auto& pointLightATransform = pointLightA.addComponent<fluxgl::Transform>();
@@ -82,7 +82,7 @@ class Example : public fluxgl::Scene {
             auto& pointLightAComponent = pointLightA.addComponent<fluxgl::Light>();
             pointLightAComponent.type = fluxgl::LightType::Point;
             pointLightAComponent.color = {1.0f, 1.0f, 1.0f};
-            pointLightAComponent.intensity = 0.5f;
+            pointLightAComponent.intensity = 1.0f;
 
             pointLightB = createEntity();
             auto& pointLightBTransform = pointLightB.addComponent<fluxgl::Transform>();
@@ -95,7 +95,7 @@ class Example : public fluxgl::Scene {
             auto& pointLightBComponent = pointLightB.addComponent<fluxgl::Light>();
             pointLightBComponent.type = fluxgl::LightType::Point;
             pointLightBComponent.color = {0.0f, 0.0f, 1.0f};
-            pointLightBComponent.intensity = 0.5f;
+            pointLightBComponent.intensity = 1.0f;
         }
 
         void onInit() override {
