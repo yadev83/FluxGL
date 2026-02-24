@@ -15,7 +15,7 @@ function(add_gui_executable name path)
     
     list(GET path 0 first_source)
     get_filename_component(source_dir ${first_source} PATH)
-    if(exists ${CMAKE_CURRENT_SOURCE_DIR}/${source_dir}/assets)
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${source_dir}/assets)
         add_custom_command(TARGET ${name} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${CMAKE_CURRENT_SOURCE_DIR}/${source_dir}/assets $<TARGET_FILE_DIR:${name}>/assets

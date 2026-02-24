@@ -24,6 +24,11 @@ Then pull the necessary git submodules with :
 git submodule update --init --recursive
 ``` 
 
+Later on, you can update the submodules with : 
+```bash
+git submodule update --recursive
+```
+
 Submodules are located in the `vendor` folder. The following dependencies are used :
 - [VCPKG](https://github.com/microsoft/vcpkg) : The package manager for C++
 
