@@ -8,21 +8,24 @@ class Audio : public fluxgl::Scene {
         fluxgl::Entity entity;
 
     public:
-        void onInit() override {
-            fluxgl::AudioEngine& audioEngine = fluxgl::AudioEngine::get();
-            audioEngine.init();
-            fluxgl::SoundID sound = audioEngine.loadSound("assets/bgm/solitude.wav", fluxgl::SoundType::BGM);
+        void onLoad() override {
+            registerSystem<fluxgl::RenderSystem>();
+            registerSystem<fluxgl::AudioSystem>();
+        }
 
-            audioEngine.play(sound);
+        void onInit() override {
+            entity = createEntity();
+            auto& audioSource = entity.addComponent<fluxgl::AudioSource>();
+            audioSource.sound.path = "assets/bgm/solitude.wav";
+            audioSource.sound.type = fluxgl::SoundType::BGM;
+            audioSource.loop = true;
+            audioSource.shouldPlay = true;
         }
 
         void onUpdate(float deltaTime) override {
             if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
                 context->window.setWindowShouldClose();
             }
-
-            fluxgl::AudioEngine& audioEngine = fluxgl::AudioEngine::get();
-            audioEngine.update();
         }
 };
 

@@ -42,6 +42,7 @@ target_sources(FluxGL PRIVATE
     src/ecs/entity.cpp
     src/ecs/behavior.cpp
     src/ecs/systems/render_system.cpp
+    src/ecs/systems/audio_system.cpp
     src/input/input_manager.cpp
     src/utils/file.cpp
     src/utils/compute.cpp

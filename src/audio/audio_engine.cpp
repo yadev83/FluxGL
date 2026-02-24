@@ -12,6 +12,7 @@ namespace fluxgl {
 
     bool AudioEngine::init() {
         if(ma_engine_init(NULL, &m_engine) == MA_SUCCESS) {
+            FLUXGL_LOG_INFO("Audio Engine initialized");
             return true;
         } else {
             FLUXGL_LOG_ERROR("Failed to initialize audio engine");
@@ -20,22 +21,12 @@ namespace fluxgl {
     }
 
     void AudioEngine::shutdown() {
+        FLUXGL_LOG_INFO("Shutting down Audio Engine");
         for(auto& [id, source]: m_sources) {
             ma_sound_uninit(&source.sound);
         }
 
         ma_engine_uninit(&m_engine);
-    }
-
-    void AudioEngine::update() {
-        for(auto it = m_sources.begin(); it != m_sources.end(); ) {
-            if(!ma_sound_is_playing(&it->second.sound)) {
-                ma_sound_uninit(&it->second.sound);
-                it = m_sources.erase(it);
-            } else {
-                ++it;
-            }
-        }
     }
 
     void AudioEngine::setSourcePosition(SourceID id, const glm::vec3& position) {

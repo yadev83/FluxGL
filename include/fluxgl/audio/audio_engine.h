@@ -31,7 +31,6 @@ namespace fluxgl {
 
             bool init();
             void shutdown();
-            void update();
 
             void setSourcePosition(SourceID id, const glm::vec3& position);
             void setListener(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up);
