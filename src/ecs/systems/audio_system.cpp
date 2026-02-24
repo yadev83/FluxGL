@@ -14,6 +14,9 @@ namespace fluxgl {
         // Start by clearing the listener data
         AudioEngine::get().setListener(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.0f));
 
+        // Update the audio engine
+        AudioEngine::get().update();
+
         // Setup the listener (one per scene only, grab the first one)
         for(auto& e : registry.query<AudioListener, Transform>()) {
             auto& listener = e.getComponent<AudioListener>();
@@ -36,11 +39,6 @@ namespace fluxgl {
             } else if(source.shouldStop && source.source != 0) {
                 source.shouldStop = false;
                 AudioEngine::get().stop(source.source);
-            }
-
-            // Cleanup si le son s'est terminé
-            if(source.source != 0 && !AudioEngine::get().isPlaying(source.source)) {
-                source.source = 0;
             }
 
             // Apply spatialization

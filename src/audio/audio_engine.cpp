@@ -29,6 +29,26 @@ namespace fluxgl {
         ma_engine_uninit(&m_engine);
     }
 
+    void AudioEngine::update() {
+        // Clear old sources
+        for(auto it = m_sources.begin(); it != m_sources.end();) {
+            if(!isPlaying(it->first)) {
+                stop(it->first);
+            } else {
+                ++it;
+            }
+        }
+
+        // Mix volumes
+        for(auto& [id, source] : m_sources) {
+            auto it = m_sounds.find(id);
+            if(it == m_sounds.end()) continue;
+            
+            float volume = source.volume * getVolume(it->second.type) * getMasterVolume();
+            ma_sound_set_volume(&source.sound, volume);
+        }
+    }
+
     void AudioEngine::setSourcePosition(SourceID id, const glm::vec3& position) {
         auto it = m_sources.find(id);
         if(it == m_sources.end()) return;
@@ -60,6 +80,24 @@ namespace fluxgl {
             up.y,
             up.z
         );
+    }
+
+    void AudioEngine::setMasterVolume(float volume) {
+        m_master = volume < 0.0f ? 0.0f : volume > 1.0f ? 1.0f : volume;
+    }
+
+    float AudioEngine::getMasterVolume() {
+        return m_master;
+    }
+
+    void AudioEngine::setVolume(SoundType type, float volume) {
+        float v = volume < 0.0f ? 0.0f : volume > 1.0f ? 1.0f : volume;
+        m_volumes[type] = v;
+    }
+
+    float AudioEngine::getVolume(SoundType type) {
+        auto it = m_volumes.find(type);
+        return it == m_volumes.end() ? 1.0f : it->second;
     }
 
     SoundID AudioEngine::loadSound(std::string path, SoundType type) {
@@ -100,7 +138,9 @@ namespace fluxgl {
         }
 
         ma_sound_set_looping(&source.sound, loop);
-        ma_sound_set_volume(&source.sound, volume);
+        float typeVolume = getVolume(it->second.type);
+        float finalVolume = volume * typeVolume * m_master;
+        ma_sound_set_volume(&source.sound, finalVolume);
 
         if(ma_sound_start(&source.sound) != MA_SUCCESS) {
             FLUXGL_LOG_ERROR("Failed to start sound: " + it->second.path);

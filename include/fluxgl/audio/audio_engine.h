@@ -20,9 +20,11 @@ namespace fluxgl {
             
             std::unordered_map<SoundID, Sound> m_sounds;
             SoundID m_nextSoundID = 1;
-
             std::unordered_map<SourceID, Source> m_sources;
             SourceID m_nextSourceID = 1;
+
+            float m_master = 1.0f;
+            std::unordered_map<SoundType, float> m_volumes;
 
             AudioEngine() = default;
 
@@ -31,9 +33,15 @@ namespace fluxgl {
 
             bool init();
             void shutdown();
+            void update();
 
             void setSourcePosition(SourceID id, const glm::vec3& position);
             void setListener(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up);
+
+            void setMasterVolume(float volume);
+            float getMasterVolume();
+            void setVolume(SoundType type, float volume);
+            float getVolume(SoundType type);
 
             SoundID loadSound(std::string path, SoundType type);
             SourceID play(SoundID id, bool loop = false, float volume = 1.0f);

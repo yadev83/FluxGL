@@ -26,6 +26,14 @@ class Audio : public fluxgl::Scene {
             if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
                 context->window.setWindowShouldClose();
             }
+
+            if(context->inputManager.isKeyPressed(GLFW_KEY_DOWN)) {
+                fluxgl::AudioEngine::get().setMasterVolume(fluxgl::AudioEngine::get().getMasterVolume() - 0.1f);
+            }
+
+            if(context->inputManager.isKeyPressed(GLFW_KEY_UP)) {
+                fluxgl::AudioEngine::get().setMasterVolume(fluxgl::AudioEngine::get().getMasterVolume() + 0.1f);
+            }
         }
 };
 
