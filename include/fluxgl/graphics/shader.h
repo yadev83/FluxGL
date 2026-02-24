@@ -36,5 +36,8 @@ namespace fluxgl {
             // builders
             static Shader loadFromFiles(const std::string& vertexPath, const std::string& fragmentPath);
             static Shader loadFromSource(const std::string& vertexSrc, const std::string& fragmentSrc);
+
+            static Shader defaultLit();
+            static Shader defaultUnlit();
     };
 }

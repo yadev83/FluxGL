@@ -18,9 +18,10 @@ export VCPKG_DEFAULT_HOST_TRIPLET=x64-mingw-static
 cmake -S . -G "MinGW Makefiles" -B "$BUILD_DIR" \
     -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
     -DVCPKG_TARGET_TRIPLET=x64-mingw-static \
-    -DCMAKE_TOOLCHAIN_FILE="$ROOT_DIR"/vendor/vcpkg/scripts/buildsystems/vcpkg.cmake
+    -DCMAKE_TOOLCHAIN_FILE="$ROOT_DIR"/vendor/vcpkg/scripts/buildsystems/vcpkg.cmake \
+    -DFLUXGL_BUILD_EXAMPLES=ON
 echo "✅ Configuration complete!"
 
 echo "🔨 Building FluxGL & Examples..."
-cmake --build "$BUILD_DIR" -DFLUXGL_BUILD_EXAMPLES=ON
+cmake --build "$BUILD_DIR"
 echo "✅ Build complete!"
