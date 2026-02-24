@@ -11,8 +11,7 @@ class Audio : public fluxgl::Scene {
         void onInit() override {
             fluxgl::AudioEngine& audioEngine = fluxgl::AudioEngine::get();
             audioEngine.init();
-            audioEngine.setListener({0, 0, 0}, {0, 0, 1}, {0, 1, 0});
-            fluxgl::SoundID sound = audioEngine.loadSound("assets/bgm/solitude.wav");
+            fluxgl::SoundID sound = audioEngine.loadSound("assets/bgm/solitude.wav", fluxgl::SoundType::BGM);
 
             audioEngine.play(sound);
         }
@@ -21,6 +20,9 @@ class Audio : public fluxgl::Scene {
             if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
                 context->window.setWindowShouldClose();
             }
+
+            fluxgl::AudioEngine& audioEngine = fluxgl::AudioEngine::get();
+            audioEngine.update();
         }
 };
 

@@ -30,3 +30,5 @@
 #include "graphics/renderer.h"
 
 #include "audio/audio_engine.h"
+#include "audio/sound.h"
+#include "audio/source.h"
