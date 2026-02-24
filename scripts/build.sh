@@ -22,5 +22,5 @@ cmake -S . -G "MinGW Makefiles" -B "$BUILD_DIR" \
 echo "✅ Configuration complete!"
 
 echo "🔨 Building FluxGL & Examples..."
-cmake --build "$BUILD_DIR"
+cmake --build "$BUILD_DIR" -DFLUXGL_BUILD_EXAMPLES=ON
 echo "✅ Build complete!"

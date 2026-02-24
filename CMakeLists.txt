@@ -1,29 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 project(FluxGL)
 
-# Function definitions
-function(add_gui_executable name path)
-    cmake_parse_arguments(ARG "" "" "" ${ARGN})
-    add_executable(${name} ${path})
-
-    if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-        if(CMAKE_BUILD_TYPE STREQUAL "Release")
-            set_target_properties(${name} PROPERTIES WIN32_EXECUTABLE TRUE)
-        else()
-            set_target_properties(${name} PROPERTIES WIN32_EXECUTABLE FALSE) # keep pour debug
-        endif()
-    endif()
-
-    target_link_libraries(${name} PRIVATE FluxGL)
-    set_target_properties(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples/${name})
-    
-    list(GET path 0 first_source)
-    get_filename_component(source_dir ${first_source} PATH)
-    add_custom_command(TARGET ${name} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_CURRENT_SOURCE_DIR}/${source_dir}/assets $<TARGET_FILE_DIR:${name}>/assets
-    )
-endfunction()
+# Options
+option(FLUXGL_BUILD_EXAMPLES "Build examples" OFF)
 
 # Build type
 if(NOT CMAKE_BUILD_TYPE)
@@ -43,18 +22,16 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Include dirs
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
 # Find packages
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glad CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
 
 # Build the library
-add_library(FluxGL STATIC 
+add_library(FluxGL STATIC)
+add_library(FluxGL::FluxGL ALIAS FluxGL)
+
+target_sources(FluxGL PRIVATE
     src/core/app.cpp
     src/core/window.cpp
     src/core/error.cpp
@@ -72,15 +49,21 @@ add_library(FluxGL STATIC
     src/graphics/renderer.cpp
     src/graphics/texture.cpp
 )
-target_link_libraries(FluxGL 
-    PUBLIC  glfw
-            glad::glad
-            glm::glm
+
+target_include_directories(FluxGL
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<INSTALL_INTERFACE:include>
 )
 
-# Build the examples
-add_gui_executable(hello examples/hello/hello.cpp)
-add_gui_executable(textures examples/textures/textures.cpp)
-add_gui_executable(transform examples/transform/transform.cpp)
-add_gui_executable(3d examples/3d/3d.cpp)
-add_gui_executable(light examples/light/light.cpp)
+target_link_libraries(FluxGL 
+    PUBLIC  
+        glfw
+        glad::glad
+        glm::glm
+)
+
+# Build examples
+if(FLUXGL_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
