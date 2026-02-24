@@ -28,3 +28,5 @@
 #include "graphics/texture.h"
 #include "graphics/material.h"
 #include "graphics/renderer.h"
+
+#include "audio/audio_engine.h"
