@@ -220,7 +220,7 @@ namespace fluxgl {
                 }
 
                 // DIRECTIONAL LIGHTS
-                for(int i = 0; i < MAX_DIRECTIONAL_LIGHTS && i < u_PointLightCount; i++) {
+                for(int i = 0; i < MAX_DIRECTIONAL_LIGHTS && i < u_DirectionalLightCount; i++) {
                     vec3 lightDir = normalize(-u_DirectionalLights[i].direction);
                     vec3 viewDir = normalize(u_CameraPosition - FragPos);
                     vec3 normal = normalize(Normal);
