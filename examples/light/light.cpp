@@ -66,7 +66,7 @@ class Example : public fluxgl::Scene {
 
             sunLight = createEntity();
             auto& sunLightTransform = sunLight.addComponent<fluxgl::Transform>();
-            sunLightTransform.rotation = {-0.2f, -1.0f, -3.0f};
+            sunLightTransform.rotation = {-25.0f, 0.0f, 0.0f};
             auto& sunLightComponent = sunLight.addComponent<fluxgl::Light>();
             sunLightComponent.type = fluxgl::LightType::Directional;
             sunLightComponent.color = ambientLightColor;
@@ -113,6 +113,9 @@ class Example : public fluxgl::Scene {
             float radius = 2.0f;
             glm::vec3 center = cubeA.getComponent<fluxgl::Transform>().position;
             float speed = 3.0f;
+
+            auto& sunTransform = sunLight.getComponent<fluxgl::Transform>();
+            sunTransform.rotation.y += deltaTime * 10.0f;
 
             // Update position
             auto& lightTransform = pointLightB.getComponent<fluxgl::Transform>();

@@ -18,6 +18,7 @@
 #include "ecs/components/light.h"
 
 #include "utils/file.h"
+#include "utils/compute.h"
 
 #include "input/input_manager.h"
 
