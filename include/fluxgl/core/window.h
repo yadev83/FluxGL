@@ -11,6 +11,7 @@ namespace fluxgl {
     class Window {
         private:
             GLFWwindow* m_window = nullptr;
+
             static void framebufferResizeCallback(GLFWwindow* window, int width, int height);
             static void errorCallback(int error, const char* description);
 
@@ -26,10 +27,10 @@ namespace fluxgl {
             void swapBuffers();
             void pollEvents();
             void bindApp(App& app);
-            bool shouldClose() const;
-            bool isMouseLocked() const;
 
-            void setMouseLocked(bool value);
-            void quit();
+            bool shouldClose() const;
+            void setWindowShouldClose(bool value = true);
+            bool isMouseLocked() const;
+            void setMouseLocked(bool value = true);
     };
 }

@@ -27,9 +27,11 @@ namespace fluxgl {
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position)); 
         glEnableVertexAttribArray(1); 
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
         glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
+        glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, uv));
 
         // EBO Generation + Bind + Data (if indices are provided) 
         if (!indices.empty()) { 
@@ -77,10 +79,10 @@ namespace fluxgl {
 
     Mesh Mesh::quad() {
         std::vector<Vertex> vertices = {
-            {{-0.5f, -0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
-            {{0.5f, -0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
-            {{0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
-            {{-0.5f, 0.5f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
+            {{-0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 0.0f}},
+            {{0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 0.0f}},
+            {{0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}},
+            {{-0.5f, 0.5f, 0.0f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f, 1.0f}, {0.0f, 1.0f}}
         };
         
         std::vector<unsigned int> indices = {
@@ -94,40 +96,40 @@ namespace fluxgl {
     Mesh Mesh::cube() {
         std::vector<Vertex> vertices = {
             // ===== Face +Z (Front) =====
-            {{-0.5f, -0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
-            {{ 0.5f, -0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}, {1.f, 0.f}},
-            {{ 0.5f,  0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
-            {{-0.5f,  0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 1.f}},
+            {{-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
+            {{ 0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f}, {1.f, 0.f}},
+            {{ 0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
+            {{-0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 1.0f, 1.0f}, {0.f, 1.f}},
 
             // ===== Face -Z (Back) =====
-            {{ 0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
-            {{-0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.f, 0.f}},
-            {{-0.5f,  0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
-            {{ 0.5f,  0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 1.f}},
+            {{ 0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
+            {{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f, 1.0f}, {1.f, 0.f}},
+            {{-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
+            {{ 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {1.0f, 1.0f, 1.0f}, {0.f, 1.f}},
 
             // ===== Face +X (Right) =====
-            {{ 0.5f, -0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
-            {{ 0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.f, 0.f}},
-            {{ 0.5f,  0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
-            {{ 0.5f,  0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 1.f}},
+            {{ 0.5f, -0.5f,  0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
+            {{ 0.5f, -0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.f, 0.f}},
+            {{ 0.5f,  0.5f, -0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
+            {{ 0.5f,  0.5f,  0.5f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.f, 1.f}},
 
             // ===== Face -X (Left) =====
-            {{-0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
-            {{-0.5f, -0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}, {1.f, 0.f}},
-            {{-0.5f,  0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
-            {{-0.5f,  0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 1.f}},
+            {{-0.5f, -0.5f, -0.5f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
+            {{-0.5f, -0.5f,  0.5f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.f, 0.f}},
+            {{-0.5f,  0.5f,  0.5f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
+            {{-0.5f,  0.5f, -0.5f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.f, 1.f}},
 
             // ===== Face +Y (Top) =====
-            {{-0.5f,  0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
-            {{ 0.5f,  0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}, {1.f, 0.f}},
-            {{ 0.5f,  0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
-            {{-0.5f,  0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 1.f}},
+            {{-0.5f,  0.5f,  0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
+            {{ 0.5f,  0.5f,  0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.f, 0.f}},
+            {{ 0.5f,  0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
+            {{-0.5f,  0.5f, -0.5f}, {0.0f, 1.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.f, 1.f}},
 
             // ===== Face -Y (Bottom) =====
-            {{-0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
-            {{ 0.5f, -0.5f, -0.5f}, {1.0f, 1.0f, 1.0f}, {1.f, 0.f}},
-            {{ 0.5f, -0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
-            {{-0.5f, -0.5f,  0.5f}, {1.0f, 1.0f, 1.0f}, {0.f, 1.f}}
+            {{-0.5f, -0.5f, -0.5f}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.f, 0.f}},
+            {{ 0.5f, -0.5f, -0.5f}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.f, 0.f}},
+            {{ 0.5f, -0.5f,  0.5f}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {1.f, 1.f}},
+            {{-0.5f, -0.5f,  0.5f}, {0.0f, -1.0f, 0.0f}, {1.0f, 1.0f, 1.0f}, {0.f, 1.f}}
         };
         
         std::vector<unsigned int> indices = {
@@ -158,8 +160,15 @@ namespace fluxgl {
                 float y = 0.5f * std::cos(phi);
                 float z = 0.5f * std::sin(theta) * std::sin(phi);
 
+                // compute normal (find which direction is facing outwards)
+                glm::vec3 normal = {
+                    std::cos(theta) * std::sin(phi),
+                    std::cos(phi),
+                    std::sin(theta) * std::sin(phi)
+                };
+
                 vertices.push_back({
-                    {x, y, z}, {1.0f, 1.0f, 1.0f}, {u, v}
+                    {x, y, z}, normal, {1.0f, 1.0f, 1.0f}, {u, v}
                 });
             }
         }

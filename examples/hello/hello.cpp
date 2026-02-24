@@ -3,16 +3,17 @@
 
 #include <fluxgl/fluxgl.h>
 
-class HelloApp : public fluxgl::App {
-    public: using fluxgl::App::App; // Inherit constructors
-
+class Hello : public fluxgl::Scene {
     private:
-        fluxgl::Renderable entity;
+        fluxgl::Entity entity;
 
-    protected:
+    public:
         void onInit() override {
-            entity.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
-            entity.mesh = fluxgl::Mesh::fromVertices({ 
+            entity = createEntity();
+            auto& entityRenderer = entity.addComponent<fluxgl::MeshRenderer>();
+
+            entityRenderer.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
+            entityRenderer.mesh = fluxgl::Mesh::fromVertices({ 
                 {.position = {-0.5f, -0.5f, 0.0f}, .color = {1.0f, 0.0f, 0.0f}}, 
                 {.position = {0.0f, 0.5f, 0.0f}, .color = {0.0f, 1.0f, 0.0f}},
                 {.position = {0.5f, -0.5f, 0.0f}, .color = {0.0f, 0.0f, 1.0f}}
@@ -20,19 +21,20 @@ class HelloApp : public fluxgl::App {
         }
 
         void onUpdate(float deltaTime) override {
-            if(getInput().isKeyPressed(GLFW_KEY_ESCAPE)) {
-                getWindow().quit();
+            if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
+                context->window.setWindowShouldClose();
             }
-        }
 
-        void onRender() override {
-            fluxgl::Renderer::clear({0.2f, 0.3f, 0.3f});
-            fluxgl::Renderer::draw(entity);
+            auto& entityRenderer = entity.getComponent<fluxgl::MeshRenderer>();
+            fluxgl::Renderer::beginFrame();
+            fluxgl::Renderer::drawMesh(entityRenderer.mesh, entityRenderer.material);
         }
 };
 
 int main() {
-    HelloApp app(800, 600, "Hello FluxGL");
+    fluxgl::App app(800, 600, "Hello FluxGL");
+
+    fluxgl::SceneManager::get().registerScene<Hello>("Hello");
     app.run();
 
     return 0;

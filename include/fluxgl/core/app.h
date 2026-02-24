@@ -4,16 +4,15 @@
 #include "window.h"
 
 namespace fluxgl {
+    struct AppContext {
+        fluxgl::Window& window;
+        fluxgl::InputManager& inputManager;
+    };
+
     class App {
         private:
             fluxgl::Window m_window;
             fluxgl::InputManager m_inputManager;
-
-        protected:
-            virtual void onInit() {}
-            virtual void onUpdate(float deltaTime) {}
-            virtual void onRender() {}
-            virtual void onShutdown() {}
 
         public:
             App(int width, int height, const char *title);

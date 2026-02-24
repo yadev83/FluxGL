@@ -4,43 +4,60 @@
 #include <iostream>
 #include <sstream>
 
-class TransformExample : public fluxgl::App {
-    public: using fluxgl::App::App; // Inherit constructors
+class TransformExample : public fluxgl::Scene {
+    fluxgl::Entity entity, camera;
 
-    private:
-        fluxgl::Renderable entity;
-        fluxgl::Camera camera;
-
-    protected:
+    public:
         void onInit() override {
-            entity.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
-            entity.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
-            entity.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
+            entity = createEntity();
+            camera = createEntity();
+
+            auto& cameraTransform = camera.addComponent<fluxgl::Transform>();
+            auto& cameraComponent = camera.addComponent<fluxgl::Camera>();
+
+            auto& entityTransform = entity.addComponent<fluxgl::Transform>();
+            auto& entityRenderer = entity.addComponent<fluxgl::MeshRenderer>();
             
-            entity.mesh = fluxgl::Mesh::quad();
+            entityRenderer.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
+            entityRenderer.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
+            entityRenderer.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
+            
+            entityRenderer.mesh = fluxgl::Mesh::quad();
 
-            entity.transform.scale = {0.5f, 0.5f, 0.5f};
-            entity.transform.rotation = glm::vec3(-55.0f, 0.0f, 0.0f);
+            entityTransform.scale = {0.5f, 0.5f, 0.5f};
+            entityTransform.rotation = glm::vec3(-55.0f, 0.0f, 0.0f);
 
-            camera.transform.position = {0.0f, 0.0f, 3.0f};
+            cameraTransform.position = {0.0f, 0.0f, 3.0f};
         }
 
         void onUpdate(float deltaTime) override {
-            if(getInput().isKeyPressed(GLFW_KEY_ESCAPE)) {
-                getWindow().quit();
+            if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
+                context->window.setWindowShouldClose();
             }
 
-            entity.transform.rotation.z += 20.0f * deltaTime; // Rotate around Z-axis
-        }
+            entity.getComponent<fluxgl::Transform>().rotation.z += 20.0f * deltaTime; // Rotate around Z-axis
 
-        void onRender() override {
-            fluxgl::Renderer::clear();
-            fluxgl::Renderer::draw(entity, &camera);
+            fluxgl::Renderer::beginFrame();
+
+            auto& cameraComponent = camera.getComponent<fluxgl::Camera>();
+            auto& cameraTransform = camera.getComponent<fluxgl::Transform>();
+
+            auto& meshTransform = entity.getComponent<fluxgl::Transform>();
+            auto& meshRenderer = entity.getComponent<fluxgl::MeshRenderer>();
+
+            fluxgl::Renderer::setCamera(cameraComponent.getViewMatrix(cameraTransform), cameraComponent.getProjectionMatrix(), cameraTransform.position);
+            fluxgl::Renderer::drawMesh(
+                meshRenderer.mesh,
+                meshRenderer.material,
+                meshTransform.getModelMatrix()
+            );
         }
 };
 
 int main() {
-    TransformExample app(800, 600, "Transform Example");
+    fluxgl::App app(800, 600, "Transform Example");
+
+    fluxgl::SceneManager::get().registerScene<TransformExample>("Transform");
     app.run();
 
     return 0;

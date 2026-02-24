@@ -1,6 +1,7 @@
 #include <fluxgl/core/app.h>
 #include <fluxgl/core/error.h>
 #include <fluxgl/core/log.h>
+#include <fluxgl/core/scene_manager.h>
 
 #include <iostream>
 #include <sstream>
@@ -12,7 +13,8 @@ namespace fluxgl {
 
     void App::run() {
         try {
-            onInit();
+            AppContext ctx { m_window, m_inputManager };
+            SceneManager::get().setContext(&ctx);
 
             float lastTime = 0.0f;
             while (!m_window.shouldClose()) {
@@ -23,13 +25,10 @@ namespace fluxgl {
                 m_inputManager.beginFrame();
                 m_window.pollEvents();
 
-                onUpdate(deltaTime);
-                onRender();
+                SceneManager::get().update(deltaTime);
 
                 m_window.swapBuffers();
             }
-
-            onShutdown();
         } catch (const fluxgl::Error& error) {
             std::stringstream oss;
             oss << "Error: " << error.code << " - " << error.message;

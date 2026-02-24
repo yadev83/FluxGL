@@ -5,7 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.3.0] - 2026-02-24
+
+### Added
+- Basic ECS system with a registry, entity, and component system
+- SceneManager and Scene classes for scene management
+- Systems implementation with the ECS (used only in generic rendering for now)
+- Behaviors system for "custom" actions without going through the whole systems/components loop. (Imagine MonoBehaviors from Unity and similar stuff)
+- Lighting system with different light types and a heavy shader update (materials pipeline included)
+
+### Changed
+- App lifecycle now goes through scenes and App should not be inherited directly
+- Letterboxing and aspect ratio respect in rendering system
+- Updated the build system to make examples optional and fluxgl buildable as a standalone library for other projects
 
 ## [0.2.0] - 2026-02-18
 

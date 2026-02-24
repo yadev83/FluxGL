@@ -5,75 +5,62 @@
 #include <sstream>
 #include <vector>
 
+#include "fps_controller.h"
+
 #define MAX_ENTITIES 10
 
-class ThreeDimensionsExample : public fluxgl::App {
-    public: using fluxgl::App::App; // Inherit constructors
-
+class Scene3D : public fluxgl::Scene {
     private:
-        std::vector<fluxgl::Renderable> entities;
-        fluxgl::Camera camera;
+        fluxgl::Entity camera;
+        std::vector<fluxgl::Entity> entities;
 
-    protected:
-        void onInit() override {           
+    public:
+        void onLoad() override {
+            registerSystem<fluxgl::RenderSystem>();
+        }
+
+        void onInit() override {
             for(int i = 0; i < MAX_ENTITIES; i++) {
-                entities.emplace_back();
+                entities.emplace_back(createEntity());
                 auto& entity = entities.back();
+
+                auto& transform = entity.addComponent<fluxgl::Transform>();
+                auto& meshRenderer = entity.addComponent<fluxgl::MeshRenderer>();
                 
                 bool isEven = i % 2 == 0;
 
-                entity.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
-                entity.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
-                if(isEven) entity.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
+                meshRenderer.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
+                meshRenderer.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
+                if(isEven) meshRenderer.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
                 
-                entity.mesh = isEven ? fluxgl::Mesh::sphere() : fluxgl::Mesh::cube();
+                meshRenderer.mesh = isEven ? fluxgl::Mesh::sphere() : fluxgl::Mesh::cube();
                 // Randomize position
-                entity.transform.position = glm::vec3((float)rand() / (float)RAND_MAX * 6.0f - 3.0f, (float)rand() / (float)RAND_MAX * 6.0f - 3.0f, (float)rand() / (float)RAND_MAX * 6.0f - 3.0f);
-                //entity.transform.scale = glm::vec3((float)rand() / (float)RAND_MAX * 2.0f + 0.5f, (float)rand() / (float)RAND_MAX * 2.0f + 0.5f, (float)rand() / (float)RAND_MAX * 2.0f + 0.5f);
+                transform.position = glm::vec3((float)rand() / (float)RAND_MAX * 6.0f - 3.0f, (float)rand() / (float)RAND_MAX * 6.0f - 3.0f, (float)rand() / (float)RAND_MAX * 6.0f - 3.0f);
             }
-            
-            camera.transform.position = {0.0f, 0.0f, 10.0f};
+
+            camera = createEntity();
+            camera.addComponent<fluxgl::Camera>();
+            auto& cameraTransform = camera.addComponent<fluxgl::Transform>();
+            cameraTransform.position = {0.0f, 0.0f, 3.0f};
+            camera.registerBehavior<FirstPersonController>();
         }
 
         void onUpdate(float deltaTime) override {
-            if(getInput().isKeyPressed(GLFW_KEY_ESCAPE)) getWindow().isMouseLocked() ? getWindow().setMouseLocked(false) : getWindow().quit();
-            if(getInput().isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) getWindow().setMouseLocked(true);
+            if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) context->window.isMouseLocked() ? context->window.setMouseLocked(false) : context->window.setWindowShouldClose();
+            if(context->inputManager.isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) context->window.setMouseLocked(true);
 
-            float velocity = 5.0f * deltaTime;
-            if(getInput().isKeyDown(GLFW_KEY_W)) camera.transform.position += camera.transform.front() * velocity;
-            if(getInput().isKeyDown(GLFW_KEY_S)) camera.transform.position -= camera.transform.front() * velocity;
-            if(getInput().isKeyDown(GLFW_KEY_A)) camera.transform.position -= camera.transform.right() * velocity;
-            if(getInput().isKeyDown(GLFW_KEY_D)) camera.transform.position += camera.transform.right() * velocity;
-
-            if(getWindow().isMouseLocked()) {
-                static double lastX = getInput().getMouseX(), lastY = getInput().getMouseY();
-                double offsetX = getInput().getMouseX() - lastX;
-                double offsetY = lastY - getInput().getMouseY();
-                lastX = getInput().getMouseX();
-                lastY = getInput().getMouseY();
-                float sensitivity = 0.1f;
-
-                camera.transform.rotation.y += offsetX * sensitivity;
-                camera.transform.rotation.x += offsetY * sensitivity;
-
-                if(camera.transform.rotation.x > 89.0f) camera.transform.rotation.x = 89.0f;
-                if(camera.transform.rotation.x < -89.0f) camera.transform.rotation.x = -89.0f;
+            for(fluxgl::Entity& entity : entities) {
+                auto& transform = entity.getComponent<fluxgl::Transform>();
+                transform.rotation.x += 20.0f * deltaTime; // Rotate around X-axis
+                transform.rotation.z += 20.0f * deltaTime; // Rotate around Z-axis
             }
-
-            for(fluxgl::Renderable& entity : entities) {
-                entity.transform.rotation.x += 20.0f * deltaTime; // Rotate around X-axis
-                entity.transform.rotation.z += 20.0f * deltaTime; // Rotate around Z-axis
-            }
-        }
-
-        void onRender() override {
-            fluxgl::Renderer::clear();
-            for(fluxgl::Renderable& entity : entities) fluxgl::Renderer::draw(entity, &camera);
         }
 };
 
 int main() {
-    ThreeDimensionsExample app(800, 600, "3D Example");
+    fluxgl::App app(800, 600, "3D Example");
+    
+    fluxgl::SceneManager::get().registerScene<Scene3D>("3D");
     app.run();
 
     return 0;

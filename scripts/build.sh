@@ -11,6 +11,10 @@ ROOT_DIR="$SCRIPT_DIR/.."
 BUILD_DIR="$ROOT_DIR/build/$BUILD_TYPE"
 
 echo "🚧 Configuring build..."
+
+export VCPKG_DEFAULT_TRIPLET=x64-mingw-static
+export VCPKG_DEFAULT_HOST_TRIPLET=x64-mingw-static
+
 cmake -S . -G "MinGW Makefiles" -B "$BUILD_DIR" \
     -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
     -DVCPKG_TARGET_TRIPLET=x64-mingw-static \
@@ -18,5 +22,5 @@ cmake -S . -G "MinGW Makefiles" -B "$BUILD_DIR" \
 echo "✅ Configuration complete!"
 
 echo "🔨 Building FluxGL & Examples..."
-cmake --build "$BUILD_DIR"
+cmake --build "$BUILD_DIR" -DFLUXGL_BUILD_EXAMPLES=ON
 echo "✅ Build complete!"
