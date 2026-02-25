@@ -7,17 +7,21 @@
 #include "core/scene.h"
 #include "core/scene_manager.h"
 
+#include "utils/file.h"
+
 #include "ecs/entity.h"
 #include "ecs/registry.h"
 #include "ecs/system.h"
 #include "ecs/behavior.h"
-#include "ecs/systems/render_system.h"
 #include "ecs/components/transform.h"
 #include "ecs/components/mesh_renderer.h"
 #include "ecs/components/camera.h"
 #include "ecs/components/light.h"
+#include "ecs/components/audio_listener.h"
+#include "ecs/components/audio_source.h"
 
-#include "utils/file.h"
+#include "ecs/systems/render_system.h"
+#include "ecs/systems/audio_system.h"
 
 #include "input/input_manager.h"
 
@@ -27,3 +31,7 @@
 #include "graphics/texture.h"
 #include "graphics/material.h"
 #include "graphics/renderer.h"
+
+#include "audio/audio_engine.h"
+#include "audio/sound.h"
+#include "audio/source.h"

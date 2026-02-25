@@ -27,7 +27,7 @@ namespace fluxgl {
                 case LightType::Directional: {
                     if(entity.hasComponent<Transform>()) {
                         auto& transform = entity.getComponent<Transform>();
-                        Renderer::registerDirectionalLight(light.color, light.intensity, transform.rotation);
+                        Renderer::registerDirectionalLight(light.color, light.intensity, transform.front());
                     } 
                 } break;
                 case LightType::Point: {

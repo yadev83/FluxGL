@@ -8,6 +8,10 @@ struct GLFWwindow;
 namespace fluxgl {
     class App;
 
+    /**
+     * @brief Window class abstraction for the GLFW library
+     * 
+     */
     class Window {
         private:
             GLFWwindow* m_window = nullptr;

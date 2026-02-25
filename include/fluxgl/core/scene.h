@@ -5,6 +5,14 @@
 
 namespace fluxgl {
     struct AppContext;
+
+    /**
+     * @brief Scene base class
+     * 
+     * Every scene in a project must inherit from this class
+     * It should then be registered in the singleton class "SceneManager" before starting the app
+     * It holds a Registry and a list of Systems for the ECS implementation, and gives acces to the AppContext (window / input)
+     */
     class Scene {
         private:
             Registry m_registry;

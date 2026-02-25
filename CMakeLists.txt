@@ -42,12 +42,15 @@ target_sources(FluxGL PRIVATE
     src/ecs/entity.cpp
     src/ecs/behavior.cpp
     src/ecs/systems/render_system.cpp
+    src/ecs/systems/audio_system.cpp
     src/input/input_manager.cpp
     src/utils/file.cpp
     src/graphics/mesh.cpp
     src/graphics/shader.cpp
     src/graphics/renderer.cpp
     src/graphics/texture.cpp
+    src/audio/miniaudio_impl.cpp
+    src/audio/audio_engine.cpp
 )
 
 target_include_directories(FluxGL

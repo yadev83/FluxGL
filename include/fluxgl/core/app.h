@@ -9,6 +9,13 @@ namespace fluxgl {
         fluxgl::InputManager& inputManager;
     };
 
+    /**
+     * @brief Main application class
+     * 
+     * The entry point of any FluxGL application should be there
+     * It automatically starts an openGL window and sets up an input manager and the Audio Engine.
+     * The main loop is then handled by the run() method
+     */
     class App {
         private:
             fluxgl::Window m_window;

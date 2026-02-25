@@ -7,6 +7,13 @@
 namespace fluxgl {
     struct AppContext;
 
+    /**
+     * @brief A Scene orchestrator used by the main App class
+     * 
+     * This class is responsible for loading, unloading and updating scenes
+     * It also handles the transition between scenes
+     * It is a singleton, so it can be statically accessed and only ONE instance can be created at a time in an application
+     */
     class SceneManager {
         private:
             fluxgl::AppContext* m_appContext = nullptr;
