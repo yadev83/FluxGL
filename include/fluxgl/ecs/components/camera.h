@@ -5,6 +5,8 @@
 namespace fluxgl {
     struct Camera {
         float fov = 45.0f;
+        float orthographicSize = 1.0f;
+
         float nearPlane = 0.1f;
         float farPlane = 100.0f;
 
@@ -19,7 +21,14 @@ namespace fluxgl {
         glm::mat4 getProjectionMatrix() const {
             float aspectRatio = static_cast<float>(width) / height;
             if (isOrthographic) {
-                return glm::ortho(0.0f, static_cast<float>(width), 0.0f, static_cast<float>(height), nearPlane, farPlane);
+                return glm::ortho(
+                    -orthographicSize * aspectRatio, 
+                    orthographicSize * aspectRatio, 
+                    -orthographicSize, 
+                    orthographicSize, 
+                    nearPlane, 
+                    farPlane
+                );
             } else {
                 return glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
             }
