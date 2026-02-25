@@ -8,7 +8,6 @@
 #include "core/scene_manager.h"
 
 #include "utils/file.h"
-#include "utils/compute.h"
 
 #include "ecs/entity.h"
 #include "ecs/registry.h"

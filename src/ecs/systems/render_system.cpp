@@ -1,6 +1,5 @@
 #include <vector>
 #include <fluxgl/core/scene.h>
-#include <fluxgl/utils/compute.h>
 
 #include <fluxgl/ecs/registry.h>
 #include <fluxgl/ecs/entity.h>
@@ -28,7 +27,7 @@ namespace fluxgl {
                 case LightType::Directional: {
                     if(entity.hasComponent<Transform>()) {
                         auto& transform = entity.getComponent<Transform>();
-                        Renderer::registerDirectionalLight(light.color, light.intensity, rotationToDirection(transform.rotation));
+                        Renderer::registerDirectionalLight(light.color, light.intensity, transform.front());
                     } 
                 } break;
                 case LightType::Point: {
