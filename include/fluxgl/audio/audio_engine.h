@@ -36,6 +36,7 @@ namespace fluxgl {
             void update();
 
             void setSourcePosition(SourceID id, const glm::vec3& position);
+            void setSourceSpatialized(SourceID id, bool spatialized);
             void setListener(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up);
 
             void setMasterVolume(float volume);

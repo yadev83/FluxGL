@@ -56,6 +56,13 @@ namespace fluxgl {
         ma_sound_set_position(&it->second.sound, position.x, position.y, position.z);
     }
 
+    void AudioEngine::setSourceSpatialized(SourceID id, bool spatialized) {
+        auto it = m_sources.find(id);
+        if(it == m_sources.end()) return;
+
+        ma_sound_set_spatialization_enabled(&it->second.sound, spatialized);
+    }
+
     void AudioEngine::setListener(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up) {
         ma_engine_listener_set_position(
             &m_engine,

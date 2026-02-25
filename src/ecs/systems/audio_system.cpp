@@ -11,9 +11,6 @@ namespace fluxgl {
     void AudioSystem::onUpdate(Scene& scene, float dt) {
         auto& registry = scene.getRegistry();
 
-        // Start by clearing the listener data
-        AudioEngine::get().setListener(glm::vec3(0.0f), glm::vec3(0.0f), glm::vec3(0.0f));
-
         // Update the audio engine
         AudioEngine::get().update();
 
@@ -36,15 +33,25 @@ namespace fluxgl {
                 source.shouldPlay = false;
                 SoundID sound = AudioEngine::get().loadSound(source.sound.path, source.sound.type);
                 source.source = AudioEngine::get().play(sound, source.loop, source.volume);
-            } else if(source.shouldStop && source.source != 0) {
-                source.shouldStop = false;
-                AudioEngine::get().stop(source.source);
             }
+            
+            if(source.source != 0) {
+                if(!AudioEngine::get().isPlaying(source.source)) {
+                    source.source = 0;
+                }
 
-            // Apply spatialization
-            if(source.source != 0 && source.spatialized && e.hasComponent<Transform>()) {
-                auto& transform = e.getComponent<Transform>();
-                AudioEngine::get().setSourcePosition(source.source, transform.position);
+                if(source.shouldStop) {
+                    source.shouldStop = false;
+                    AudioEngine::get().stop(source.source);
+                }
+
+                if(source.spatialized && e.hasComponent<Transform>()) {
+                    auto& transform = e.getComponent<Transform>();
+                    AudioEngine::get().setSourcePosition(source.source, transform.position);
+                    AudioEngine::get().setSourceSpatialized(source.source, true);
+                } else {
+                    AudioEngine::get().setSourceSpatialized(source.source, false);
+                }
             }
         }
     }
