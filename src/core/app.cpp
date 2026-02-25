@@ -2,6 +2,7 @@
 #include <fluxgl/core/error.h>
 #include <fluxgl/core/log.h>
 #include <fluxgl/core/scene_manager.h>
+#include <fluxgl/audio/audio_engine.h>
 
 #include <iostream>
 #include <sstream>
@@ -15,6 +16,7 @@ namespace fluxgl {
         try {
             AppContext ctx { m_window, m_inputManager };
             SceneManager::get().setContext(&ctx);
+            AudioEngine::get().init();
 
             float lastTime = 0.0f;
             while (!m_window.shouldClose()) {
@@ -29,6 +31,8 @@ namespace fluxgl {
 
                 m_window.swapBuffers();
             }
+
+            AudioEngine::get().shutdown();
         } catch (const fluxgl::Error& error) {
             std::stringstream oss;
             oss << "Error: " << error.code << " - " << error.message;

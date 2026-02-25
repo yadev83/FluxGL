@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Added a basic audioEngine (load / play / start) based on miniaudio lib 
+- Implemented the ECS Audio_System with AudioSource and AudioListener components for audio capabilities
+
 ### Fixed
 - Fixed a rotation compute error that made the directional lights not work properly
 

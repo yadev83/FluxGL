@@ -10,6 +10,5 @@ RELEASE_BUILD_DIR="$ROOT_DIR/build/Release"
 
 # Remove the build directory
 echo "🚮 Cleaning build artifacts..."
-cmake --build "$DEBUG_BUILD_DIR" --target clean || true
-cmake --build "$RELEASE_BUILD_DIR" --target clean || true
+rm -rf "$DEBUG_BUILD_DIR" "$RELEASE_BUILD_DIR"
 echo "✅ Clean complete!"
