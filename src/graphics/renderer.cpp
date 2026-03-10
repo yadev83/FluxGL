@@ -102,6 +102,7 @@ namespace fluxgl {
             sprite.texture.bind(0);
             sprite.shader.setUniform("u_Texture", 0);
         }
+        sprite.shader.setUniform("u_UseTexture", sprite.texture.isValid());
 
         // Color
         sprite.shader.setUniform("u_Color", sprite.color);

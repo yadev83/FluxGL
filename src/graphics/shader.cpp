@@ -354,10 +354,16 @@ namespace fluxgl {
             in vec2 TexCoord;
 
             uniform sampler2D u_Texture;
+            uniform bool u_UseTexture;
             uniform vec3 u_Color;
 
             void main()
             {
+                if(!u_UseTexture) {
+                    FragColor = vec4(u_Color, 1.0);
+                    return;
+                }
+
                 vec4 tex = texture(u_Texture, TexCoord);
                 FragColor = vec4(u_Color, 1.0) * tex;
             }
