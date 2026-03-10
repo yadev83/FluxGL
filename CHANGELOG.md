@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Sprite component and basic sprite rendering
+
 ### Fixed
 - Added Orthographic camera view scaling to fix the ortho view.
 

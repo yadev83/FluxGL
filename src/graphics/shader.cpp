@@ -98,6 +98,10 @@ namespace fluxgl {
         glUniform1f(glGetUniformLocation(m_ID, name.c_str()), value);
     }
 
+    void Shader::setUniform(const std::string& name, const glm::vec2& value) const {
+        glUniform2f(glGetUniformLocation(m_ID, name.c_str()), value.x, value.y);
+    }
+
     void Shader::setUniform(const std::string& name, const glm::vec3& value) const {
         glUniform3f(glGetUniformLocation(m_ID, name.c_str()), value.x, value.y, value.z);
     }
@@ -310,6 +314,52 @@ namespace fluxgl {
             {
                 // Output fragment
                 FragColor = vec4(u_AlbedoColor, 1.0);
+            }
+        )";
+
+        return loadFromSource(vertexSrc, fragmentSrc);
+    }
+
+    Shader Shader::spriteUnlit() {
+        const char *vertexSrc = R"(
+            #version 330 core
+
+            layout (location = 0) in vec3 aPos;
+            layout (location = 1) in vec3 aNormal;
+            layout (location = 2) in vec3 aColor;
+            layout (location = 3) in vec2 aUV;
+
+            out vec2 TexCoord;
+
+            uniform mat4 u_Model;
+            uniform mat4 u_View;
+            uniform mat4 u_Projection;
+
+            uniform vec2 u_UVMin;
+            uniform vec2 u_UVMax;
+
+            void main()
+            {
+                gl_Position = u_Projection * u_View * u_Model * vec4(aPos, 1.0);
+
+                // Remap UV for atlas
+                TexCoord = mix(u_UVMin, u_UVMax, aUV);
+            }
+        )";
+
+        const char *fragmentSrc = R"(
+            #version 330 core
+
+            out vec4 FragColor;
+            in vec2 TexCoord;
+
+            uniform sampler2D u_Texture;
+            uniform vec3 u_Color;
+
+            void main()
+            {
+                vec4 tex = texture(u_Texture, TexCoord);
+                FragColor = vec4(u_Color, 1.0) * tex;
             }
         )";
 

@@ -1,11 +1,12 @@
 #pragma once
 
 #include <fluxgl/graphics/texture.h>
-#include <glm/glm.hpp>
+#include <fluxgl/graphics/shader.h>
 
 namespace fluxgl {
-    struct SpriteRenderer {
+    struct Sprite {
         Texture texture;
+        Shader shader;
 
         glm::vec3 color = {1.0f, 1.0f, 1.0f};
         glm::vec2 size = {1.0f, 1.0f};
