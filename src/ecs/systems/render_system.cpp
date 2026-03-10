@@ -57,6 +57,16 @@ namespace fluxgl {
             Renderer::setCamera(camera->getViewMatrix(*cameraTransform), camera->getProjectionMatrix(), cameraTransform->position);
         }
 
+        // Draw sprites
+        for(auto entity : registry.query<Sprite, Transform>()) {
+            auto& sprite = entity.getComponent<Sprite>();
+            auto& transform = entity.getComponent<Transform>();
+
+            static Mesh quad = Mesh::quad();
+            Renderer::drawSprite(quad, sprite, transform.getModelMatrix());
+        }
+
+        // Draw meshes
         for(auto entity : registry.query<MeshRenderer, Transform>()) {
             auto& meshRenderer = entity.getComponent<MeshRenderer>();
             auto& transform = entity.getComponent<Transform>();

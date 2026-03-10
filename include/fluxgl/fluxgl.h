@@ -15,6 +15,7 @@
 #include "ecs/behavior.h"
 #include "ecs/components/transform.h"
 #include "ecs/components/mesh_renderer.h"
+#include "ecs/components/sprite.h"
 #include "ecs/components/camera.h"
 #include "ecs/components/light.h"
 #include "ecs/components/audio_listener.h"

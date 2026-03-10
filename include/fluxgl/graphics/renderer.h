@@ -1,5 +1,6 @@
 #pragma once
 
+#include <fluxgl/ecs/components/sprite.h>
 #include <glm/glm.hpp>
 #include "mesh.h"
 #include "material.h"
@@ -62,6 +63,7 @@ namespace fluxgl {
             static void registerDirectionalLight(const glm::vec3& lightColor, const float intensity, const glm::vec3& direction);
             static void registerPointLight(const glm::vec3& lightColor, const float intensity, const glm::vec3& position);
 
+            static void drawSprite(const Mesh& quad, const Sprite& sprite, const glm::mat4& modelMatrix = glm::mat4(1.0f));
             static void drawMesh(const Mesh& mesh, const Material& material, const glm::mat4& modelMatrix = glm::mat4(1.0f));
     };
 }

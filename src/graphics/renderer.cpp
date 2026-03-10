@@ -1,6 +1,7 @@
 #include <fluxgl/graphics/renderer.h>
 #include <fluxgl/core/log.h>
 #include <glad/glad.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace fluxgl {
     RenderState Renderer::m_state;
@@ -92,6 +93,46 @@ namespace fluxgl {
             .intensity = intensity,
             .position = position
         });
+    }
+
+    void Renderer::drawSprite(const Mesh& quad, const Sprite& sprite, const glm::mat4& modelMatrix) {
+        if(sprite.shader.isValid()) sprite.shader.bind();
+
+        if(sprite.texture.isValid()) {
+            sprite.texture.bind(0);
+            sprite.shader.setUniform("u_Texture", 0);
+        }
+
+        // Color
+        sprite.shader.setUniform("u_Color", sprite.color);
+
+        // UV Atlas
+        sprite.shader.setUniform("u_UVMin", sprite.uvMin);
+        sprite.shader.setUniform("u_UVMax", sprite.uvMax);
+
+        // Update model Matrix with sprite data
+        glm::mat4 model = modelMatrix;
+        model = glm::scale(model, glm::vec3(sprite.size, 1.0f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, sprite.layer));
+
+        // Binding MVP matrices
+        sprite.shader.setUniform("u_View", m_sceneState.viewMatrix);
+        sprite.shader.setUniform("u_Projection", m_sceneState.projectionMatrix);
+        sprite.shader.setUniform("u_Model", modelMatrix);
+
+        // DRAW CALL
+        unsigned int vao = quad.getVAO();
+        size_t indexCount = quad.getIndexCount();
+        size_t verticesCount = quad.getVerticesCount();
+
+        if (vao > 0) { 
+            glBindVertexArray(vao); 
+            if (indexCount > 0) { 
+                glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0); 
+            } else { 
+                glDrawArrays(GL_TRIANGLES, 0, verticesCount); 
+            } 
+        }
     }
 
     void Renderer::drawMesh(const Mesh& mesh, const Material& material, const glm::mat4& modelMatrix) {
