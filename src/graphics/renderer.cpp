@@ -26,7 +26,16 @@ namespace fluxgl {
                 m_state.viewportX = 0.0f;
                 m_state.viewportY = (height - m_state.viewportHeight) / 2.0f;
             }
+        } else {
+            m_state.viewportWidth = width;
+            m_state.viewportHeight = height;
+            m_state.viewportX = 0.0f;
+            m_state.viewportY = 0.0f;
         }
+    }
+
+    float Renderer::getViewportAspectRatio() {
+        return (float)m_state.viewportWidth / m_state.viewportHeight;
     }
 
     void Renderer::beginFrame() {
@@ -119,7 +128,7 @@ namespace fluxgl {
         // Binding MVP matrices
         sprite.shader.setUniform("u_View", m_sceneState.viewMatrix);
         sprite.shader.setUniform("u_Projection", m_sceneState.projectionMatrix);
-        sprite.shader.setUniform("u_Model", modelMatrix);
+        sprite.shader.setUniform("u_Model", model);
 
         // DRAW CALL
         unsigned int vao = quad.getVAO();

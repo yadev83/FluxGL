@@ -55,6 +55,7 @@ namespace fluxgl {
 
         public:
             static void setFramebufferSize(int width, int height);
+            static float getViewportAspectRatio();
             static void beginFrame();
 
             static void setCamera(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& position);

@@ -54,7 +54,7 @@ namespace fluxgl {
 
         // Set the camera
         if(camera && cameraTransform) {
-            Renderer::setCamera(camera->getViewMatrix(*cameraTransform), camera->getProjectionMatrix(), cameraTransform->position);
+            Renderer::setCamera(camera->getViewMatrix(*cameraTransform), camera->getProjectionMatrix(Renderer::getViewportAspectRatio()), cameraTransform->position);
         }
 
         // Draw sprites
