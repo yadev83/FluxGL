@@ -45,7 +45,7 @@ class TransformExample : public fluxgl::Scene {
             auto& meshTransform = entity.getComponent<fluxgl::Transform>();
             auto& meshRenderer = entity.getComponent<fluxgl::MeshRenderer>();
 
-            fluxgl::Renderer::setCamera(cameraComponent.getViewMatrix(cameraTransform), cameraComponent.getProjectionMatrix(fluxgl::Renderer::getViewportAspectRatio()), cameraTransform.position);
+            fluxgl::Renderer::setCamera(cameraComponent.getViewMatrix(cameraTransform), cameraComponent.getProjectionMatrix(), cameraTransform.position);
             fluxgl::Renderer::drawMesh(
                 meshRenderer.mesh,
                 meshRenderer.material,

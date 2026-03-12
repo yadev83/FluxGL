@@ -1,6 +1,7 @@
 #pragma once
 
 #include "transform.h"
+#include <fluxgl/graphics/renderer.h>
 
 namespace fluxgl {
     struct Camera {
@@ -12,11 +13,17 @@ namespace fluxgl {
         bool isOrthographic = false;
         int worldWidth = 24;
 
+        glm::vec2 getWorldDimensions() const {
+            float aspectRatio = fluxgl::Renderer::getViewportAspectRatio();
+            return {worldWidth, worldWidth / aspectRatio}; 
+        }
+
         glm::mat4 getViewMatrix(Transform& transform) const {
             return glm::lookAt(transform.position, transform.position + transform.front(), transform.up());
         }
 
-        glm::mat4 getProjectionMatrix(float aspectRatio = 1.0f) const {
+        glm::mat4 getProjectionMatrix() const {
+            float aspectRatio = fluxgl::Renderer::getViewportAspectRatio();
             if (isOrthographic) {
                 int worldHeight = worldWidth / aspectRatio;
                 return glm::ortho(
