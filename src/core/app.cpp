@@ -3,6 +3,7 @@
 #include <fluxgl/core/log.h>
 #include <fluxgl/core/scene_manager.h>
 #include <fluxgl/audio/audio_engine.h>
+#include <fluxgl/graphics/debug_renderer.h>
 
 #include <iostream>
 #include <sstream>
@@ -15,8 +16,15 @@ namespace fluxgl {
     void App::run() {
         try {
             AppContext ctx { m_window, m_inputManager };
+
+            // Initialize subsystems
             SceneManager::get().setContext(&ctx);
             AudioEngine::get().init();
+
+            // Debug only subsystems
+            #if FLUXGL_DEBUG
+                DebugRenderer::enable();
+            #endif
 
             float lastTime = 0.0f;
             while (!m_window.shouldClose()) {

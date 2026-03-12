@@ -11,6 +11,7 @@
 #include <fluxgl/ecs/components/light.h>
 
 #include <fluxgl/graphics/renderer.h>
+#include <fluxgl/graphics/debug_renderer.h>
 
 namespace fluxgl {
     void RenderSystem::onUpdate(fluxgl::Scene& scene, float dt) {
@@ -54,7 +55,10 @@ namespace fluxgl {
 
         // Set the camera
         if(camera && cameraTransform) {
-            Renderer::setCamera(camera->getViewMatrix(*cameraTransform), camera->getProjectionMatrix(), cameraTransform->position);
+            glm::mat4 viewMatrix = camera->getViewMatrix(*cameraTransform);
+            glm::mat4 projectionMatrix = camera->getProjectionMatrix();
+            Renderer::setCamera(viewMatrix, projectionMatrix, cameraTransform->position);
+            if(DebugRenderer::isEnabled()) DebugRenderer::setCamera(viewMatrix, projectionMatrix);
         }
 
         // Draw sprites
@@ -77,5 +81,8 @@ namespace fluxgl {
                 transform.getModelMatrix()
             );
         }
+
+        // Debug renderer (if enabled)
+        if(DebugRenderer::isEnabled()) DebugRenderer::flush();
     }
 }

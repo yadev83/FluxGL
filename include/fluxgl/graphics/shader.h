@@ -41,5 +41,6 @@ namespace fluxgl {
             static Shader defaultLit();
             static Shader defaultUnlit();
             static Shader spriteUnlit();
+            static Shader debugUnlit();
     };
 }

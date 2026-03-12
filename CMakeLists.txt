@@ -49,6 +49,7 @@ target_sources(FluxGL PRIVATE
     src/graphics/shader.cpp
     src/graphics/renderer.cpp
     src/graphics/texture.cpp
+    src/graphics/debug_renderer.cpp
     src/audio/miniaudio_impl.cpp
     src/audio/audio_engine.cpp
 )

@@ -32,6 +32,7 @@
 #include "graphics/texture.h"
 #include "graphics/material.h"
 #include "graphics/renderer.h"
+#include "graphics/debug_renderer.h"
 
 #include "audio/audio_engine.h"
 #include "audio/sound.h"
