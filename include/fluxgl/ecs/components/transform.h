@@ -36,5 +36,17 @@ namespace fluxgl {
         glm::vec3 up() const {
             return glm::normalize(glm::cross(right(), front()));
         }
+
+        glm::vec3 worldUp() const {
+            return glm::vec3(0.0f, 1.0f, 0.0f);
+        }
+
+        glm::vec3 worldRight() const {
+            return glm::vec3(1.0f, 0.0f, 0.0f);
+        }
+
+        glm::vec3 worldFront() const {
+            return glm::vec3(0.0f, 0.0f, 1.0f);
+        }
     };
 }

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Sprite component and basic sprite rendering
+- World unit vectors in the transform component
 
 ### Fixed
 - Added Orthographic camera view scaling to fix the ortho view.
