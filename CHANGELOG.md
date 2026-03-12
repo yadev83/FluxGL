@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Added Orthographic camera view scaling to fix the ortho view.
+- OrthoCam worldWidth = 24 units by default. Height is calculated based on the aspect ratio.
 
 ## [0.4.0] - 2026-02-25
 

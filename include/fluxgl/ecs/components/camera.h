@@ -10,8 +10,7 @@ namespace fluxgl {
         float farPlane = 100.0f;
 
         bool isOrthographic = false;
-        int worldWidth = 800;
-        int worldHeight = 600;
+        int worldWidth = 24;
 
         glm::mat4 getViewMatrix(Transform& transform) const {
             return glm::lookAt(transform.position, transform.position + transform.front(), transform.up());
@@ -19,6 +18,7 @@ namespace fluxgl {
 
         glm::mat4 getProjectionMatrix(float aspectRatio = 1.0f) const {
             if (isOrthographic) {
+                int worldHeight = worldWidth / aspectRatio;
                 return glm::ortho(
                     -worldWidth * 0.5f, 
                     worldWidth * 0.5f, 
