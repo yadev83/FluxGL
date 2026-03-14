@@ -11,10 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sprite component and basic sprite rendering
 - World unit vectors in the transform component
 - Debug renderer to draw lines, rectangles, etc... on screen for debugging purposes
+- Tags system for entities
 
 ### Fixed
 - Added Orthographic camera view scaling to fix the ortho view.
 - OrthoCam worldWidth = 24 units by default. Height is calculated based on the aspect ratio.
+- Entity destroy now marks for deletion and applies deletion at the beginning of the next frame
 
 ## [0.4.0] - 2026-02-25
 

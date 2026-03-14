@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace fluxgl {
     using EntityID = unsigned int;
     class Registry;
@@ -14,6 +16,9 @@ namespace fluxgl {
             Entity(EntityID id, Registry* registry);
 
             EntityID getID() const;
+            void addTag(const std::string& tag);
+            bool hasTag(const std::string& tag);
+            void removeTag(const std::string& tag);
 
             template<typename ComponentT, typename... Args>
             ComponentT& addComponent(Args&&... args);
@@ -29,7 +34,6 @@ namespace fluxgl {
 
             template<typename BehaviorT, typename... Args>
             BehaviorT& registerBehavior(Args&&... args);
-            void clearBehaviors();
     };
 }
 

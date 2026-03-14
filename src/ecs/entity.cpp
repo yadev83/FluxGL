@@ -7,7 +7,15 @@ namespace fluxgl {
         return m_id; 
     }
 
-    void Entity::clearBehaviors() {
-        m_registry->clearBehaviors(m_id);
+    void Entity::addTag(const std::string& tag) {
+        m_registry->addTag(m_id, tag);
+    }
+
+    bool Entity::hasTag(const std::string& tag) {
+        return m_registry->hasTag(m_id, tag);
+    }
+
+    void Entity::removeTag(const std::string& tag) {
+        m_registry->removeTag(m_id, tag);
     }
 }

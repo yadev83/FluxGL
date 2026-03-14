@@ -43,6 +43,9 @@ namespace fluxgl {
                 m_initialized = true;
             }
 
+            // Before anything else, update the registry
+            m_currentScene->getRegistry().update(dt);
+
             m_currentScene->onUpdate(dt);
             m_currentScene->updateBehaviors(dt);
             m_currentScene->updateSystems(dt);
