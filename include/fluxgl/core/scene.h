@@ -20,14 +20,13 @@ namespace fluxgl {
 
         protected:
             AppContext* context = nullptr;
-
-            Entity createEntity();
             void destroyEntity(Entity entity);
 
         public:
             void setContext(AppContext* appContext);
             Registry& getRegistry();
             AppContext& getContext();
+            Entity createEntity();
             Entity getEntity(EntityID id);
 
             template<typename S, typename... Args>
