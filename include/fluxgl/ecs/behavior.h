@@ -30,6 +30,7 @@ namespace fluxgl {
 
             virtual void onInit() {}
             virtual void onUpdate(float dt) {}
+            virtual void onLateUpdate(float dt) {}
     };
 }
 

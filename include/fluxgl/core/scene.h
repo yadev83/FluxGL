@@ -2,6 +2,7 @@
 
 #include <fluxgl/ecs/registry.h>
 #include <fluxgl/ecs/system.h>
+#include <algorithm>
 
 namespace fluxgl {
     struct AppContext;
@@ -34,16 +35,38 @@ namespace fluxgl {
                 m_systems.push_back(new S(std::forward<Args>(args)...));
             }
 
+            template<typename S>
+            bool hasSystem() {
+                for(System* sys : m_systems) {
+                    if(dynamic_cast<S*>(sys) != nullptr) return true;
+                }
+                
+                return false;            
+            }
+
+            template<typename S>
+            S& getSystem() {
+                for(System* sys : m_systems) {
+                    if(auto casted = dynamic_cast<S*>(sys))
+                        return *casted;
+                }
+
+                throw std::runtime_error("System not found");
+            }
+
             void initSystems();
             void updateSystems(float dt);
+            void lateUpdateSystems(float dt);
 
             void initBehaviors();
             void updateBehaviors(float dt);
+            void lateUpdateBehaviors(float dt);
 
             virtual ~Scene() = default;
             virtual void onLoad() {}
             virtual void onDestroy() {}
             virtual void onInit() {}
             virtual void onUpdate(float dt) {}
+            virtual void onLateUpdate(float dt) {}
     };
 }

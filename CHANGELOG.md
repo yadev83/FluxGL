@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - World unit vectors in the transform component
 - Debug renderer to draw lines, rectangles, etc... on screen for debugging purposes
 - Tags system for entities
+- Systems can now be retrieved through Scene getters
+- LateUpdate() in lifecycle methods (applied after onUpdate for most systems)
 
 ### Fixed
 - Added Orthographic camera view scaling to fix the ortho view.

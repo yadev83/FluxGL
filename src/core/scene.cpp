@@ -47,6 +47,12 @@ namespace fluxgl {
         }
     }
 
+    void Scene::lateUpdateBehaviors(float dt) {
+        for(auto& behavior : m_registry.getAllBehaviors()) {
+            behavior->onLateUpdate(dt);
+        }
+    }
+
     void Scene::initSystems() {
         for(auto& system : m_systems) {
             system->onInit(*this);
@@ -56,6 +62,12 @@ namespace fluxgl {
     void Scene::updateSystems(float dt) {
         for(auto& system : m_systems) {
             system->onUpdate(*this, dt);
+        }
+    }
+
+    void Scene::lateUpdateSystems(float dt) {
+        for(auto& system : m_systems) {
+            system->onLateUpdate(*this, dt);
         }
     }
 }
