@@ -47,9 +47,21 @@ namespace fluxgl {
         }
     }
 
+    void Scene::fixedUpdateBehaviors(float dt) {
+        for(auto& behavior : m_registry.getAllBehaviors()) {
+            behavior->onFixedUpdate(dt);
+        }
+    }
+
     void Scene::lateUpdateBehaviors(float dt) {
         for(auto& behavior : m_registry.getAllBehaviors()) {
             behavior->onLateUpdate(dt);
+        }
+    }
+
+    void Scene::renderBehaviors(float dt) {
+        for(auto& behavior : m_registry.getAllBehaviors()) {
+            behavior->onRender(dt);
         }
     }
 
@@ -68,6 +80,18 @@ namespace fluxgl {
     void Scene::lateUpdateSystems(float dt) {
         for(auto& system : m_systems) {
             system->onLateUpdate(*this, dt);
+        }
+    }
+
+    void Scene::fixedUpdateSystems(float dt) {
+        for(auto& system : m_systems) {
+            system->onFixedUpdate(*this, dt);
+        }
+    }
+
+    void Scene::renderSystems(float dt) {
+        for(auto& system : m_systems) {
+            system->onRender(*this, dt);
         }
     }
 }

@@ -23,6 +23,9 @@ namespace fluxgl {
             Scene* m_nextScene = nullptr;
             bool m_initialized = false;
 
+            float m_fixedStep = 1.0f / 60.0f;
+            float m_fixedStepAcc = 0.0f;
+
             SceneManager() = default;
 
         public:

@@ -56,17 +56,23 @@ namespace fluxgl {
 
             void initSystems();
             void updateSystems(float dt);
+            void fixedUpdateSystems(float dt);
             void lateUpdateSystems(float dt);
+            void renderSystems(float dt);
 
             void initBehaviors();
             void updateBehaviors(float dt);
+            void fixedUpdateBehaviors(float dt);
             void lateUpdateBehaviors(float dt);
+            void renderBehaviors(float dt);
 
             virtual ~Scene() = default;
             virtual void onLoad() {}
             virtual void onDestroy() {}
             virtual void onInit() {}
             virtual void onUpdate(float dt) {}
+            virtual void onFixedUpdate(float dt) {}
             virtual void onLateUpdate(float dt) {}
+            virtual void onRender(float dt) {}
     };
 }

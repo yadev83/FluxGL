@@ -3,6 +3,14 @@
 namespace fluxgl {
     Entity::Entity(EntityID id, Registry* registry) : m_id(id), m_registry(registry) {}
 
+    bool Entity::isValid() {
+        return m_registry->isValidEntity(m_id);
+    }
+
+    void Entity::destroy() {
+        m_registry->destroyEntity(m_id);
+    }
+
     EntityID Entity::getID() const {
         return m_id; 
     }

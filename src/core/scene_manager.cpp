@@ -43,16 +43,28 @@ namespace fluxgl {
                 m_initialized = true;
             }
 
-            // Before anything else, update the registry
-            m_currentScene->getRegistry().update(dt);
-
             m_currentScene->updateSystems(dt);
             m_currentScene->updateBehaviors(dt);
             m_currentScene->onUpdate(dt);
 
+            m_fixedStepAcc += dt;
+            while(m_fixedStepAcc >= m_fixedStep) {
+                m_currentScene->fixedUpdateSystems(m_fixedStep);
+                m_currentScene->fixedUpdateBehaviors(m_fixedStep);
+                m_currentScene->onFixedUpdate(m_fixedStep);
+                m_fixedStepAcc -= m_fixedStep;
+            }
+
             m_currentScene->lateUpdateSystems(dt);
             m_currentScene->lateUpdateBehaviors(dt);
             m_currentScene->onLateUpdate(dt);
+
+            m_currentScene->renderSystems(dt);
+            m_currentScene->renderBehaviors(dt);
+            m_currentScene->onRender(dt);
+
+            // Registry update/clean up after render
+            m_currentScene->getRegistry().update(dt);
         }
     }
 

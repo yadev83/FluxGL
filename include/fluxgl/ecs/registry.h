@@ -35,6 +35,7 @@ namespace fluxgl {
             // Entities management
             Entity createEntity();
             void destroyEntity(EntityID id); // Marks entity for deletion
+            bool isValidEntity(EntityID id);
             Entity getEntity(EntityID id);
 
             // Entity components

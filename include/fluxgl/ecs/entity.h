@@ -14,6 +14,8 @@ namespace fluxgl {
         public:
             Entity() = default;
             Entity(EntityID id, Registry* registry);
+            bool isValid();
+            void destroy();
 
             EntityID getID() const;
             void addTag(const std::string& tag);

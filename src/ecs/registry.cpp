@@ -31,6 +31,15 @@ namespace fluxgl {
         m_entitiesToDelete.push_back(id);
     }
 
+    bool Registry::isValidEntity(EntityID id) {
+        // Make sure that entity has at least one component storage, and is not marked for deletion
+        if(std::find(m_entitiesToDelete.begin(), m_entitiesToDelete.end(), id) != m_entitiesToDelete.end()) return false;
+
+        // Otherwise, isValid (not true really, but it works for now)
+        // TODO : Store valid ids inside the registry and check on that instead
+        return true;
+    }
+
     Entity Registry::getEntity(EntityID id) {
         return Entity(id, this);
     }
@@ -44,7 +53,10 @@ namespace fluxgl {
     }
 
     bool Registry::hasTag(EntityID id, const std::string& tag) {
-        auto& storage = m_tags[id];
+        auto it = m_tags.find(id);
+        if(it == m_tags.end()) return false;
+        auto& storage = it->second;
+        
         return std::find(storage.begin(), storage.end(), tag) != storage.end();
     }
 
