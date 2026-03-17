@@ -14,7 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Lifecycle is now a bit more precise with fixedUpdates and LateUpdates/RenderUpdates
-
+- Registry management has been upgraded with many improvements
+    - EntityIDs are now limited to a fixed number (10000) and managed automatically by the system to avoid invalidities
+    - Registry can now create hierarchy between entities to (children => parent)
+    - A lot of exceptions are now caught for easier debugging
+    - Entity removal system and isAlive/isValid checks have been improved
+    
 ### Fixed
 - Added Orthographic camera view scaling to fix the ortho view.
 - OrthoCam worldWidth = 24 units by default. Height is calculated based on the aspect ratio.

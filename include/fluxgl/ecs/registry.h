@@ -3,7 +3,10 @@
 #include <typeindex>
 #include <unordered_map>
 #include <vector>
+#include <set>
 #include <string>
+
+#define FLUXGL_MAX_ENTITIES 10000
 
 namespace fluxgl {
     class Entity;
@@ -16,19 +19,25 @@ namespace fluxgl {
 
     class Registry {
         private:
-            EntityID m_nextID = 0;
+            std::vector<EntityID> m_availableIDs;
+
             // Map a type index to a componentStorage
             std::unordered_map<std::type_index, ComponentStorage> m_storages;
             // Map entities to behaviors
             std::unordered_map<EntityID, BehaviorStorage> m_behaviors;
             // Map entities to tags
             std::unordered_map<EntityID, TagsStorage> m_tags;
+            // Map entities to parent entities (hierarchy)
+            std::unordered_map<EntityID, EntityID> m_hierarchy; // parent > children
 
             // Entities to delete on next frame
-            std::vector<EntityID> m_entitiesToDelete;
-            void destroyEntities();
+            std::set<EntityID> m_entitiesToDelete;
+            void removeEntity(EntityID id); // Remove entity from the registry
+            void removeEntitiesMarkedForDestruction();
 
         public:
+            Registry();
+
             // Registry frame mgt
             void update(float dt);
 
@@ -36,7 +45,12 @@ namespace fluxgl {
             Entity createEntity();
             void destroyEntity(EntityID id); // Marks entity for deletion
             bool isValidEntity(EntityID id);
+            bool isAliveEntity(EntityID id);
             Entity getEntity(EntityID id);
+            void setParent(EntityID child, EntityID parent = 0);
+            void removeChild(EntityID child);
+            std::vector<Entity> getChildren(EntityID id);
+            Entity getParent(EntityID id);
 
             // Entity components
             template<typename ComponentT, typename... Args>
@@ -62,7 +76,6 @@ namespace fluxgl {
             // Entity Behaviors
             template<typename BehaviorT, typename... Args>
             BehaviorT& registerBehavior(EntityID id, Args&&... args);
-            
             BehaviorStorage getAllBehaviors();
     };
 }

@@ -15,6 +15,8 @@ namespace fluxgl {
             Entity() = default;
             Entity(EntityID id, Registry* registry);
             bool isValid();
+            Entity appendChild();
+            Entity getParent();
             void destroy();
 
             EntityID getID() const;

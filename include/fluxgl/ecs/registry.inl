@@ -3,6 +3,8 @@
 namespace fluxgl {
     template<typename ComponentT, typename... Args>
     ComponentT& Registry::addComponent(EntityID id, Args&&... args) {
+        if(!isValidEntity(id)) throw std::runtime_error("Registry::AddComponent" + std::string(typeid(ComponentT).name()) + ": Invalid entity" + std::to_string(id));
+
         auto& storage = m_storages[typeid(ComponentT)];
 
         if(storage.find(id) == storage.end()) {
@@ -14,18 +16,26 @@ namespace fluxgl {
 
     template<typename ComponentT>
     ComponentT& Registry::getComponent(EntityID id) {
+        if(!isValidEntity(id)) throw std::runtime_error("Registry::GetComponent" + std::string(typeid(ComponentT).name()) + ": Invalid entity" + std::to_string(id));
+        if(!hasComponent<ComponentT>(id)) throw std::runtime_error("Registry::GetComponent: Component not found");
+
         auto& storage = m_storages[typeid(ComponentT)];
         return *static_cast<ComponentT*>(storage[id]);
     }
 
     template<typename ComponentT>
     bool Registry::hasComponent(EntityID id) {
+        if(!isValidEntity(id)) return false;
+
         auto& storage = m_storages[typeid(ComponentT)];
         return storage.find(id) != storage.end();
     }
 
     template<typename ComponentT>
     void Registry::removeComponent(EntityID id) {
+        if(!isValidEntity(id)) throw std::runtime_error("Registry::RemoveComponent" + std::string(typeid(ComponentT).name()) + ": Invalid entity" + std::to_string(id));
+        if(!hasComponent<ComponentT>(id)) throw std::runtime_error("Registry::RemoveComponent: Component" + std::string(typeid(ComponentT).name()) + " not found for entity " + std::to_string(id));
+
         auto& storage = m_storages[typeid(ComponentT)];
         storage.erase(id);
     }
@@ -36,6 +46,7 @@ namespace fluxgl {
 
         for(auto& [type, storage] : m_storages) {
             for(auto& [entityID, compPtr] : storage) {
+                if(!isAliveEntity(entityID)) continue; // Skip invalid entities for queries
                 if(hasComponent<FirstT>(entityID) && (hasComponent<RestT>(entityID) && ...)) {
                     result.push_back(Entity(entityID, this));                         
                 }
