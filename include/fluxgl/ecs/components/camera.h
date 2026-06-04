@@ -3,8 +3,19 @@
 #include "transform.h"
 #include <fluxgl/graphics/renderer.h>
 
+#include <json/json.h>
+#include <fluxgl/ecs/registry.h>
+#include <fluxgl/ecs/entity.h>
+
+
 namespace fluxgl {
     struct Camera {
+        static constexpr const char* TypeName = "Camera";
+        static void Create(fluxgl::Registry& registry, fluxgl::EntityID entityID, const Json::Value& data) {
+            Camera camera;
+            registry.addComponent<Camera>(entityID, camera);
+        }
+
         float fov = 45.0f;
 
         float nearPlane = 0.1f;

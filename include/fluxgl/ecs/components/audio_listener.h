@@ -1,7 +1,17 @@
 #pragma once
 
+#include <json/json.h>
+#include <fluxgl/ecs/registry.h>
+#include <fluxgl/ecs/entity.h>
+
 namespace fluxgl {
     struct AudioListener {
+        static constexpr const char* TypeName = "AudioListener";
+        static void Create(fluxgl::Registry& registry, fluxgl::EntityID entityID, const Json::Value& data) {
+            AudioListener listener;
+            registry.addComponent<AudioListener>(entityID, listener);
+        }
+
         bool active = true;
     };
 }
