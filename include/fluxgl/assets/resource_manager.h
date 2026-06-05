@@ -47,7 +47,13 @@ namespace fluxgl {
 
         public:
             TextureHandle loadTexture(const std::string& path);
+            TextureHandle addTexture(Texture* texture);
+            TextureHandle addTexture(Texture texture);
+
             ShaderHandle loadShader(const std::string& vertexPath, const std::string& fragmentPath);
+            ShaderHandle addShader(Shader* shader);
+            ShaderHandle addShader(Shader shader);
+            
             //MeshHandle loadMesh(const std::string& path);
 
             Texture* getTexture(TextureHandle handle);

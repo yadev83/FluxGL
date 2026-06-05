@@ -7,6 +7,7 @@ namespace fluxgl {
     struct AppContext {
         fluxgl::Window& window;
         fluxgl::InputManager& inputManager;
+        fluxgl::ResourceManager& resourceManager;
     };
 
     /**
@@ -20,6 +21,7 @@ namespace fluxgl {
         private:
             fluxgl::Window m_window;
             fluxgl::InputManager m_inputManager;
+            fluxgl::ResourceManager m_resourceManager;
 
         public:
             App(int width, int height, const char *title);
@@ -29,6 +31,8 @@ namespace fluxgl {
             const fluxgl::InputManager& getInput() const;
             fluxgl::Window& getWindow();
             const fluxgl::Window& getWindow() const;
+            fluxgl::ResourceManager& getResourceManager();
+            const fluxgl::ResourceManager& getResourceManager() const;
 
             void run();
     };
