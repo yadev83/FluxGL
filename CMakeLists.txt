@@ -26,6 +26,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(glfw3 CONFIG REQUIRED)
 find_package(glad CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
+find_package(jsoncpp CONFIG REQUIRED)
 
 # Build the library
 add_library(FluxGL STATIC)
@@ -52,6 +53,7 @@ target_sources(FluxGL PRIVATE
     src/graphics/debug_renderer.cpp
     src/audio/miniaudio_impl.cpp
     src/audio/audio_engine.cpp
+    src/assets/resource_manager.cpp
 )
 
 target_include_directories(FluxGL

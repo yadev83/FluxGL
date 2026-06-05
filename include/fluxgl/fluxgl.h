@@ -37,3 +37,5 @@
 #include "audio/audio_engine.h"
 #include "audio/sound.h"
 #include "audio/source.h"
+
+#include "assets/resource_manager.h"
