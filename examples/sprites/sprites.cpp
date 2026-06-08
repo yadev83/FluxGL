@@ -9,14 +9,17 @@ class Sprites : public fluxgl::Scene {
     public:
         void onLoad() override {
             registerSystem<fluxgl::RenderSystem>();
+
+            context->resourceManager.addShader("sprite_unlit", fluxgl::Shader::spriteUnlit());
+            context->resourceManager.addTexture("awesomeface", fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
         }
 
         void onInit() override {
             sprite = createEntity();
             sprite.addComponent<fluxgl::Transform>();
             fluxgl::Sprite& spriteComponent = sprite.addComponent<fluxgl::Sprite>();
-            spriteComponent.shader = fluxgl::Shader::spriteUnlit();
-            spriteComponent.texture = fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png");
+            spriteComponent.shader = context->resourceManager.findShader("sprite_unlit");
+            spriteComponent.texture = context->resourceManager.findTexture("awesomeface");
             spriteComponent.size = {1.0f, 1.0f};
 
             camera = createEntity();

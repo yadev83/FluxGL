@@ -4,6 +4,7 @@
 #include <fluxgl/core/scene_manager.h>
 #include <fluxgl/audio/audio_engine.h>
 #include <fluxgl/graphics/debug_renderer.h>
+#include <fluxgl/assets/resource_manager.h>
 
 #include <iostream>
 #include <sstream>
@@ -15,7 +16,7 @@ namespace fluxgl {
 
     void App::run() {
         try {
-            AppContext ctx { m_window, m_inputManager };
+            AppContext ctx { m_window, m_inputManager, m_resourceManager };
 
             // Initialize subsystems
             SceneManager::get().setContext(&ctx);
@@ -69,5 +70,13 @@ namespace fluxgl {
 
     const fluxgl::Window& App::getWindow() const { 
         return m_window; 
+    }
+
+    fluxgl::ResourceManager& App::getResourceManager() {
+        return m_resourceManager;
+    }
+
+    const fluxgl::ResourceManager& App::getResourceManager() const {
+        return m_resourceManager;
     }
 }

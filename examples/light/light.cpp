@@ -26,38 +26,45 @@ class Example : public fluxgl::Scene {
             registerSystem<fluxgl::RenderSystem>();
             fluxgl::Renderer::setClearColor(0.4f * ambientLightColor);
 
+            auto& resources = context->resourceManager;
+            resources.addShader("shader", fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl"));
+            resources.addTexture("albedo", fluxgl::Texture::loadFromFile("assets/textures/container.png"));
+            resources.addTexture("specular", fluxgl::Texture::loadFromFile("assets/textures/container_specular.png"));
+            resources.addTexture("emission", fluxgl::Texture::loadFromFile("assets/textures/emission_map.jpg"));
+            resources.addMesh("cube", fluxgl::Mesh::cube());
+            resources.addMesh("sphere", fluxgl::Mesh::sphere());
+
             camera = createEntity();
             camera.registerBehavior<FirstPersonController>();
             camera.addComponent<fluxgl::Camera>();
             auto& cameraTransform = camera.addComponent<fluxgl::Transform>();
             cameraTransform.position = {0.0f, 0.0f, 5.0f};
 
-            cubeA = createEntity();
             cubeA.addComponent<fluxgl::Transform>();
             auto& cubeARenderer = cubeA.addComponent<fluxgl::MeshRenderer>();
-            cubeARenderer.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
+            cubeARenderer.material.shader = resources.findShader("shader");
             cubeARenderer.material.albedoColor = {1.0f, 0.2f, 0.2f};
-            cubeARenderer.mesh = fluxgl::Mesh::cube();
+            cubeARenderer.mesh = resources.findMesh("cube");
 
             cubeB = createEntity();
             auto& cubeBTransform = cubeB.addComponent<fluxgl::Transform>();
             cubeBTransform.position = {2.0f, 0.0f, -2.0f};
             auto& cubeBRenderer = cubeB.addComponent<fluxgl::MeshRenderer>();
-            cubeBRenderer.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
-            cubeBRenderer.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/container.png"));
-            cubeBRenderer.material.specularMap = fluxgl::Texture::loadFromFile("assets/textures/container_specular.png");
-            cubeBRenderer.mesh = fluxgl::Mesh::cube();
+            cubeBRenderer.material.shader = resources.findShader("shader");
+            cubeBRenderer.material.albedoTextures.push_back(resources.findTexture("albedo"));
+            cubeBRenderer.material.specularMap = resources.findTexture("specular");
+            cubeBRenderer.mesh = resources.findMesh("cube");
 
             cubeC = createEntity();
             auto& cubeCTransform = cubeC.addComponent<fluxgl::Transform>();
             cubeCTransform.position = {2.0f, 0.0f, 2.0f};
             auto& cubeCRenderer = cubeC.addComponent<fluxgl::MeshRenderer>();
-            cubeCRenderer.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
+            cubeCRenderer.material.shader = resources.findShader("shader");
             cubeCRenderer.material.albedoColor = glm::vec3(0.0f);
             cubeCRenderer.material.specularColor = glm::vec3(0.0f);
             cubeCRenderer.material.emissionColor = glm::vec3(1.0f);
-            cubeCRenderer.material.emissionMap = fluxgl::Texture::loadFromFile("assets/textures/emission_map.jpg");
-            cubeCRenderer.mesh = fluxgl::Mesh::cube();
+            cubeCRenderer.material.emissionMap = resources.findTexture("emission");
+            cubeCRenderer.mesh = resources.findMesh("cube");
 
             ambientLight = createEntity();
             auto& ambientLightComponent = ambientLight.addComponent<fluxgl::Light>();
@@ -76,9 +83,9 @@ class Example : public fluxgl::Scene {
             auto& pointLightATransform = pointLightA.addComponent<fluxgl::Transform>();
             pointLightATransform.position = {3.0f, 5.0f, 2.0f};
             auto& pointLightARenderer = pointLightA.addComponent<fluxgl::MeshRenderer>();
-            pointLightARenderer.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/flat.frag.glsl");
+            pointLightARenderer.material.shader = resources.findShader("shader");
             pointLightARenderer.material.albedoColor = {1.0f, 1.0f, 1.0f};
-            pointLightARenderer.mesh = fluxgl::Mesh::sphere();
+            pointLightARenderer.mesh = resources.findMesh("sphere");
             auto& pointLightAComponent = pointLightA.addComponent<fluxgl::Light>();
             pointLightAComponent.type = fluxgl::LightType::Point;
             pointLightAComponent.color = {1.0f, 1.0f, 1.0f};
@@ -89,9 +96,9 @@ class Example : public fluxgl::Scene {
             pointLightBTransform.position = {0.0f, 0.0f, -2.0f};
             pointLightBTransform.scale = {0.2f, 0.2f, 0.2f};
             auto& pointLightBRenderer = pointLightB.addComponent<fluxgl::MeshRenderer>();
-            pointLightBRenderer.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/flat.frag.glsl");
+            pointLightBRenderer.material.shader = resources.findShader("shader");
             pointLightBRenderer.material.albedoColor = {0.0f, 0.0f, 1.0f};
-            pointLightBRenderer.mesh = fluxgl::Mesh::sphere();
+            pointLightBRenderer.mesh = resources.findMesh("sphere");
             auto& pointLightBComponent = pointLightB.addComponent<fluxgl::Light>();
             pointLightBComponent.type = fluxgl::LightType::Point;
             pointLightBComponent.color = {0.0f, 0.0f, 1.0f};

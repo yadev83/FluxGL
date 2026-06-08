@@ -6,6 +6,7 @@
 		"glad",
 		"glm",
 		"stb",
-		"miniaudio"
+		"miniaudio",
+		"jsoncpp"
 	]
 }

@@ -4,6 +4,9 @@
 #include "vertex.h"
 
 namespace fluxgl {
+    /** TODO : Make the mesh easier to load/unload for resource manager and reusability...
+     * File reading maybe ?
+     */
     class Mesh {
         private:
             unsigned int m_VAO = 0; 

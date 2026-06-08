@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sprite component and basic sprite rendering
 - World unit vectors in the transform component
 - Debug renderer to draw lines, rectangles, etc... on screen for debugging purposes
+- ResourceManager can now be used to store resources for later use. Also makes ECS components lighter since they now hold resource handles instead of raw pointers. It makes initialization and prefabs easier to implement.
 
 ### Changed
 - Lifecycle is now a bit more precise with fixedUpdates and LateUpdates/RenderUpdates

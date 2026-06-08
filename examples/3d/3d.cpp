@@ -17,6 +17,13 @@ class Scene3D : public fluxgl::Scene {
     public:
         void onLoad() override {
             registerSystem<fluxgl::RenderSystem>();
+
+            auto& resources = context->resourceManager;
+            resources.addShader("shader", fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl"));
+            resources.addTexture("container", fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
+            resources.addTexture("awesomeface", fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
+            resources.addMesh("cube", fluxgl::Mesh::cube());
+            resources.addMesh("sphere", fluxgl::Mesh::sphere());
         }
 
         void onInit() override {
@@ -29,11 +36,11 @@ class Scene3D : public fluxgl::Scene {
                 
                 bool isEven = i % 2 == 0;
 
-                meshRenderer.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
-                meshRenderer.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
-                if(isEven) meshRenderer.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
+                meshRenderer.material.shader = context->resourceManager.findShader("shader");
+                meshRenderer.material.albedoTextures.push_back(context->resourceManager.findTexture("container"));
+                if(isEven) meshRenderer.material.albedoTextures.push_back(context->resourceManager.findTexture("awesomeface"));
                 
-                meshRenderer.mesh = isEven ? fluxgl::Mesh::sphere() : fluxgl::Mesh::cube();
+                meshRenderer.mesh = isEven ? context->resourceManager.findMesh("sphere") : context->resourceManager.findMesh("cube");
                 // Randomize position
                 transform.position = glm::vec3((float)rand() / (float)RAND_MAX * 6.0f - 3.0f, (float)rand() / (float)RAND_MAX * 6.0f - 3.0f, (float)rand() / (float)RAND_MAX * 6.0f - 3.0f);
             }

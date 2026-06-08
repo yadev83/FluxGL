@@ -64,7 +64,32 @@ namespace fluxgl {
             static void registerDirectionalLight(const glm::vec3& lightColor, const float intensity, const glm::vec3& direction);
             static void registerPointLight(const glm::vec3& lightColor, const float intensity, const glm::vec3& position);
 
-            static void drawSprite(const Mesh& quad, const Sprite& sprite, const glm::mat4& modelMatrix = glm::mat4(1.0f));
-            static void drawMesh(const Mesh& mesh, const Material& material, const glm::mat4& modelMatrix = glm::mat4(1.0f));
+            static void drawSprite(
+                const glm::mat4& modelMatrix = glm::mat4(1.0f),
+
+                const Shader* shader = nullptr,
+                const Texture* texture = nullptr,
+                const int layer = 0,
+                const glm::vec3& color = glm::vec3(1.0f),
+                const glm::vec2& size = glm::vec2(1.0f),
+                const glm::vec2& uvMin = glm::vec2(0.0f),
+                const glm::vec2& uvMax = glm::vec2(1.0f)
+            );
+
+            static void drawMesh(
+                const Mesh* mesh = nullptr,
+                const glm::mat4& modelMatrix = glm::mat4(1.0f),
+                
+                const Shader* shader = nullptr,
+                const std::vector<Texture*> textures = {},
+                const Texture* normalMap = nullptr,
+                const Texture* specularMap = nullptr,
+                const Texture* emissionMap = nullptr,
+
+                const glm::vec3& albedoColor = glm::vec3(1.0f),
+                const glm::vec3& specularColor = glm::vec3(1.0f),
+                const glm::vec3& emissionColor = glm::vec3(0.0f),
+                const float shininess = 32.0f
+            );
     };
 }
