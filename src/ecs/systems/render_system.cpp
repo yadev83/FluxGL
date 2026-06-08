@@ -1,4 +1,5 @@
 #include <vector>
+#include <fluxgl/core/app.h>
 #include <fluxgl/core/scene.h>
 
 #include <fluxgl/ecs/registry.h>
@@ -16,6 +17,7 @@
 namespace fluxgl {
     void RenderSystem::onUpdate(fluxgl::Scene& scene, float dt) {
         auto& registry = scene.getRegistry();
+        auto& resources = scene.getContext().resourceManager;
 
         // Clear/Setup frame
         Renderer::beginFrame();
@@ -66,8 +68,20 @@ namespace fluxgl {
             auto& sprite = entity.getComponent<Sprite>();
             auto& transform = entity.getComponent<Transform>();
 
-            static Mesh quad = Mesh::quad();
-            Renderer::drawSprite(quad, sprite, transform.getModelMatrix());
+            auto shader = resources.getShader(sprite.shader);
+            auto texture = resources.getTexture(sprite.texture);
+
+            Renderer::drawSprite(
+                transform.getModelMatrix(),
+                
+                shader,
+                texture,
+                sprite.layer,
+                sprite.color,
+                sprite.size,
+                sprite.uvMin,
+                sprite.uvMax
+            );
         }
 
         // Draw meshes
@@ -75,10 +89,27 @@ namespace fluxgl {
             auto& meshRenderer = entity.getComponent<MeshRenderer>();
             auto& transform = entity.getComponent<Transform>();
             
+            auto mesh = resources.getMesh(meshRenderer.mesh);
+            auto shader = resources.getShader(meshRenderer.material.shader);
+            auto albedoTextures = resources.getTextures(meshRenderer.material.albedoTextures);
+            auto normalMap = resources.getTexture(meshRenderer.material.normalMap);
+            auto specularMap = resources.getTexture(meshRenderer.material.specularMap);
+            auto emissionMap = resources.getTexture(meshRenderer.material.emissionMap);
+
             Renderer::drawMesh(
-                meshRenderer.mesh, 
-                meshRenderer.material, 
-                transform.getModelMatrix()
+                mesh,
+                transform.getModelMatrix(),
+                
+                shader,
+                albedoTextures,
+                normalMap,
+                specularMap,
+                emissionMap,
+
+                meshRenderer.material.albedoColor,
+                meshRenderer.material.specularColor,
+                meshRenderer.material.emissionColor,
+                meshRenderer.material.shininess
             );
         }
 

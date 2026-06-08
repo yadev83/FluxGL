@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fluxgl/input/input_manager.h>
+#include <fluxgl/assets/resource_manager.h>
 #include "window.h"
 
 namespace fluxgl {

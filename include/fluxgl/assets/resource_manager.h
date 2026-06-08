@@ -36,14 +36,14 @@ namespace fluxgl {
 
     using TextureHandle = ResourceHandle<Texture>;
     using ShaderHandle = ResourceHandle<Shader>;
-    //using MeshHandle = ResourceHandle<Mesh>;
+    using MeshHandle = ResourceHandle<Mesh>;
 
     // ResourceManager class to manage loading and getting resources
     class ResourceManager {
         private:
             ResourceStorage<Texture>    m_textureStorage;
             ResourceStorage<Shader>     m_shaderStorage;
-            //ResourceStorage<Mesh>       m_meshStorage;
+            ResourceStorage<Mesh>       m_meshStorage;
 
         public:
             TextureHandle loadTexture(const std::string& path);
@@ -55,10 +55,13 @@ namespace fluxgl {
             ShaderHandle addShader(Shader shader);
             
             //MeshHandle loadMesh(const std::string& path);
+            MeshHandle addMesh(Mesh* mesh);
+            MeshHandle addMesh(Mesh mesh);
 
             Texture* getTexture(TextureHandle handle);
+            std::vector<Texture*> getTextures(const std::vector<TextureHandle>& handles);
             Shader* getShader(ShaderHandle handle);
-            //Mesh* getMesh(MeshHandle handle);
+            Mesh* getMesh(MeshHandle handle);
     };
 }
 

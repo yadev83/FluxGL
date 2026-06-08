@@ -33,11 +33,40 @@ namespace fluxgl {
         return m_shaderStorage.add(newShader);
     }
 
+    MeshHandle ResourceManager::addMesh(Mesh* mesh) {
+        return m_meshStorage.add(mesh);
+    }
+
+    MeshHandle ResourceManager::addMesh(Mesh mesh) {
+        Mesh* newMesh = new Mesh(std::move(mesh));
+        return m_meshStorage.add(newMesh);
+    }
+
     Texture* ResourceManager::getTexture(TextureHandle handle) {
         return m_textureStorage.get(handle);
     }
 
+    std::vector<Texture*> ResourceManager::getTextures(const std::vector<TextureHandle>& handles) {
+        std::vector<Texture*> textures;
+        textures.reserve(handles.size());
+
+        for(const auto& handle : handles) {
+            Texture* texture = m_textureStorage.get(handle);
+            if(texture) {
+                textures.push_back(texture);
+            } else {
+                textures.push_back(nullptr); // Or handle this case as needed
+            }
+        }
+
+        return textures;
+    }
+
     Shader* ResourceManager::getShader(ShaderHandle handle) {
         return m_shaderStorage.get(handle);
+    }
+
+    Mesh* ResourceManager::getMesh(MeshHandle handle) {
+        return m_meshStorage.get(handle);
     }
 }

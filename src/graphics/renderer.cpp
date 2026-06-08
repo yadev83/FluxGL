@@ -104,37 +104,44 @@ namespace fluxgl {
         });
     }
 
-    void Renderer::drawSprite(const Mesh& quad, const Sprite& sprite, const glm::mat4& modelMatrix) {
-        if(sprite.shader.isValid()) sprite.shader.bind();
+    void Renderer::drawSprite(
+        const glm::mat4& modelMatrix,
 
-        if(sprite.texture.isValid()) {
-            sprite.texture.bind(0);
-            sprite.shader.setUniform("u_Texture", 0);
+        const Shader* shader,
+        const Texture* texture,
+        const int layer,
+        const glm::vec3& color,
+        const glm::vec2& size,
+        const glm::vec2& uvMin,
+        const glm::vec2& uvMax
+    ) {
+        if(!(shader && shader->isValid())) throw std::runtime_error("Invalid shader provided to Renderer::drawSprite");
+        shader->bind();
+
+        if(texture && texture->isValid()) {
+            texture->bind(0);
+            shader->setUniform("u_Texture", 0);
+            shader->setUniform("u_UseTexture", true);
+        } else {
+            shader->setUniform("u_UseTexture", false);
         }
-        sprite.shader.setUniform("u_UseTexture", sprite.texture.isValid());
 
-        // Color
-        sprite.shader.setUniform("u_Color", sprite.color);
+        shader->setUniform("u_Color", color);
+        shader->setUniform("u_UVMin", uvMin);
+        shader->setUniform("u_UVMax", uvMax);
 
-        // UV Atlas
-        sprite.shader.setUniform("u_UVMin", sprite.uvMin);
-        sprite.shader.setUniform("u_UVMax", sprite.uvMax);
-
-        // Update model Matrix with sprite data
         glm::mat4 model = modelMatrix;
-        model = glm::scale(model, glm::vec3(sprite.size, 1.0f));
-        model = glm::translate(model, glm::vec3(0.0f, 0.0f, sprite.layer));
+        model = glm::scale(model, glm::vec3(size, 1.0f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, layer));
 
-        // Binding MVP matrices
-        sprite.shader.setUniform("u_View", m_sceneState.viewMatrix);
-        sprite.shader.setUniform("u_Projection", m_sceneState.projectionMatrix);
-        sprite.shader.setUniform("u_Model", model);
+        shader->setUniform("u_View", m_sceneState.viewMatrix);
+        shader->setUniform("u_Projection", m_sceneState.projectionMatrix);
+        shader->setUniform("u_Model", model);
 
-        // DRAW CALL
+        static Mesh quad = Mesh::quad();
         unsigned int vao = quad.getVAO();
         size_t indexCount = quad.getIndexCount();
         size_t verticesCount = quad.getVerticesCount();
-
         if (vao > 0) { 
             glBindVertexArray(vao); 
             if (indexCount > 0) { 
@@ -145,91 +152,107 @@ namespace fluxgl {
         }
     }
 
-    void Renderer::drawMesh(const Mesh& mesh, const Material& material, const glm::mat4& modelMatrix) {
-        // Binding shader
-        if(material.shader.isValid()) material.shader.bind();
+    void Renderer::drawMesh(
+        const Mesh* mesh,
+        const glm::mat4& modelMatrix,
+        
+        const Shader* shader,
+        const std::vector<Texture*> albedoTextures,
+        const Texture* normalMap,
+        const Texture* specularMap,
+        const Texture* emissionMap,
+
+        const glm::vec3& albedoColor,
+        const glm::vec3& specularColor,
+        const glm::vec3& emissionColor,
+        const float shininess
+    ) {
+        if(!(shader && shader->isValid())) throw std::runtime_error("Invalid shader provided to Renderer::drawMesh");
+        shader->bind();
+
+        if(!mesh) throw std::runtime_error("Invalid mesh provided to Renderer::drawMesh");
 
         // Binding textures/maps
         int slot = 0;
-        for(size_t i = 0; i < material.albedoTextures.size(); i++) {
-            if(material.albedoTextures[i].isValid()) {
-                material.albedoTextures[i].bind(slot);
-                material.shader.setUniform("u_Albedo[" + std::to_string(slot) + "]", slot);
+        for(size_t i = 0; i < albedoTextures.size(); i++) {
+            if(albedoTextures[i]->isValid()) {
+                albedoTextures[i]->bind(slot);
+                shader->setUniform("u_Albedo[" + std::to_string(slot) + "]", slot);
                 slot++;
             }
         }
-        material.shader.setUniform("u_AlbedoTextureCount", slot);
+        shader->setUniform("u_AlbedoTextureCount", slot);
 
-        if(material.normalMap.isValid()) {
-            material.normalMap.bind(slot);
-            material.shader.setUniform("u_NormalMap", slot);
-            material.shader.setUniform("u_UseNormalMap", true);
+        if(normalMap && normalMap->isValid()) {
+            normalMap->bind(slot);
+            shader->setUniform("u_NormalMap", slot);
+            shader->setUniform("u_UseNormalMap", true);
             slot++;
         } else {
-            material.shader.setUniform("u_UseNormalMap", false);
-        }
-        
-        if(material.specularMap.isValid()) {
-            material.specularMap.bind(slot);
-            material.shader.setUniform("u_SpecularMap", slot);
-            material.shader.setUniform("u_UseSpecularMap", true);
-            slot++;
-        } else {
-            material.shader.setUniform("u_UseSpecularMap", false);
+            shader->setUniform("u_UseNormalMap", false);
         }
 
-        if(material.emissionMap.isValid()) {
-            material.emissionMap.bind(slot);
-            material.shader.setUniform("u_EmissionMap", slot);
-            material.shader.setUniform("u_UseEmissionMap", true);
+        if(specularMap && specularMap->isValid()) {
+            specularMap->bind(slot);
+            shader->setUniform("u_SpecularMap", slot);
+            shader->setUniform("u_UseSpecularMap", true);
             slot++;
         } else {
-            material.shader.setUniform("u_UseEmissionMap", false);
+            shader->setUniform("u_UseSpecularMap", false);
+        }
+
+        if(emissionMap && emissionMap->isValid()) {
+            emissionMap->bind(slot);
+            shader->setUniform("u_EmissionMap", slot);
+            shader->setUniform("u_UseEmissionMap", true);
+            slot++;
+        } else {
+            shader->setUniform("u_UseEmissionMap", false);
         }
 
         // Binding colors
-        material.shader.setUniform("u_AlbedoColor", material.albedoColor);
-        material.shader.setUniform("u_SpecularColor", material.specularColor);
-        material.shader.setUniform("u_EmissionColor", material.emissionColor);
+        shader->setUniform("u_AlbedoColor", albedoColor);
+        shader->setUniform("u_SpecularColor", specularColor);
+        shader->setUniform("u_EmissionColor", emissionColor);
         // Binding material properties
-        material.shader.setUniform("u_SpecularColor", material.specularColor);
-        material.shader.setUniform("u_Shininess", material.shininess);
+        shader->setUniform("u_SpecularColor", specularColor);
+        shader->setUniform("u_Shininess", shininess);
 
         // Binding MVP matrices
-        material.shader.setUniform("u_View", m_sceneState.viewMatrix);
-        material.shader.setUniform("u_Projection", m_sceneState.projectionMatrix);
-        material.shader.setUniform("u_Model", modelMatrix);
+        shader->setUniform("u_View", m_sceneState.viewMatrix);
+        shader->setUniform("u_Projection", m_sceneState.projectionMatrix);
+        shader->setUniform("u_Model", modelMatrix);
         
         // Binding camera position
-        material.shader.setUniform("u_CameraPosition", m_sceneState.cameraPosition);
+        shader->setUniform("u_CameraPosition", m_sceneState.cameraPosition);
 
         // Ambient Lighting
-        material.shader.setUniform("u_AmbientLightCount", int(m_sceneState.ambientLights.size()));
+        shader->setUniform("u_AmbientLightCount", int(m_sceneState.ambientLights.size()));
         for(size_t i = 0; i < m_sceneState.ambientLights.size(); i++) {
-            material.shader.setUniform("u_AmbientLights[" + std::to_string(i) + "].color", m_sceneState.ambientLights[i].color);
-            material.shader.setUniform("u_AmbientLights[" + std::to_string(i) + "].intensity", m_sceneState.ambientLights[i].intensity);
+            shader->setUniform("u_AmbientLights[" + std::to_string(i) + "].color", m_sceneState.ambientLights[i].color);
+            shader->setUniform("u_AmbientLights[" + std::to_string(i) + "].intensity", m_sceneState.ambientLights[i].intensity);
         }
 
         // Directional Lights
-        material.shader.setUniform("u_DirectionalLightCount", int(m_sceneState.directionalLights.size()));
+        shader->setUniform("u_DirectionalLightCount", int(m_sceneState.directionalLights.size()));
         for(size_t i = 0; i < m_sceneState.directionalLights.size(); i++) {
-            material.shader.setUniform("u_DirectionalLights[" + std::to_string(i) + "].color", m_sceneState.directionalLights[i].color);
-            material.shader.setUniform("u_DirectionalLights[" + std::to_string(i) + "].intensity", m_sceneState.directionalLights[i].intensity);
-            material.shader.setUniform("u_DirectionalLights[" + std::to_string(i) + "].direction", m_sceneState.directionalLights[i].direction);
+            shader->setUniform("u_DirectionalLights[" + std::to_string(i) + "].color", m_sceneState.directionalLights[i].color);
+            shader->setUniform("u_DirectionalLights[" + std::to_string(i) + "].intensity", m_sceneState.directionalLights[i].intensity);
+            shader->setUniform("u_DirectionalLights[" + std::to_string(i) + "].direction", m_sceneState.directionalLights[i].direction);
         }
 
         // Point lights
-        material.shader.setUniform("u_PointLightCount", int(m_sceneState.pointLights.size()));
+        shader->setUniform("u_PointLightCount", int(m_sceneState.pointLights.size()));
         for(size_t i = 0; i < m_sceneState.pointLights.size(); i++) {
-            material.shader.setUniform("u_PointLights[" + std::to_string(i) + "].color", m_sceneState.pointLights[i].color);
-            material.shader.setUniform("u_PointLights[" + std::to_string(i) + "].intensity", m_sceneState.pointLights[i].intensity);
-            material.shader.setUniform("u_PointLights[" + std::to_string(i) + "].position", m_sceneState.pointLights[i].position);
+            shader->setUniform("u_PointLights[" + std::to_string(i) + "].color", m_sceneState.pointLights[i].color);
+            shader->setUniform("u_PointLights[" + std::to_string(i) + "].intensity", m_sceneState.pointLights[i].intensity);
+            shader->setUniform("u_PointLights[" + std::to_string(i) + "].position", m_sceneState.pointLights[i].position);
         }
 
         // DRAW CALL
-        unsigned int vao = mesh.getVAO();
-        size_t indexCount = mesh.getIndexCount();
-        size_t verticesCount = mesh.getVerticesCount();
+        unsigned int vao = mesh->getVAO();
+        size_t indexCount = mesh->getIndexCount();
+        size_t verticesCount = mesh->getVerticesCount();
 
         if (vao > 0) { 
             glBindVertexArray(vao); 
