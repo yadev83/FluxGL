@@ -8,6 +8,14 @@ class TransformExample : public fluxgl::Scene {
     fluxgl::Entity entity, camera;
 
     public:
+        void onLoad() override {
+            auto& resources = context->resourceManager;
+            resources.addShader("shader", fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl"));
+            resources.addTexture("container", fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
+            resources.addTexture("awesomeface", fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
+            resources.addMesh("mesh", fluxgl::Mesh::quad());
+        }
+
         void onInit() override {
             entity = createEntity();
             camera = createEntity();
@@ -18,11 +26,11 @@ class TransformExample : public fluxgl::Scene {
             auto& entityTransform = entity.addComponent<fluxgl::Transform>();
             auto& entityRenderer = entity.addComponent<fluxgl::MeshRenderer>();
             
-            entityRenderer.material.shader = fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
-            entityRenderer.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
-            entityRenderer.material.albedoTextures.push_back(fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
+            entityRenderer.material.shader = context->resourceManager.findShader("shader");
+            entityRenderer.material.albedoTextures.push_back(context->resourceManager.findTexture("container"));
+            entityRenderer.material.albedoTextures.push_back(context->resourceManager.findTexture("awesomeface"));
             
-            entityRenderer.mesh = fluxgl::Mesh::quad();
+            entityRenderer.mesh = context->resourceManager.findMesh("mesh");
 
             entityTransform.scale = {0.5f, 0.5f, 0.5f};
             entityTransform.rotation = glm::vec3(-55.0f, 0.0f, 0.0f);
@@ -47,9 +55,15 @@ class TransformExample : public fluxgl::Scene {
 
             fluxgl::Renderer::setCamera(cameraComponent.getViewMatrix(cameraTransform), cameraComponent.getProjectionMatrix(), cameraTransform.position);
             fluxgl::Renderer::drawMesh(
-                meshRenderer.mesh,
-                meshRenderer.material,
-                meshTransform.getModelMatrix()
+                context->resourceManager.getMesh(meshRenderer.mesh),
+                meshTransform.getModelMatrix(),
+                context->resourceManager.getShader(meshRenderer.material.shader),
+                context->resourceManager.getTextures(meshRenderer.material.albedoTextures),
+                nullptr, nullptr, nullptr,
+                meshRenderer.material.albedoColor,
+                meshRenderer.material.specularColor,
+                meshRenderer.material.emissionColor,
+                meshRenderer.material.shininess
             );
         }
 };
