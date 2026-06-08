@@ -36,6 +36,7 @@ namespace fluxgl {
 
     template<typename T>
     T* ResourceStorage<T>::get(ResourceHandle<T> handle) {
+        if(!handle.isValid()) return nullptr;
         if(handle.index >= m_slots.size()) return nullptr;
 
         auto& slot = m_slots[handle.index];
@@ -50,7 +51,7 @@ namespace fluxgl {
         auto it = m_nameToIndex.find(name);
 
         if(it == m_nameToIndex.end()) {
-            throw std::runtime_error("Resource with name '" + name + "' not found");
+            return { ResourceHandle<T>::INVALID_INDEX, 0 }; // Invalid handle returned
         }
 
         return { it->second, m_slots[it->second].generation };

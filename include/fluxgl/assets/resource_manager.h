@@ -8,7 +8,7 @@
 #include <fluxgl/graphics/shader.h>
 #include <fluxgl/graphics/mesh.h>
 
-namespace fluxgl {
+namespace fluxgl { 
     /** 
      * Generic resource handle, can be used for any type of resource (e.g., textures, shaders)
      * 
@@ -19,8 +19,14 @@ namespace fluxgl {
     */
     template<typename T>
     struct ResourceHandle {
+        static constexpr size_t INVALID_INDEX = std::numeric_limits<size_t>::max();
+
         size_t      index = 0;
         uint32_t    generation = 0;
+
+        bool isValid() const {
+            return index != INVALID_INDEX;
+        }
     };
 
     /** 
