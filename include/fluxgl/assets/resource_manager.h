@@ -7,6 +7,7 @@
 #include <fluxgl/graphics/texture.h>
 #include <fluxgl/graphics/shader.h>
 #include <fluxgl/graphics/mesh.h>
+#include <fluxgl/assets/assets.h>
 
 namespace fluxgl { 
     /** 
@@ -60,14 +61,14 @@ namespace fluxgl {
     class ResourceStorage {
         private:
             std::vector<ResourceSlot<T>> m_slots;
-            std::unordered_map<std::string, size_t> m_nameToIndex;
+            std::unordered_map<Resource, size_t> m_nameToIndex;
 
         public:
             T* get(ResourceHandle<T> handle);
-            ResourceHandle<T> find(const std::string& name);
+            ResourceHandle<T> find(const Resource& name);
             std::vector<ResourceHandle<T>> findAll();
 
-            ResourceHandle<T> add(T* resource, const std::string& name = "");
+            ResourceHandle<T> add(T* resource, const Resource& name = "");
             void remove(ResourceHandle<T> handle);
     };
 
@@ -96,19 +97,19 @@ namespace fluxgl {
 
             TextureHandle addTexture(const std::string& name, Texture* texture);
             TextureHandle addTexture(const std::string& name, Texture texture);
-            TextureHandle findTexture(const std::string& name);
+            TextureHandle findTexture(const Resource& texture);
             std::vector<Texture*> getTextures(const std::vector<TextureHandle>& handles);
             Texture* getTexture(TextureHandle handle);
 
             ShaderHandle addShader(const std::string& name, Shader* shader);
             ShaderHandle addShader(const std::string& name, Shader shader);
-            ShaderHandle findShader(const std::string& name);
+            ShaderHandle findShader(const Resource& shader);
             Shader* getShader(ShaderHandle handle);
             Shader* getShader(const std::string& name);
 
             MeshHandle addMesh(const std::string& name, Mesh* mesh);
             MeshHandle addMesh(const std::string& name, Mesh mesh);
-            MeshHandle findMesh(const std::string& name);
+            MeshHandle findMesh(const Resource& mesh);
             Mesh* getMesh(MeshHandle handle);
             Mesh* getMesh(const std::string& name);
     };
