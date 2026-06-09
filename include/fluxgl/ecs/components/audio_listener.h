@@ -6,9 +6,14 @@
 
 namespace fluxgl {
     struct AudioListener {
-        static constexpr const char* TypeName = "AudioListener";
+        static constexpr const char* TypeName = "fluxgl::AudioListener";
         static void Create(fluxgl::Registry& registry, fluxgl::EntityID entityID, const Json::Value& data) {
             AudioListener listener;
+
+            if(data.isObject()) {
+                listener.active = data.get("active", true).asBool();
+            }
+
             registry.addComponent<AudioListener>(entityID, listener);
         }
 

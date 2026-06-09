@@ -13,9 +13,16 @@ namespace fluxgl {
     using SourceID = unsigned int;
 
     struct AudioSource {
-        static constexpr const char* TypeName = "AudioSource";
+        static constexpr const char* TypeName = "fluxgl::AudioSource";
         static void Create(fluxgl::Registry& registry, fluxgl::EntityID entityID, const Json::Value& data) {
             AudioSource source;
+
+            if(data.isObject()) {
+                source.loop = data.get("loop", false).asBool();
+                source.spatialized = data.get("spatialized", true).asBool();
+                source.volume = data.get("volume", 1.0f).asFloat();
+            }
+
             registry.addComponent<AudioSource>(entityID, source);
         }
 

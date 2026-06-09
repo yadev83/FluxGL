@@ -11,20 +11,20 @@
 
 namespace fluxgl {
     struct Transform {
-        static constexpr const char* TypeName = "Transform";
+        static constexpr const char* TypeName = "fluxgl::Transform";
         static void Create(fluxgl::Registry& registry, fluxgl::EntityID entityID, const Json::Value& data) {
             Transform transform;
             
             // Parse the json data if it is a valid object, and go through its members to compute the transform component
             if(data.isObject()) {
                 Json::Value positionData = data.get("position", Json::objectValue);
-                transform.position = {positionData.get("x", 0.0f), positionData.get("y", 0.0f), positionData.get("z", 0.0f)};
+                transform.position = {positionData.get("x", 0.0f).asFloat(), positionData.get("y", 0.0f).asFloat(), positionData.get("z", 0.0f).asFloat()};
 
                 Json::Value rotationData = data.get("rotation", Json::objectValue);
-                transform.rotation = {rotationData.get("x", 0.0f), rotationData.get("y", 0.0f), rotationData.get("z", 0.0f)};
+                transform.rotation = {rotationData.get("x", 0.0f).asFloat(), rotationData.get("y", 0.0f).asFloat(), rotationData.get("z", 0.0f).asFloat()};
 
                 Json::Value scaleData = data.get("scale", Json::objectValue);
-                transform.scale = {scaleData.get("x", 1.0f), scaleData.get("y", 1.0f), scaleData.get("z", 1.0f)};
+                transform.scale = {scaleData.get("x", 1.0f).asFloat(), scaleData.get("y", 1.0f).asFloat(), scaleData.get("z", 1.0f).asFloat()};
             }
 
             registry.addComponent<Transform>(entityID, transform);

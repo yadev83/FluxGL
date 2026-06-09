@@ -10,9 +10,22 @@ namespace fluxgl {
     enum class LightType { Ambient, Directional, Point };
 
     struct Light {
-        static constexpr const char* TypeName = "Light";
+        static constexpr const char* TypeName = "fluxgl::Light";
         static void Create(fluxgl::Registry& registry, fluxgl::EntityID entityID, const Json::Value& data) {
             Light light;
+
+            if(data.isObject()) {
+                Json::Value typeData = data.get("type", "ambient");
+                if(typeData.asString() == "ambient") light.type = LightType::Ambient;
+                if(typeData.asString() == "directional") light.type = LightType::Directional;
+                if(typeData.asString() == "point") light.type == LightType::Point;
+
+                Json::Value colorData = data.get("color", Json::objectValue);
+                light.color = {colorData.get("r", 1.0f).asFloat(), colorData.get("g", 1.0f).asFloat(), colorData.get("b", 1.0f).asFloat()};
+                
+                light.intensity = data.get("intensity", 1.0f).asFloat();
+            }
+
             registry.addComponent<Light>(entityID, light);
         }
 

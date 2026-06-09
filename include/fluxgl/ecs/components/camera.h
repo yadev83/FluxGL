@@ -10,9 +10,20 @@
 
 namespace fluxgl {
     struct Camera {
-        static constexpr const char* TypeName = "Camera";
+        static constexpr const char* TypeName = "fluxgl::Camera";
         static void Create(fluxgl::Registry& registry, fluxgl::EntityID entityID, const Json::Value& data) {
             Camera camera;
+
+            if(data.isObject()) {
+                camera.fov = data.get("fov", 45.0f).asFloat();
+                
+                camera.nearPlane = data.get("nearPlane", 0.1f).asFloat();
+                camera.farPlane = data.get("farPlane", 100.0f).asFloat();
+                
+                camera.isOrthographic = data.get("isOrthographic", false).asBool();
+                camera.worldWidth = data.get("worldWidth", 24).asInt();
+            }
+
             registry.addComponent<Camera>(entityID, camera);
         }
 

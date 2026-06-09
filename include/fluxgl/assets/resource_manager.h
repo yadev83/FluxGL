@@ -98,20 +98,22 @@ namespace fluxgl {
             TextureHandle addTexture(const std::string& name, Texture* texture);
             TextureHandle addTexture(const std::string& name, Texture texture);
             TextureHandle findTexture(const Resource& texture);
-            std::vector<Texture*> getTextures(const std::vector<TextureHandle>& handles);
             Texture* getTexture(TextureHandle handle);
+            std::vector<Texture*> getTextures(const std::vector<TextureHandle>& handles);
+            Texture* getTexture(const Resource& texture);
+            std::vector<Texture*> getTextures(const std::vector<Resource>& textures);
 
             ShaderHandle addShader(const std::string& name, Shader* shader);
             ShaderHandle addShader(const std::string& name, Shader shader);
             ShaderHandle findShader(const Resource& shader);
             Shader* getShader(ShaderHandle handle);
-            Shader* getShader(const std::string& name);
+            Shader* getShader(const Resource& shader);
 
             MeshHandle addMesh(const std::string& name, Mesh* mesh);
             MeshHandle addMesh(const std::string& name, Mesh mesh);
             MeshHandle findMesh(const Resource& mesh);
             Mesh* getMesh(MeshHandle handle);
-            Mesh* getMesh(const std::string& name);
+            Mesh* getMesh(const Resource& mesh);
     };
 }
 
