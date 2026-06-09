@@ -5,6 +5,7 @@
 #include <vector>
 #include <set>
 #include <string>
+#include <sstream>
 
 #define FLUXGL_MAX_ENTITIES 10000
 
@@ -23,6 +24,7 @@ namespace fluxgl {
 
             // Map a type index to a componentStorage
             std::unordered_map<std::type_index, ComponentStorage> m_storages;
+            std::vector<std::type_index> getEntityComponentTypes(EntityID id); // Utils to grab entity component names
             // Map entities to behaviors
             std::unordered_map<EntityID, BehaviorStorage> m_behaviors;
             // Map entities to tags
@@ -37,6 +39,8 @@ namespace fluxgl {
 
         public:
             Registry();
+            void dumpEntity(std::stringstream& ss, EntityID id, int depth = 0);
+            std::string toString();
 
             // Registry frame mgt
             void update(float dt);
@@ -46,6 +50,7 @@ namespace fluxgl {
             void destroyEntity(EntityID id); // Marks entity for deletion
             bool isValidEntity(EntityID id);
             bool isAliveEntity(EntityID id);
+            bool isEntityInUse(EntityID id);
             Entity getEntity(EntityID id);
             void setParent(EntityID child, EntityID parent = 0);
             void removeChild(EntityID child);

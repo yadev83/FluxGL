@@ -1,6 +1,6 @@
 #include <fluxgl/ecs/registry.h>
 #include <fluxgl/ecs/entity.h>
-
+#include <fluxgl/ecs/behavior.h>
 #include <fluxgl/core/log.h>
 
 #include <algorithm>
@@ -13,6 +13,61 @@ namespace fluxgl {
             if(i % 100 == 0) FLUXGL_LOG_DEBUG("Available entities: " + std::to_string(m_availableIDs.size()));
         }
         FLUXGL_LOG_DEBUG("Available entities: " + std::to_string(m_availableIDs.size()));
+    }
+
+    std::vector<std::type_index> Registry::getEntityComponentTypes(EntityID id) {
+        std::vector<std::type_index> result;
+        
+        for(auto& [type, storage] : m_storages) {
+            if(storage.contains(id)) {
+                result.push_back(type);
+            }
+        }
+
+        return result;
+    }
+
+    void Registry::dumpEntity(std::stringstream& ss, EntityID id, int depth) {
+        std::string indent(depth * 2, ' ');
+
+        ss << indent << "Entity " << id << '\n';
+
+        if(auto tagIt = m_tags.find(id); tagIt != m_tags.end()) {
+            ss << indent << "   Tags: ";
+
+            for(auto& tag : tagIt->second) ss << tag << "; ";
+            ss << '\n';
+        }
+
+        ss << indent << "   Components: " << '\n';
+        for(auto& type : getEntityComponentTypes(id)) {
+            ss << indent << "       " << type.name() << '\n';
+        }
+
+        if(m_behaviors.find(id) != m_behaviors.end()) {
+            ss << indent << "   Behaviors: " << '\n';
+            for(Behavior* behavior : m_behaviors[id]) {
+                ss << indent << "       " << typeid(*behavior).name() << '\n';
+            }
+        }
+        
+        for(Entity child : getChildren(id)) dumpEntity(ss, child.getID(), depth + 1);
+    }
+
+    std::string Registry::toString() {
+        std::stringstream ss;
+
+        ss << "Registry Dump\n";
+
+        for(EntityID id = 1; id < FLUXGL_MAX_ENTITIES; ++id) {
+            if(!isValidEntity(id)) continue;
+            if(!isEntityInUse(id)) continue;
+            if(m_hierarchy.contains(id)) continue;
+
+            dumpEntity(ss, id);
+        }
+
+        return ss.str();
     }
 
     void Registry::removeEntity(EntityID id) {
@@ -71,6 +126,10 @@ namespace fluxgl {
 
     bool Registry::isAliveEntity(EntityID id) {
         return std::find(m_entitiesToDelete.begin(), m_entitiesToDelete.end(), id) == m_entitiesToDelete.end();
+    }
+
+    bool Registry::isEntityInUse(EntityID id) {
+        return std::find(m_availableIDs.begin(), m_availableIDs.end(), id) == m_availableIDs.end();
     }
 
     void Registry::setParent(EntityID child, EntityID parent) {
