@@ -38,4 +38,5 @@
 #include "audio/sound.h"
 #include "audio/source.h"
 
+#include "assets/assets.h"
 #include "assets/resource_manager.h"

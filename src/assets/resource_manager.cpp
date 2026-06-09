@@ -32,8 +32,8 @@ namespace fluxgl {
         return textures;
     }
     
-    TextureHandle ResourceManager::findTexture(const std::string& name) {
-        return m_textureStorage.find(name);
+    TextureHandle ResourceManager::findTexture(const Resource& texture) {
+        return m_textureStorage.find(texture);
     }
 
     Texture* ResourceManager::getTexture(TextureHandle handle) {
@@ -49,8 +49,8 @@ namespace fluxgl {
         return m_shaderStorage.add(newShader, name);
     }
 
-    ShaderHandle ResourceManager::findShader(const std::string& name) {
-        return m_shaderStorage.find(name);
+    ShaderHandle ResourceManager::findShader(const Resource& shader) {
+        return m_shaderStorage.find(shader);
     }
 
     Shader* ResourceManager::getShader(ShaderHandle handle) {
@@ -66,8 +66,8 @@ namespace fluxgl {
         return m_meshStorage.add(newMesh, name);
     }
 
-    MeshHandle ResourceManager::findMesh(const std::string& name) {
-        return m_meshStorage.find(name);
+    MeshHandle ResourceManager::findMesh(const Resource& mesh) {
+        return m_meshStorage.find(mesh);
     }
 
     Mesh* ResourceManager::getMesh(MeshHandle handle) {
