@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 namespace fluxgl {
     using EntityID = unsigned int;
@@ -17,6 +18,7 @@ namespace fluxgl {
             bool isValid();
             Entity appendChild();
             Entity getParent();
+            std::vector<Entity> getChildren();
             void destroy();
 
             EntityID getID() const;

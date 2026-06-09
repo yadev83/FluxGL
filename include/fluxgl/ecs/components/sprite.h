@@ -14,7 +14,7 @@ namespace fluxgl {
 
         if(data.isObject()) {
             Json::Value colorData = data.get("color", Json::objectValue);
-            sprite.color = {colorData.get("r", 1.0f).asFloat(), colorData.get("g", 1.0f).asFloat(), colorData.get("b", 1.0f).asFloat()};
+            sprite.color = {colorData.get("r", 1.0f).asFloat(), colorData.get("g", 0.0f).asFloat(), colorData.get("b", 1.0f).asFloat()};
 
             Json::Value sizeData = data.get("size", Json::objectValue);
             sprite.size = {sizeData.get("x", 1.0f).asFloat(), sizeData.get("y", 1.0f).asFloat()};
@@ -37,7 +37,7 @@ namespace fluxgl {
         Resource texture;
         Resource shader;
 
-        glm::vec3 color = {1.0f, 1.0f, 1.0f};
+        glm::vec3 color = {1.0f, 0.0f, 1.0f};
         glm::vec2 size = {1.0f, 1.0f};
 
         int layer = 0;

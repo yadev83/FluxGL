@@ -18,6 +18,10 @@ namespace fluxgl {
         return m_registry->getParent(m_id);
     }
 
+    std::vector<Entity> Entity::getChildren() {
+        return m_registry->getChildren(m_id);
+    }
+
     void Entity::destroy() {
         m_registry->destroyEntity(m_id);
     }
