@@ -54,6 +54,7 @@ target_sources(FluxGL PRIVATE
     src/audio/miniaudio_impl.cpp
     src/audio/audio_engine.cpp
     src/assets/resource_manager.cpp
+    src/assets/prefab_loader.cpp
 )
 
 target_include_directories(FluxGL
@@ -67,6 +68,7 @@ target_link_libraries(FluxGL
         glfw
         glad::glad
         glm::glm
+        JsonCpp::JsonCpp
 )
 
 # Build examples

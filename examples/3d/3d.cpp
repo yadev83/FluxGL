@@ -36,11 +36,11 @@ class Scene3D : public fluxgl::Scene {
                 
                 bool isEven = i % 2 == 0;
 
-                meshRenderer.material.shader = context->resourceManager.findShader("shader");
-                meshRenderer.material.albedoTextures.push_back(context->resourceManager.findTexture("container"));
-                if(isEven) meshRenderer.material.albedoTextures.push_back(context->resourceManager.findTexture("awesomeface"));
+                meshRenderer.material.shader = "shader";
+                meshRenderer.material.albedoTextures.push_back("container");
+                if(isEven) meshRenderer.material.albedoTextures.push_back("awesomeface");
                 
-                meshRenderer.mesh = isEven ? context->resourceManager.findMesh("sphere") : context->resourceManager.findMesh("cube");
+                meshRenderer.mesh = isEven ? "sphere" : "cube";
                 // Randomize position
                 transform.position = glm::vec3((float)rand() / (float)RAND_MAX * 6.0f - 3.0f, (float)rand() / (float)RAND_MAX * 6.0f - 3.0f, (float)rand() / (float)RAND_MAX * 6.0f - 3.0f);
             }

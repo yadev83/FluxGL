@@ -25,8 +25,8 @@ class Hello : public fluxgl::Scene {
             entity = createEntity();
             auto& entityRenderer = entity.addComponent<fluxgl::MeshRenderer>();
             
-            entityRenderer.material.shader = resources.findShader("shader");
-            entityRenderer.mesh = resources.findMesh("mesh");
+            entityRenderer.material.shader = "shader";
+            entityRenderer.mesh = "mesh";
         }
 
         void onUpdate(float deltaTime) override {

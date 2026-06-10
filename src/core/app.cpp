@@ -16,7 +16,7 @@ namespace fluxgl {
 
     void App::run() {
         try {
-            AppContext ctx { m_window, m_inputManager, m_resourceManager };
+            AppContext ctx { m_window, m_inputManager, m_resourceManager, m_prefabLoader };
 
             // Initialize subsystems
             SceneManager::get().setContext(&ctx);

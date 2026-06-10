@@ -18,8 +18,8 @@ class Sprites : public fluxgl::Scene {
             sprite = createEntity();
             sprite.addComponent<fluxgl::Transform>();
             fluxgl::Sprite& spriteComponent = sprite.addComponent<fluxgl::Sprite>();
-            spriteComponent.shader = context->resourceManager.findShader("sprite_unlit");
-            spriteComponent.texture = context->resourceManager.findTexture("awesomeface");
+            spriteComponent.shader = "sprite_unlit";
+            spriteComponent.texture = "awesomeface";
             spriteComponent.size = {1.0f, 1.0f};
 
             camera = createEntity();

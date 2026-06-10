@@ -1,10 +1,20 @@
+#include <fluxgl/core/app.h>
 #include <fluxgl/core/scene.h>
 #include <fluxgl/ecs/entity.h>
 #include <fluxgl/ecs/behavior.h>
+#include <fluxgl/assets/prefab_loader.h>
 
 namespace fluxgl {
     Entity Scene::createEntity() { 
         return m_registry.createEntity();
+    }
+
+    Entity Scene::instantiate(const std::string& path) {
+        return context->prefabLoader.instantiate(&m_registry, path);
+    }
+
+    Entity Scene::instantiate(Prefab& prefab) {
+        return context->prefabLoader.instantiate(&m_registry, prefab);
     }
 
     void Scene::destroyEntity(Entity entity) {

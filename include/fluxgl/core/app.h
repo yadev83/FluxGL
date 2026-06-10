@@ -2,6 +2,7 @@
 
 #include <fluxgl/input/input_manager.h>
 #include <fluxgl/assets/resource_manager.h>
+#include <fluxgl/assets/prefab_loader.h>
 #include "window.h"
 
 namespace fluxgl {
@@ -9,6 +10,7 @@ namespace fluxgl {
         fluxgl::Window& window;
         fluxgl::InputManager& inputManager;
         fluxgl::ResourceManager& resourceManager;
+        fluxgl::PrefabLoader& prefabLoader;
     };
 
     /**
@@ -23,6 +25,7 @@ namespace fluxgl {
             fluxgl::Window m_window;
             fluxgl::InputManager m_inputManager;
             fluxgl::ResourceManager m_resourceManager;
+            fluxgl::PrefabLoader m_prefabLoader;
 
         public:
             App(int width, int height, const char *title);

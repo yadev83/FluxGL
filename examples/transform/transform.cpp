@@ -26,11 +26,11 @@ class TransformExample : public fluxgl::Scene {
             auto& entityTransform = entity.addComponent<fluxgl::Transform>();
             auto& entityRenderer = entity.addComponent<fluxgl::MeshRenderer>();
             
-            entityRenderer.material.shader = context->resourceManager.findShader("shader");
-            entityRenderer.material.albedoTextures.push_back(context->resourceManager.findTexture("container"));
-            entityRenderer.material.albedoTextures.push_back(context->resourceManager.findTexture("awesomeface"));
+            entityRenderer.material.shader = "shader";
+            entityRenderer.material.albedoTextures.push_back("container");
+            entityRenderer.material.albedoTextures.push_back("awesomeface");
             
-            entityRenderer.mesh = context->resourceManager.findMesh("mesh");
+            entityRenderer.mesh = "mesh";
 
             entityTransform.scale = {0.5f, 0.5f, 0.5f};
             entityTransform.rotation = glm::vec3(-55.0f, 0.0f, 0.0f);

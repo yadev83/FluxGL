@@ -21,11 +21,11 @@ class Texture : public fluxgl::Scene {
 
             entity = createEntity();
             auto& meshRenderer = entity.addComponent<fluxgl::MeshRenderer>();
-            meshRenderer.material.shader = resources.findShader("shader");
-            meshRenderer.material.albedoTextures.push_back(resources.findTexture("container"));
-            meshRenderer.material.albedoTextures.push_back(resources.findTexture("awesomeface"));
+            meshRenderer.material.shader = "shader";
+            meshRenderer.material.albedoTextures.push_back("container");
+            meshRenderer.material.albedoTextures.push_back("awesomeface");
 
-            meshRenderer.mesh = resources.findMesh("mesh");
+            meshRenderer.mesh = "mesh";
         }
 
         void onUpdate(float deltaTime) override {
