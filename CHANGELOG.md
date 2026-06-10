@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Prefabs are json assets that can be used to generate complex entities from data instead of code
 - Lifetime system : Add a lifetime component with a duration on an entity to make it disappear after the duration is elapsed
 - Physics System : Apply basic physics to rigidbodies and adds box colliders based collision detection
+- Virtual File System : Currently targetting a disk storage provider, but will be used later for packaging assets
 
 ### Changed
 - Lifecycle is now a bit more precise with fixedUpdates and LateUpdates/RenderUpdates
