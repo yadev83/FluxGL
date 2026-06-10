@@ -40,6 +40,7 @@ class Example : public fluxgl::Scene {
             auto& cameraTransform = camera.addComponent<fluxgl::Transform>();
             cameraTransform.position = {0.0f, 0.0f, 5.0f};
 
+            cubeA = createEntity();
             cubeA.addComponent<fluxgl::Transform>();
             auto& cubeARenderer = cubeA.addComponent<fluxgl::MeshRenderer>();
             cubeARenderer.material.shader = "shader";
