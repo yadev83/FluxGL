@@ -1,4 +1,5 @@
 #include <fluxgl/core/app.h>
+#include <fluxgl/core/directory_storage_provider.h>
 #include <fluxgl/core/error.h>
 #include <fluxgl/core/log.h>
 #include <fluxgl/core/scene_manager.h>
@@ -10,13 +11,13 @@
 #include <sstream>
 
 namespace fluxgl {
-    App::App(int width, int height, const char *title) : m_window(width, height, title) {
+    App::App(int width, int height, const char *title) : m_window(width, height, title), m_vfs(new DirectoryStorageProvider()) {
         m_window.bindApp(*this);
     }
 
     void App::run() {
         try {
-            AppContext ctx { m_window, m_inputManager, m_resourceManager, m_prefabLoader };
+            AppContext ctx { m_window, m_vfs, m_inputManager, m_resourceManager, m_prefabLoader };
 
             // Initialize subsystems
             SceneManager::get().setContext(&ctx);

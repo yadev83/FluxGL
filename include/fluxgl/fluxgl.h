@@ -6,6 +6,8 @@
 #include "core/log.h"
 #include "core/scene.h"
 #include "core/scene_manager.h"
+#include "core/virtual_file_system.h"
+#include "core/directory_storage_provider.h"
 
 #include "utils/file.h"
 

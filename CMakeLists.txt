@@ -39,6 +39,8 @@ target_sources(FluxGL PRIVATE
     src/core/log.cpp
     src/core/scene.cpp
     src/core/scene_manager.cpp
+    src/core/virtual_file_system.cpp
+    src/core/directory_storage_provider.cpp
     src/ecs/registry.cpp
     src/ecs/entity.cpp
     src/ecs/behavior.cpp

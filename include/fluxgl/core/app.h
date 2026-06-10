@@ -4,10 +4,13 @@
 #include <fluxgl/assets/resource_manager.h>
 #include <fluxgl/assets/prefab_loader.h>
 #include "window.h"
+#include "virtual_file_system.h"
 
 namespace fluxgl {
     struct AppContext {
         fluxgl::Window& window;
+        fluxgl::VirtualFileSystem& vfs;
+
         fluxgl::InputManager& inputManager;
         fluxgl::ResourceManager& resourceManager;
         fluxgl::PrefabLoader& prefabLoader;
@@ -23,6 +26,8 @@ namespace fluxgl {
     class App {
         private:
             fluxgl::Window m_window;
+            fluxgl::VirtualFileSystem m_vfs;
+            
             fluxgl::InputManager m_inputManager;
             fluxgl::ResourceManager m_resourceManager;
             fluxgl::PrefabLoader m_prefabLoader;
