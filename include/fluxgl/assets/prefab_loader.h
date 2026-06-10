@@ -27,8 +27,8 @@ namespace fluxgl {
         
         public:
             Prefab();
-            Prefab(std::string path);
-            void loadFromFile(std::string path);
+            Prefab(std::string source);
+            void loadFromSource(std::string source);
 
             Json::Value& getData();
     };
@@ -44,7 +44,6 @@ namespace fluxgl {
 
         public:
             Entity instantiate(Registry* registry, Prefab& prefab);
-            Entity instantiate(Registry* registry, const std::string& path);
 
             template <typename T>
             void registerComponent() {

@@ -11,7 +11,7 @@ class Sprites : public fluxgl::Scene {
             registerSystem<fluxgl::RenderSystem>();
 
             context->resourceManager.addShader("sprite_unlit", fluxgl::Shader::spriteUnlit());
-            context->resourceManager.addTexture("awesomeface", fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
+            context->resourceManager.addTexture("awesomeface", fluxgl::Texture::loadFromMemory(context->vfs.read("assets/textures/awesomeface.png")));
         }
 
         void onInit() override {

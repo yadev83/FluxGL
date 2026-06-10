@@ -29,7 +29,6 @@ namespace fluxgl {
             Registry& getRegistry();
             AppContext& getContext();
             Entity createEntity();
-            Entity instantiate(const std::string& path);
             Entity instantiate(Prefab& prefab);
             Entity getEntity(EntityID id);
 

@@ -35,7 +35,6 @@ namespace fluxgl {
             void setUniform(const std::string& name, const glm::mat4& value) const;
 
             // builders
-            static Shader loadFromFiles(const std::string& vertexPath, const std::string& fragmentPath);
             static Shader loadFromSource(const std::string& vertexSrc, const std::string& fragmentSrc);
 
             static Shader defaultLit();

@@ -49,7 +49,6 @@ target_sources(FluxGL PRIVATE
     src/ecs/systems/lifetime_system.cpp
     src/ecs/systems/physics_system.cpp
     src/input/input_manager.cpp
-    src/utils/file.cpp
     src/graphics/mesh.cpp
     src/graphics/shader.cpp
     src/graphics/renderer.cpp

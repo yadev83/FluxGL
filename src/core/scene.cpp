@@ -9,10 +9,6 @@ namespace fluxgl {
         return m_registry.createEntity();
     }
 
-    Entity Scene::instantiate(const std::string& path) {
-        return context->prefabLoader.instantiate(&m_registry, path);
-    }
-
     Entity Scene::instantiate(Prefab& prefab) {
         return context->prefabLoader.instantiate(&m_registry, prefab);
     }

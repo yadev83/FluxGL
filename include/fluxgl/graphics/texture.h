@@ -1,5 +1,7 @@
 #pragma once
 
+#include <fluxgl/core/virtual_file_system.h>
+
 namespace fluxgl {
     class Texture {
         private:
@@ -28,7 +30,6 @@ namespace fluxgl {
             Texture& operator=(Texture&& other) noexcept;
 
             // Builders
-            static Texture loadFromFile(const char *path);
-            static Texture loadFromMemory(const char *data, int width, int height, int channels); 
+            static Texture loadFromMemory(Buffer data); 
     };
 }

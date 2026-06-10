@@ -1,6 +1,5 @@
 #include <fluxgl/graphics/shader.h>
 #include <fluxgl/core/error.h>
-#include <fluxgl/utils/file.h>
 
 #include <fluxgl/core/log.h>
 
@@ -108,13 +107,6 @@ namespace fluxgl {
 
     void Shader::setUniform(const std::string& name, const glm::mat4& value) const {
         glUniformMatrix4fv(glGetUniformLocation(m_ID, name.c_str()), 1, GL_FALSE, &value[0][0]);
-    }
-
-    Shader Shader::loadFromFiles(const std::string& vertexPath, const std::string& fragmentPath) {
-        FLUXGL_LOG_DEBUG("Loading shader from files: " + vertexPath + ", " + fragmentPath);
-        std::string vertexSrc = readFileToString(vertexPath);
-        std::string fragmentSrc = readFileToString(fragmentPath);
-        return Shader::loadFromSource(vertexSrc, fragmentSrc);
     }
 
     Shader Shader::loadFromSource(const std::string& vertexSrc, const std::string& fragmentSrc) {

@@ -19,5 +19,6 @@ namespace fluxgl {
         public:
             VirtualFileSystem(IStorageProvider *provider = nullptr);
             Buffer read(std::string path);
+            std::string readText(std::string path);
     };
 }

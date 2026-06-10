@@ -27,10 +27,15 @@ class Example : public fluxgl::Scene {
             fluxgl::Renderer::setClearColor(0.4f * ambientLightColor);
 
             auto& resources = context->resourceManager;
-            resources.addShader("shader", fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl"));
-            resources.addTexture("albedo", fluxgl::Texture::loadFromFile("assets/textures/container.png"));
-            resources.addTexture("specular", fluxgl::Texture::loadFromFile("assets/textures/container_specular.png"));
-            resources.addTexture("emission", fluxgl::Texture::loadFromFile("assets/textures/emission_map.jpg"));
+            auto& vfs = context->vfs;
+
+            resources.addShader("shader", fluxgl::Shader::loadFromSource(
+                vfs.readText("assets/shaders/vertex.glsl"), 
+                vfs.readText("assets/shaders/fragment.glsl")
+            ));
+            resources.addTexture("albedo", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container.png")));
+            resources.addTexture("specular", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container_specular.png")));
+            resources.addTexture("emission", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/emission_map.jpg")));
             resources.addMesh("cube", fluxgl::Mesh::cube());
             resources.addMesh("sphere", fluxgl::Mesh::sphere());
 

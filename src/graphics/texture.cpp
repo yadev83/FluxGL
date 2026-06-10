@@ -72,24 +72,21 @@ namespace fluxgl {
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    Texture Texture::loadFromFile(const char *path) {
-        if(!std::filesystem::exists(path)) {
-            throw Error{ErrorCode::IOError, "Texture File does not exist: " + std::string(path)};
-        }
-
+    Texture Texture::loadFromMemory(Buffer data) {
+        Texture texture;
+        
         int width, height, channels;
         stbi_set_flip_vertically_on_load(true);
-        unsigned char *data = stbi_load(path, &width, &height, &channels, 0);
-        
-        Texture texture = loadFromMemory(reinterpret_cast<const char*>(data), width, height, channels);
-        stbi_image_free(data);
+        unsigned char* decoded = stbi_load_from_memory(
+            data.data(),
+            data.size(),
+            &width,
+            &height,
+            &channels,
+            0            
+        );
 
-        return texture;
-    }
-
-    Texture Texture::loadFromMemory(const char *data, int width, int height, int channels) {
-        Texture texture;
-        texture.load(data, width, height, channels); 
+        texture.load(reinterpret_cast<const char*>(decoded), width, height, channels); 
         return texture;
     }
 }

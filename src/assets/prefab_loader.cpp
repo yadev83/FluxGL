@@ -1,19 +1,28 @@
 #include <fluxgl/assets/prefab_loader.h>
 
-#include <fstream>
 #include <fluxgl/core/error.h>
 #include <fluxgl/core/log.h>
 
 namespace fluxgl {
     Prefab::Prefab() {}
 
-    Prefab::Prefab(std::string path) {
-        loadFromFile(path);
+    Prefab::Prefab(std::string source) {
+        loadFromSource(source);
     }
 
-    void Prefab::loadFromFile(std::string path) {
-        std::ifstream file(path, std::ifstream::binary);
-        file >> m_data;
+    void Prefab::loadFromSource(std::string source) {
+        std::string errs;
+        Json::CharReaderBuilder builder;
+        Json::CharReader* reader(builder.newCharReader());
+
+        if (!reader->parse(
+                source.data(),
+                source.data() + source.size(),
+                &m_data,
+                &errs))
+        {
+            throw std::runtime_error(errs);
+        }
     }
 
     Json::Value& Prefab::getData() {
@@ -93,11 +102,6 @@ namespace fluxgl {
         loadPrefab(data, registry, entity.getID());
 
         return entity;
-    }
-
-    Entity PrefabLoader::instantiate(Registry* registry, const std::string& path) {
-        Prefab prefab(path);
-        return instantiate(registry, prefab);
     }
 
     void PrefabLoader::loadPrefab(const Json::Value& prefab, Registry* registry, EntityID entityID, EntityID parentID) {

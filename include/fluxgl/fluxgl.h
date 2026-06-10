@@ -9,8 +9,6 @@
 #include "core/virtual_file_system.h"
 #include "core/directory_storage_provider.h"
 
-#include "utils/file.h"
-
 #include "ecs/entity.h"
 #include "ecs/registry.h"
 #include "ecs/system.h"

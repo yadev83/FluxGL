@@ -10,9 +10,14 @@ class TransformExample : public fluxgl::Scene {
     public:
         void onLoad() override {
             auto& resources = context->resourceManager;
-            resources.addShader("shader", fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl"));
-            resources.addTexture("container", fluxgl::Texture::loadFromFile("assets/textures/container.jpg"));
-            resources.addTexture("awesomeface", fluxgl::Texture::loadFromFile("assets/textures/awesomeface.png"));
+            auto& vfs = context->vfs;
+
+            resources.addShader("shader", fluxgl::Shader::loadFromSource(
+                vfs.readText("assets/shaders/vertex.glsl"), 
+                vfs.readText("assets/shaders/fragment.glsl")
+            ));
+            resources.addTexture("container", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container.jpg")));
+            resources.addTexture("awesomeface", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/awesomeface.png")));
             resources.addMesh("mesh", fluxgl::Mesh::quad());
         }
 

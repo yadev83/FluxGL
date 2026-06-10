@@ -12,7 +12,10 @@ class Hello : public fluxgl::Scene {
             // Load resources
             auto& resources = context->resourceManager;
 
-            resources.addShader("shader", fluxgl::Shader::loadFromFiles("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl"));
+            resources.addShader("shader", fluxgl::Shader::loadFromSource(
+                getContext().vfs.readText("assets/shaders/vertex.glsl"),
+                getContext().vfs.readText("assets/shaders/fragment.glsl")
+            ));
             resources.addMesh("mesh", fluxgl::Mesh::fromVertices({ 
                 {.position = {-0.5f, -0.5f, 0.0f}, .color = {1.0f, 0.0f, 0.0f}}, 
                 {.position = {0.0f, 0.5f, 0.0f}, .color = {0.0f, 1.0f, 0.0f}},
