@@ -21,7 +21,3 @@ cmake -S . -G "MinGW Makefiles" -B "$BUILD_DIR" \
     -DCMAKE_TOOLCHAIN_FILE="$ROOT_DIR"/vendor/vcpkg/scripts/buildsystems/vcpkg.cmake \
     -DFLUXGL_BUILD_EXAMPLES=ON
 echo "✅ Configuration complete!"
-
-echo "🔨 Building FluxGL & Examples..."
-cmake --build "$BUILD_DIR"
-echo "✅ Build complete!"

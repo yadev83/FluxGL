@@ -3,6 +3,7 @@ project(FluxGL)
 
 # Options
 option(FLUXGL_BUILD_EXAMPLES "Build examples" OFF)
+option(FLUXGL_PACK_ASSETS "Pack Assets" OFF)
 
 # Build type
 if(NOT CMAKE_BUILD_TYPE)
@@ -15,6 +16,12 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(FLUXGL_DEBUG=1)
 else()
     add_compile_definitions(FLUXGL_DEBUG=0)
+endif()
+
+if(FLUXGL_PACK_ASSETS)
+    add_compile_definitions(FLUXGL_USE_ASSET_PACKS=1)
+else()
+    add_compile_definitions(FLUXGL_USE_ASSET_PACKS=0)
 endif()
 
 # C++23 is required for std::excepted<T, E>
@@ -73,6 +80,9 @@ target_link_libraries(FluxGL
         glm::glm
         JsonCpp::JsonCpp
 )
+
+# Build tools
+add_subdirectory(tools)
 
 # Build examples
 if(FLUXGL_BUILD_EXAMPLES)
