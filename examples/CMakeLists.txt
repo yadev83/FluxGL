@@ -18,17 +18,10 @@ function(add_gui_executable name path)
 
     set(asset_dir ${CMAKE_CURRENT_SOURCE_DIR}/${source_dir}/assets)
     set(output_file ${CMAKE_BINARY_DIR}/examples/${name}/assets.fgld)
-    set(ASSET_PACKER_EXE $<TARGET_FILE:AssetPacker>)
 
     if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${source_dir}/assets)
         if(FLUXGL_PACK_ASSETS)
-            add_custom_command(TARGET ${name} POST_BUILD
-                COMMAND ${ASSET_PACKER_EXE}
-                    pack
-                    ${asset_dir}
-                    ${output_file}
-                COMMENT "Packing assets for ${name}"
-            )
+            generate_assets_pack(${name}_assets ${asset_dir} ${output_file})
         else()
             add_custom_command(TARGET ${name} POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
