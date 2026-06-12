@@ -11,11 +11,17 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
+set(APP_ICON_RESOURCE
+    "${CMAKE_CURRENT_SOURCE_DIR}/resources/app.rc"
+)
+
 # Macro in the code
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_definitions(FLUXGL_DEBUG=1)
 else()
     add_compile_definitions(FLUXGL_DEBUG=0)
+    set(FLUXGL_PACK_ASSETS ON CACHE BOOL "" FORCE)
+    set(SUBSYSTEM_LINKER_OPTIONS "-mwindows")
 endif()
 
 if(FLUXGL_PACK_ASSETS)

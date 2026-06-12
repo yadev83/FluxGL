@@ -70,36 +70,43 @@ namespace fluxgl {
     }
 
     Buffer PackageStorageProvider::read(std::string path) {
-        // Expected format is : rootPath/.../.../file.whatever
-        auto slash = path.find_last_of('/');
-        if(slash == std::string::npos) throw Error{ErrorCode::IOError, "Invalid VFS path: " + path};
+        // Find package
+        fs::path current(path);
 
-        fs::path packageName = path.substr(0, slash);
-        fs::path filePath    = path.substr(slash + 1);
+        while(!current.empty()) {
+            auto it = m_packages.find(current.generic_string());
 
-        auto it = m_packages.find(packageName.generic_string());
-        if(it == m_packages.end()) throw Error{ErrorCode::IOError, "Package not found: " + packageName.generic_string()};
+            if(it != m_packages.end()) {
+                Package& package = it->second;
+                
+                fs::path assetPath = fs::relative(
+                    fs::path(path),
+                    current
+                );
+                auto entryIt = package.entries.find(assetPath.generic_string());
+                if(entryIt == package.entries.end()) throw Error{ErrorCode::IOError, "File not found in package: " + path};
 
-        Package& package = it->second;
+                const PackageEntry& entry = entryIt->second;
+                
+                package.file.clear();
+                package.file.seekg(static_cast<std::streamoff>(entry.offset), std::ios::beg);
+
+                if(!package.file) throw Error{ErrorCode::IOError, "Encountered a problem while trying to read the file entry: " + assetPath.generic_string()};
+
+                Buffer buffer(entry.size);
+                package.file.read(
+                    reinterpret_cast<char*>(buffer.data()),
+                    static_cast<std::streamsize>(entry.size)
+                );
+
+                if(!package.file) throw Error{ErrorCode::IOError, "Could not read file: " + assetPath.generic_string()};
+
+                return buffer;
+            }
+
+            current = current.parent_path();
+        }
         
-        auto entryIt = package.entries.find(filePath.generic_string());
-        if(entryIt == package.entries.end()) throw Error{ErrorCode::IOError, "File not found in package: " + path};
-
-        const PackageEntry& entry = entryIt->second;
-        
-        package.file.clear();
-        package.file.seekg(static_cast<std::streamoff>(entry.offset), std::ios::beg);
-
-        if(!package.file) throw Error{ErrorCode::IOError, "Encountered a problem while trying to read the file entry: " + filePath.generic_string()};
-
-        Buffer buffer(entry.size);
-        package.file.read(
-            reinterpret_cast<char*>(buffer.data()),
-            static_cast<std::streamsize>(entry.size)
-        );
-
-        if(!package.file) throw Error{ErrorCode::IOError, "Could not read file: " + filePath.generic_string()};
-
-        return buffer;
+        throw Error{ErrorCode::IOError, "Package not found for path: " + path};
     }
 }

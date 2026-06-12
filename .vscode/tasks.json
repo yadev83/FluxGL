@@ -26,7 +26,8 @@
         {
             "label": "configure release",
             "type": "shell",
-            "command": "scripts/configure.sh Release"
+            "command": "scripts/configure.sh Release",
+            "problemMatcher": []
         },
         {
             "label": "build release",
@@ -39,7 +40,7 @@
                 "-Command",
                 "cmake --build build/Release"
             ],
-            "group": "build"
+            "group": "build",
         },
         {
             "label": "clean",

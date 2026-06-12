@@ -1,17 +1,15 @@
 function(add_gui_executable name path)
     cmake_parse_arguments(ARG "" "" "" ${ARGN})
-    add_executable(${name} ${path})
 
     if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-        if(CMAKE_BUILD_TYPE STREQUAL "Release")
-            set_target_properties(${name} PROPERTIES WIN32_EXECUTABLE TRUE)
-        else()
-            set_target_properties(${name} PROPERTIES WIN32_EXECUTABLE FALSE) # keep pour debug
-        endif()
+        add_executable(${name} ${path} ${APP_ICON_RESOURCE})
+    else()
+        add_executable(${name} ${path})
     endif()
 
     target_link_libraries(${name} PRIVATE FluxGL)
     set_target_properties(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples/${name})
+    target_link_options(${name} PRIVATE ${SUBSYSTEM_LINKER_OPTIONS})
     
     list(GET path 0 first_source)
     get_filename_component(source_dir ${first_source} PATH)

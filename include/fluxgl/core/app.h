@@ -38,7 +38,7 @@ namespace fluxgl {
             fluxgl::PrefabLoader m_prefabLoader;
 
         public:
-            App(int width, int height, const char* title, VFSSettings vfsSettings);
+            App(int width, int height, const char* title, VFSSettings vfsSettings = {"assets.fgld", false});
             virtual ~App() = default;
 
             fluxgl::InputManager& getInput();
