@@ -79,6 +79,10 @@ void create_asset_package(std::string path, std::string outputPath = "") {
     }
 
     // We can now start to write the asset file
+    std::filesystem::path outPath(packageName);
+    if (outPath.has_parent_path()){
+        std::filesystem::create_directories(outPath.parent_path());
+    }
     std::ofstream out(packageName, std::ios::binary);
 
     PkgHeader header;

@@ -7,6 +7,11 @@
 #include "virtual_file_system.h"
 
 namespace fluxgl {
+    struct VFSSettings {
+        const char* root;
+        bool recursive = false;
+    };
+    
     struct AppContext {
         fluxgl::Window& window;
         fluxgl::VirtualFileSystem& vfs;
@@ -33,7 +38,7 @@ namespace fluxgl {
             fluxgl::PrefabLoader m_prefabLoader;
 
         public:
-            App(int width, int height, const char *title);
+            App(int width, int height, const char* title, VFSSettings vfsSettings);
             virtual ~App() = default;
 
             fluxgl::InputManager& getInput();

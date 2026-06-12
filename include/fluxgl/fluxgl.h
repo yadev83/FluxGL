@@ -8,6 +8,7 @@
 #include "core/scene_manager.h"
 #include "core/virtual_file_system.h"
 #include "core/directory_storage_provider.h"
+#include "core/package_storage_provider.h"
 
 #include "ecs/entity.h"
 #include "ecs/registry.h"

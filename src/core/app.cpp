@@ -1,5 +1,6 @@
 #include <fluxgl/core/app.h>
 #include <fluxgl/core/directory_storage_provider.h>
+#include <fluxgl/core/package_storage_provider.h>
 #include <fluxgl/core/error.h>
 #include <fluxgl/core/log.h>
 #include <fluxgl/core/scene_manager.h>
@@ -11,9 +12,15 @@
 #include <sstream>
 
 namespace fluxgl {
-    App::App(int width, int height, const char *title) : m_window(width, height, title), m_vfs(new DirectoryStorageProvider()) {
-        m_window.bindApp(*this);
-    }
+    #if FLUXGL_USE_ASSET_PACKS
+        App::App(int width, int height, const char* title, VFSSettings vfsSettings) : m_window(width, height, title), m_vfs(new PackageStorageProvider(vfsSettings.root, vfsSettings.recursive)) {
+            m_window.bindApp(*this);
+        }
+    #else
+        App::App(int width, int height, const char* title, VFSSettings vfsSettings) : m_window(width, height, title), m_vfs(new DirectoryStorageProvider()) {
+            m_window.bindApp(*this);
+        }
+    #endif
 
     void App::run() {
         try {
