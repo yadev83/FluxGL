@@ -42,6 +42,7 @@ namespace fluxgl {
              * @return AudioEngine& 
              */
             static AudioEngine& get();
+            static ma_engine *getEngine();
 
             /**
              * @brief Initialize the audio engine
@@ -58,14 +59,6 @@ namespace fluxgl {
              * Properly closes the miniaudio lib
              */
             void shutdown();
-            /**
-             * @brief Update the audio engine
-             * 
-             * Does some audio shenanigans to update the audio engine
-             * It checks if any sources are playing and updates them properly, 
-             * this includes updates to volumes, spatialization, and it also clears unused sources
-             */
-            void update();
 
             /**
              * @brief Set the position of a source for proper spatialization
@@ -73,14 +66,7 @@ namespace fluxgl {
              * @param id 
              * @param position 
              */
-            void setSourcePosition(SourceID id, const glm::vec3& position);
-            /**
-             * @brief Sets the spatialization of a source inside the audio lib (miniaudio)
-             * 
-             * @param id 
-             * @param spatialized 
-             */
-            void setSourceSpatialized(SourceID id, bool spatialized);
+            void setSoundPosition(Sound* sound = nullptr, const glm::vec3& position = {0.0f, 0.0f, 0.0f});
             /**
              * @brief Set the Listener object
              * 
@@ -92,16 +78,15 @@ namespace fluxgl {
              * @param direction 
              * @param up 
              */
-            void setListener(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up);
+            void setListenerPosition(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up);
 
             void setMasterVolume(float volume);
             float getMasterVolume();
             void setVolume(SoundType type, float volume);
             float getVolume(SoundType type);
 
-            SoundID loadSound(std::string path, SoundType type);
-            SourceID play(SoundID id, bool loop = false, float volume = 1.0f);
-            bool isPlaying(SourceID id);
-            void stop(SourceID id);
+            void play(Sound* sound = nullptr);
+            bool isPlaying(Sound* sound = nullptr);
+            void stop(Sound* sound = nullptr);
     };
 }

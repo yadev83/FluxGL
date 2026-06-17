@@ -11,14 +11,23 @@ class Audio : public fluxgl::Scene {
         void onLoad() override {
             registerSystem<fluxgl::RenderSystem>();
             registerSystem<fluxgl::AudioSystem>();
+
+            auto& resources = context->resourceManager;
+            auto& vfs = context->vfs;
+
+            resources.addSound(
+                "solitude", 
+                fluxgl::Sound::loadFromMemory(
+                    vfs.read("assets/bgm/solitude.wav"), 
+                    fluxgl::AudioEngine::getEngine()
+                )
+            );
         }
 
         void onInit() override {
             entity = createEntity();
             auto& audioSource = entity.addComponent<fluxgl::AudioSource>();
-            audioSource.sound.path = "assets/bgm/solitude.wav";
-            audioSource.sound.type = fluxgl::SoundType::BGM;
-            audioSource.loop = true;
+            audioSource.sound = "solitude";
             audioSource.shouldPlay = true;
         }
 

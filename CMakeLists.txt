@@ -70,6 +70,7 @@ target_sources(FluxGL PRIVATE
     src/graphics/debug_renderer.cpp
     src/audio/miniaudio_impl.cpp
     src/audio/audio_engine.cpp
+    src/audio/sound.cpp
     src/assets/resource_manager.cpp
     src/assets/prefab_loader.cpp
 )

@@ -1,3 +1,4 @@
+#include <fluxgl/core/app.h>
 #include <fluxgl/core/scene.h>
 #include <fluxgl/audio/audio_engine.h>
 
@@ -10,9 +11,7 @@
 namespace fluxgl {
     void AudioSystem::onUpdate(Scene& scene, float dt) {
         auto& registry = scene.getRegistry();
-
-        // Update the audio engine
-        AudioEngine::get().update();
+        auto& resources = scene.getContext().resourceManager;
 
         // Setup the listener (one per scene only, grab the first one)
         for(auto& e : registry.query<AudioListener, Transform>()) {
@@ -20,7 +19,7 @@ namespace fluxgl {
             auto& transform = e.getComponent<Transform>();
 
             if(listener.active) {
-                AudioEngine::get().setListener(transform.position, transform.front(), transform.up());
+                AudioEngine::get().setListenerPosition(transform.position, transform.front(), transform.up());
                 break;
             }
         }
@@ -28,29 +27,27 @@ namespace fluxgl {
         // Handle audio sources
         for(auto& e : registry.query<AudioSource>()) {
             auto& source = e.getComponent<AudioSource>();
+            Sound *sound = resources.getSound(source.sound);
 
-            if(source.shouldPlay && source.source == 0) {
+            // Update the source first
+            if(!AudioEngine::get().isPlaying(sound)) {
+                AudioEngine::get().stop(sound);
+            }
+
+            if(source.shouldPlay && sound->isValid()) {
                 source.shouldPlay = false;
-                SoundID sound = AudioEngine::get().loadSound(source.sound.path, source.sound.type);
-                source.source = AudioEngine::get().play(sound, source.loop, source.volume);
+                AudioEngine::get().play(sound);
             }
             
-            if(source.source != 0) {
-                if(!AudioEngine::get().isPlaying(source.source)) {
-                    source.source = 0;
-                }
-
+            if(sound->isValid()) {
                 if(source.shouldStop) {
                     source.shouldStop = false;
-                    AudioEngine::get().stop(source.source);
+                    AudioEngine::get().stop(sound);
                 }
 
-                if(source.spatialized && e.hasComponent<Transform>()) {
+                if(sound->getSpatialized() && e.hasComponent<Transform>()) {
                     auto& transform = e.getComponent<Transform>();
-                    AudioEngine::get().setSourcePosition(source.source, transform.position);
-                    AudioEngine::get().setSourceSpatialized(source.source, true);
-                } else {
-                    AudioEngine::get().setSourceSpatialized(source.source, false);
+                    AudioEngine::get().setSoundPosition(sound, transform.position);
                 }
             }
         }

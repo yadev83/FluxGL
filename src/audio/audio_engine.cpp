@@ -10,6 +10,10 @@ namespace fluxgl {
         return instance;
     }
 
+    ma_engine *AudioEngine::getEngine() {
+        return &(get().m_engine);
+    }
+
     bool AudioEngine::init() {
         if(ma_engine_init(NULL, &m_engine) == MA_SUCCESS) {
             FLUXGL_LOG_INFO("Audio Engine initialized");
@@ -29,41 +33,32 @@ namespace fluxgl {
         ma_engine_uninit(&m_engine);
     }
 
-    void AudioEngine::update() {
-        // Clear old sources
-        for(auto it = m_sources.begin(); it != m_sources.end();) {
-            if(!isPlaying(it->first)) {
-                stop(it->first);
-            } else {
-                ++it;
-            }
-        }
+    // void AudioEngine::update() {
+    //     // Clear old sources
+    //     for(auto it = m_sources.begin(); it != m_sources.end();) {
+    //         if(!isPlaying(it->first)) {
+    //             stop(it->first);
+    //         } else {
+    //             ++it;
+    //         }
+    //     }
 
-        // Mix volumes
-        for(auto& [id, source] : m_sources) {
-            auto it = m_sounds.find(id);
-            if(it == m_sounds.end()) continue;
+    //     // Mix volumes
+    //     for(auto& [id, source] : m_sources) {
+    //         auto it = m_sounds.find(id);
+    //         if(it == m_sounds.end()) continue;
             
-            float volume = source.volume * getVolume(it->second.type) * getMasterVolume();
-            ma_sound_set_volume(&source.sound, volume);
-        }
+    //         float volume = source.volume * getVolume(it->second.type) * getMasterVolume();
+    //         ma_sound_set_volume(&source.sound, volume);
+    //     }
+    // }
+
+    void AudioEngine::setSoundPosition(Sound* sound, const glm::vec3& position) {
+        if(!sound) return;
+        ma_sound_set_position(&(sound->getSound()), position.x, position.y, position.z);
     }
 
-    void AudioEngine::setSourcePosition(SourceID id, const glm::vec3& position) {
-        auto it = m_sources.find(id);
-        if(it == m_sources.end()) return;
-
-        ma_sound_set_position(&it->second.sound, position.x, position.y, position.z);
-    }
-
-    void AudioEngine::setSourceSpatialized(SourceID id, bool spatialized) {
-        auto it = m_sources.find(id);
-        if(it == m_sources.end()) return;
-
-        ma_sound_set_spatialization_enabled(&it->second.sound, spatialized);
-    }
-
-    void AudioEngine::setListener(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up) {
+    void AudioEngine::setListenerPosition(const glm::vec3& position, const glm::vec3& direction, const glm::vec3& up) {
         ma_engine_listener_set_position(
             &m_engine,
             0,
@@ -107,70 +102,29 @@ namespace fluxgl {
         return it == m_volumes.end() ? 1.0f : it->second;
     }
 
-    SoundID AudioEngine::loadSound(std::string path, SoundType type) {
-        SoundID id = m_nextSoundID++;
-        m_sounds[id] = Sound(path, type);
-        return id;
+    void AudioEngine::play(Sound* sound) {
+        if(!(sound && sound->isValid())) return;
+
+        ma_sound_set_looping(&(sound->getSound()), sound->getLoop());
+        float typeVolume = getVolume(sound->getType());
+        float finalVolume = sound->getVolume() * typeVolume * m_master;
+        ma_sound_set_volume(&(sound->getSound()), finalVolume);
+
+        if(ma_sound_start(&(sound->getSound())) != MA_SUCCESS) {
+            FLUXGL_LOG_ERROR("Failed to start sound");
+            return;
+        }
     }
 
-    SourceID AudioEngine::play(SoundID id, bool loop, float volume) {
-        auto it = m_sounds.find(id);
-        if(it == m_sounds.end()) return 0;
+    bool AudioEngine::isPlaying(Sound* sound) {
+        if(!(sound && sound->isValid())) return false;
 
-        SourceID sid = m_nextSourceID++;
-        Source& source = m_sources[sid];
-        
-        source.volume = volume;
-        source.loop = loop;
-
-        ma_uint32 flags = 0;
-
-        if(it->second.type == SoundType::BGM) {
-            flags |= MA_SOUND_FLAG_STREAM;
-        } else {
-            flags |= MA_SOUND_FLAG_DECODE;
-        }
-
-        if(ma_sound_init_from_file(
-            &m_engine,
-            it->second.path.c_str(),
-            flags,
-            nullptr,
-            nullptr,
-            &source.sound
-        ) != MA_SUCCESS) {
-            FLUXGL_LOG_ERROR("Failed to load sound: " + it->second.path);
-            m_sources.erase(sid);
-            return 0;
-        }
-
-        ma_sound_set_looping(&source.sound, loop);
-        float typeVolume = getVolume(it->second.type);
-        float finalVolume = volume * typeVolume * m_master;
-        ma_sound_set_volume(&source.sound, finalVolume);
-
-        if(ma_sound_start(&source.sound) != MA_SUCCESS) {
-            FLUXGL_LOG_ERROR("Failed to start sound: " + it->second.path);
-            ma_sound_uninit(&source.sound);
-            m_sources.erase(sid);
-            return 0;
-        }
-
-        return sid;
+        return ma_sound_is_playing(&(sound->getSound()));
     }
 
-    bool AudioEngine::isPlaying(SourceID id) {
-        auto it = m_sources.find(id);
-        if(it == m_sources.end()) return false;
-        return ma_sound_is_playing(&it->second.sound);
-    }
+    void AudioEngine::stop(Sound* sound) {
+        if(!(sound && sound->isValid())) return;
 
-    void AudioEngine::stop(SourceID id) {
-        auto it = m_sources.find(id);
-        if(it == m_sources.end()) return;
-
-        ma_sound_stop(&it->second.sound);
-        ma_sound_uninit(&it->second.sound);
-        m_sources.erase(it);
+        ma_sound_stop(&(sound->getSound()));
     }
 }

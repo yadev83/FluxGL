@@ -7,6 +7,7 @@
 #include <fluxgl/graphics/texture.h>
 #include <fluxgl/graphics/shader.h>
 #include <fluxgl/graphics/mesh.h>
+#include <fluxgl/audio/sound.h>
 #include <fluxgl/assets/assets.h>
 
 namespace fluxgl { 
@@ -75,6 +76,7 @@ namespace fluxgl {
     using TextureHandle = ResourceHandle<Texture>;
     using ShaderHandle = ResourceHandle<Shader>;
     using MeshHandle = ResourceHandle<Mesh>;
+    using SoundHandle = ResourceHandle<Sound>;
 
     /**
      * @brief The ResourceManager class is responsible for managing all resources in the application, including textures, shaders, and meshes. It provides methods to add, retrieve, find, and remove resources using handles.
@@ -91,6 +93,7 @@ namespace fluxgl {
             ResourceStorage<Texture>    m_textureStorage;
             ResourceStorage<Shader>     m_shaderStorage;
             ResourceStorage<Mesh>       m_meshStorage;
+            ResourceStorage<Sound>      m_soundStorage;
 
         public:
             ~ResourceManager();
@@ -114,6 +117,12 @@ namespace fluxgl {
             MeshHandle findMesh(const Resource& mesh);
             Mesh* getMesh(MeshHandle handle);
             Mesh* getMesh(const Resource& mesh);
+
+            SoundHandle addSound(const std::string& name, Sound* sound);
+            SoundHandle addSound(const std::string& name, Sound sound);
+            SoundHandle findSound(const Resource& sound);
+            Sound* getSound(SoundHandle handle);
+            Sound* getSound(const Resource& sound);
     };
 }
 
