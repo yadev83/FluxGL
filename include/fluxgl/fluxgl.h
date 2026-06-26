@@ -19,14 +19,11 @@
 #include "ecs/components/sprite.h"
 #include "ecs/components/camera.h"
 #include "ecs/components/light.h"
-#include "ecs/components/audio_listener.h"
-#include "ecs/components/audio_source.h"
 #include "ecs/components/lifetime.h"
 #include "ecs/components/rigidbody.h"
 #include "ecs/components/box_collider.h"
 
 #include "ecs/systems/render_system.h"
-#include "ecs/systems/audio_system.h"
 #include "ecs/systems/lifetime_system.h"
 #include "ecs/systems/physics_system.h"
 
@@ -39,10 +36,6 @@
 #include "graphics/material.h"
 #include "graphics/renderer.h"
 #include "graphics/debug_renderer.h"
-
-#include "audio/audio_engine.h"
-#include "audio/sound.h"
-#include "audio/source.h"
 
 #include "assets/assets.h"
 #include "assets/resource_manager.h"

@@ -94,25 +94,4 @@ namespace fluxgl {
     Mesh* ResourceManager::getMesh(const Resource& mesh) {
         return getMesh(findMesh(mesh));
     }
-
-    SoundHandle ResourceManager::addSound(const std::string& name, Sound* sound) {
-        return m_soundStorage.add(sound, name);
-    }
-
-    SoundHandle ResourceManager::addSound(const std::string& name, Sound sound) {
-        Sound* newSound = new Sound(std::move(sound));
-        return m_soundStorage.add(newSound, name);
-    }
-
-    SoundHandle ResourceManager::findSound(const Resource& Sound) {
-        return m_soundStorage.find(Sound);
-    }
-
-    Sound* ResourceManager::getSound(SoundHandle handle) {
-        return m_soundStorage.get(handle);
-    }
-
-    Sound* ResourceManager::getSound(const Resource& Sound) {
-        return getSound(findSound(Sound));
-    }
 }
