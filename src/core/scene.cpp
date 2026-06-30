@@ -10,7 +10,7 @@ namespace fluxgl {
     }
 
     Entity Scene::instantiate(Prefab& prefab) {
-        return context->prefabLoader.instantiate(&m_registry, prefab);
+        return getContext().prefabLoader.instantiate(&m_registry, prefab);
     }
 
     void Scene::destroyEntity(Entity entity) {
@@ -18,7 +18,7 @@ namespace fluxgl {
     }
 
     void Scene::setContext(AppContext* appContext) {
-        context = appContext;
+        m_context = appContext;
     }
 
     Registry& Scene::getRegistry() {
@@ -26,7 +26,7 @@ namespace fluxgl {
     }
 
     AppContext& Scene::getContext() {
-        return *context;
+        return *m_context;
     }
     
     Entity Scene::getEntity(EntityID id) {

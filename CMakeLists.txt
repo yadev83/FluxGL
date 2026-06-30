@@ -59,18 +59,18 @@ target_sources(FluxGL PRIVATE
     src/ecs/entity.cpp
     src/ecs/behavior.cpp
     src/ecs/systems/render_system.cpp
-    src/ecs/systems/audio_system.cpp
     src/ecs/systems/lifetime_system.cpp
     src/ecs/systems/physics_system.cpp
+    src/ecs/systems/audio_system.cpp
     src/input/input_manager.cpp
     src/graphics/mesh.cpp
     src/graphics/shader.cpp
     src/graphics/renderer.cpp
     src/graphics/texture.cpp
     src/graphics/debug_renderer.cpp
-    src/audio/miniaudio_impl.cpp
-    src/audio/audio_engine.cpp
+    src/audio/audio_impl.cpp
     src/audio/sound.cpp
+    src/audio/audio_engine.cpp
     src/assets/resource_manager.cpp
     src/assets/prefab_loader.cpp
 )

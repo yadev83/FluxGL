@@ -9,16 +9,16 @@ class TransformExample : public fluxgl::Scene {
 
     public:
         void onLoad() override {
-            auto& resources = context->resourceManager;
-            auto& vfs = context->vfs;
+            auto& resources = getContext().resourceManager;
+            auto& vfs = getContext().vfs;
 
-            resources.addShader("shader", fluxgl::Shader::loadFromSource(
+            resources.addResource<fluxgl::Shader>("shader", fluxgl::Shader::loadFromSource(
                 vfs.readText("assets/shaders/vertex.glsl"), 
                 vfs.readText("assets/shaders/fragment.glsl")
             ));
-            resources.addTexture("container", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container.jpg")));
-            resources.addTexture("awesomeface", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/awesomeface.png")));
-            resources.addMesh("mesh", fluxgl::Mesh::quad());
+            resources.addResource<fluxgl::Texture>("container", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container.jpg")));
+            resources.addResource<fluxgl::Texture>("awesomeface", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/awesomeface.png")));
+            resources.addResource<fluxgl::Mesh>("mesh", fluxgl::Mesh::quad());
         }
 
         void onInit() override {
@@ -44,8 +44,8 @@ class TransformExample : public fluxgl::Scene {
         }
 
         void onUpdate(float deltaTime) override {
-            if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
-                context->window.setWindowShouldClose();
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
+                getContext().window.setWindowShouldClose();
             }
 
             entity.getComponent<fluxgl::Transform>().rotation.z += 20.0f * deltaTime; // Rotate around Z-axis
@@ -60,10 +60,10 @@ class TransformExample : public fluxgl::Scene {
 
             fluxgl::Renderer::setCamera(cameraComponent.getViewMatrix(cameraTransform), cameraComponent.getProjectionMatrix(), cameraTransform.position);
             fluxgl::Renderer::drawMesh(
-                context->resourceManager.getMesh(meshRenderer.mesh),
+                getContext().resourceManager.getResource<fluxgl::Mesh>(meshRenderer.mesh),
                 meshTransform.getModelMatrix(),
-                context->resourceManager.getShader(meshRenderer.material.shader),
-                context->resourceManager.getTextures(meshRenderer.material.albedoTextures),
+                getContext().resourceManager.getResource<fluxgl::Shader>(meshRenderer.material.shader),
+                getContext().resourceManager.getResources<fluxgl::Texture>(meshRenderer.material.albedoTextures),
                 nullptr, nullptr, nullptr,
                 meshRenderer.material.albedoColor,
                 meshRenderer.material.specularColor,

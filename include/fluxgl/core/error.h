@@ -6,9 +6,12 @@
 namespace fluxgl {
     enum class ErrorCode {
         Success = 0,
+        Error,
         InvalidArgument,
         FileNotFound,
         IOError,
+        MemError,
+        AudioEngineError,
         OpenGLError,
         ShaderCompilationFailed,
         WindowCreationFailed

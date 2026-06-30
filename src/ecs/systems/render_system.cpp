@@ -68,8 +68,8 @@ namespace fluxgl {
             auto& sprite = entity.getComponent<Sprite>();
             auto& transform = entity.getComponent<Transform>();
 
-            auto shader = resources.getShader(sprite.shader);
-            auto texture = resources.getTexture(sprite.texture);
+            auto shader = resources.getResource<Shader>(sprite.shader);
+            auto texture = resources.getResource<Texture>(sprite.texture);
 
             Renderer::drawSprite(
                 transform.getModelMatrix(),
@@ -89,12 +89,12 @@ namespace fluxgl {
             auto& meshRenderer = entity.getComponent<MeshRenderer>();
             auto& transform = entity.getComponent<Transform>();
             
-            auto mesh = resources.getMesh(meshRenderer.mesh);
-            auto shader = resources.getShader(meshRenderer.material.shader);
-            auto albedoTextures = resources.getTextures(meshRenderer.material.albedoTextures);
-            auto normalMap = resources.getTexture(meshRenderer.material.normalMap);
-            auto specularMap = resources.getTexture(meshRenderer.material.specularMap);
-            auto emissionMap = resources.getTexture(meshRenderer.material.emissionMap);
+            auto mesh = resources.getResource<Mesh>(meshRenderer.mesh);
+            auto shader = resources.getResource<Shader>(meshRenderer.material.shader);
+            auto albedoTextures = resources.getResources<Texture>(meshRenderer.material.albedoTextures);
+            auto normalMap = resources.getResource<Texture>(meshRenderer.material.normalMap);
+            auto specularMap = resources.getResource<Texture>(meshRenderer.material.specularMap);
+            auto emissionMap = resources.getResource<Texture>(meshRenderer.material.emissionMap);
 
             Renderer::drawMesh(
                 mesh,

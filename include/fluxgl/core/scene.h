@@ -18,10 +18,10 @@ namespace fluxgl {
     class Scene {
         private:
             Registry m_registry;
+            AppContext* m_context = nullptr;
             std::vector<System*> m_systems;
 
         protected:
-            AppContext* context = nullptr;
             void destroyEntity(Entity entity);
 
         public:

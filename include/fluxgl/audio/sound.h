@@ -1,50 +1,37 @@
 #pragma once
 
-#include <string>
 #include <fluxgl/core/virtual_file_system.h>
-#include <miniaudio.h>
 
 namespace fluxgl {
-    enum class SoundType {
-        SFX,
-        UI,
-        BGM
+    enum class AudioFormat {
+        WAV
     };
 
     class Sound {
         private:
-            SoundType m_type = SoundType::SFX;
+            uint32_t    m_sampleRate;
+            uint16_t    m_channels;
+            AudioFormat m_format;
 
-            ma_decoder m_decoder;
-            ma_sound m_sound;
+            std::vector<float> m_samples;
 
-            bool m_initialized = false;
-            float m_volume = 1.0f;
-            float m_loop = false;
-            float m_spatialized = false;
-
-            void load(const char *data, size_t dataSize, ma_engine *engine);
-        
+            void decodeWAV(Buffer data);
         public:
             Sound() = default;
-            ~Sound();
 
-            bool isValid() const { return m_initialized; }
-            inline ma_sound& getSound() { return m_sound; }
+            uint32_t getChannels() const { return m_channels; }
+            uint64_t getFrameCount() const { return (m_samples.size() / m_channels); }
+            const std::vector<float>& getSamples() const { return m_samples; }
 
-            inline SoundType getType() const { return m_type; }
-            inline float getVolume() const { return m_volume; }
-            inline float getLoop() const { return m_loop; }
-            inline float getSpatialized() const { return m_spatialized; }
-
+            
             // Delete copy constructor and copy assignment operator to prevent copying 
             Sound(const Sound&) = delete; 
             Sound& operator=(const Sound&) = delete;
             // Instead, allow move
-            Sound(Sound&& other) noexcept;
-            Sound& operator=(Sound&& other) noexcept;
+            Sound(Sound&& other) noexcept = default;
+            Sound& operator=(Sound&& other) noexcept = default;
 
-            // Builder
-            static Sound loadFromMemory(Buffer data, ma_engine *engine);
+            // Builders
+            static Sound loadFromMemory(Buffer data, AudioFormat fmt = AudioFormat::WAV); 
     };
 }

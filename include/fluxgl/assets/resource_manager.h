@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <typeindex>
 
 #include <fluxgl/graphics/texture.h>
 #include <fluxgl/graphics/shader.h>
@@ -23,7 +24,7 @@ namespace fluxgl {
     struct ResourceHandle {
         static constexpr size_t INVALID_INDEX = std::numeric_limits<size_t>::max();
 
-        size_t      index = 0;
+        size_t      index = INVALID_INDEX;
         uint32_t    generation = 0;
 
         bool isValid() const {
@@ -65,6 +66,8 @@ namespace fluxgl {
             std::unordered_map<Resource, size_t> m_nameToIndex;
 
         public:
+            ~ResourceStorage();
+
             T* get(ResourceHandle<T> handle);
             ResourceHandle<T> find(const Resource& name);
             std::vector<ResourceHandle<T>> findAll();
@@ -73,10 +76,16 @@ namespace fluxgl {
             void remove(ResourceHandle<T> handle);
     };
 
-    using TextureHandle = ResourceHandle<Texture>;
-    using ShaderHandle = ResourceHandle<Shader>;
-    using MeshHandle = ResourceHandle<Mesh>;
-    using SoundHandle = ResourceHandle<Sound>;
+    class IStorage { 
+        public: 
+            virtual ~IStorage() = default;
+    };
+    
+    template<typename T>
+    class TypedStorage : public IStorage {
+        public: 
+            ResourceStorage<T> storage;
+    };
 
     /**
      * @brief The ResourceManager class is responsible for managing all resources in the application, including textures, shaders, and meshes. It provides methods to add, retrieve, find, and remove resources using handles.
@@ -90,39 +99,28 @@ namespace fluxgl {
      */
     class ResourceManager {
         private:
-            ResourceStorage<Texture>    m_textureStorage;
-            ResourceStorage<Shader>     m_shaderStorage;
-            ResourceStorage<Mesh>       m_meshStorage;
-            ResourceStorage<Sound>      m_soundStorage;
+            std::unordered_map<std::type_index, IStorage*> m_storages;
+
+            template<typename StorageType>
+            ResourceStorage<StorageType>& getStorage();
 
         public:
             ~ResourceManager();
 
-            TextureHandle addTexture(const std::string& name, Texture* texture);
-            TextureHandle addTexture(const std::string& name, Texture texture);
-            TextureHandle findTexture(const Resource& texture);
-            Texture* getTexture(TextureHandle handle);
-            std::vector<Texture*> getTextures(const std::vector<TextureHandle>& handles);
-            Texture* getTexture(const Resource& texture);
-            std::vector<Texture*> getTextures(const std::vector<Resource>& textures);
-
-            ShaderHandle addShader(const std::string& name, Shader* shader);
-            ShaderHandle addShader(const std::string& name, Shader shader);
-            ShaderHandle findShader(const Resource& shader);
-            Shader* getShader(ShaderHandle handle);
-            Shader* getShader(const Resource& shader);
-
-            MeshHandle addMesh(const std::string& name, Mesh* mesh);
-            MeshHandle addMesh(const std::string& name, Mesh mesh);
-            MeshHandle findMesh(const Resource& mesh);
-            Mesh* getMesh(MeshHandle handle);
-            Mesh* getMesh(const Resource& mesh);
-
-            SoundHandle addSound(const std::string& name, Sound* sound);
-            SoundHandle addSound(const std::string& name, Sound sound);
-            SoundHandle findSound(const Resource& sound);
-            Sound* getSound(SoundHandle handle);
-            Sound* getSound(const Resource& sound);
+            template<typename ResourceType>
+            ResourceHandle<ResourceType> addResource(const std::string& name, ResourceType* itemPtr);
+            template<typename ResourceType>
+            ResourceHandle<ResourceType> addResource(const std::string& name, ResourceType item);
+            template<typename ResourceType>
+            ResourceHandle<ResourceType> findResource(const Resource& resource);
+            template<typename ResourceType>
+            ResourceType* getResource(ResourceHandle<ResourceType> handle);
+            template<typename ResourceType>
+            ResourceType* getResource(const Resource& item);
+            template<typename ResourceType>
+            std::vector<ResourceType*> getResources(const std::vector<ResourceHandle<ResourceType>>& handles);
+            template<typename ResourceType>
+            std::vector<ResourceType*> getResources(const std::vector<Resource>& resources);
     };
 }
 

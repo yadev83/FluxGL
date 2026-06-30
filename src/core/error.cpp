@@ -10,8 +10,12 @@ namespace fluxgl {
             std::string message(int code) const override {
                 switch (static_cast<ErrorCode>(code)) {
                     case ErrorCode::Success: return "Success";
+                    case ErrorCode::Error: return "Error";
                     case ErrorCode::InvalidArgument: return "Invalid argument";
                     case ErrorCode::FileNotFound: return "File not found";
+                    case ErrorCode::IOError: return "I/O Error";
+                    case ErrorCode::MemError: return "Memory Error";
+                    case ErrorCode::AudioEngineError: return "Audio engine error";
                     case ErrorCode::OpenGLError: return "OpenGL error";
                     case ErrorCode::ShaderCompilationFailed: return "Shader compilation failed";
                     case ErrorCode::WindowCreationFailed: return "Window creation failed";

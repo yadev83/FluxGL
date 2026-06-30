@@ -26,18 +26,18 @@ class Example : public fluxgl::Scene {
             registerSystem<fluxgl::RenderSystem>();
             fluxgl::Renderer::setClearColor(0.4f * ambientLightColor);
 
-            auto& resources = context->resourceManager;
-            auto& vfs = context->vfs;
+            auto& resources = getContext().resourceManager;
+            auto& vfs = getContext().vfs;
 
-            resources.addShader("shader", fluxgl::Shader::loadFromSource(
+            resources.addResource<fluxgl::Shader>("shader", fluxgl::Shader::loadFromSource(
                 vfs.readText("assets/shaders/vertex.glsl"), 
                 vfs.readText("assets/shaders/fragment.glsl")
             ));
-            resources.addTexture("albedo", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container.png")));
-            resources.addTexture("specular", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container_specular.png")));
-            resources.addTexture("emission", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/emission_map.jpg")));
-            resources.addMesh("cube", fluxgl::Mesh::cube());
-            resources.addMesh("sphere", fluxgl::Mesh::sphere());
+            resources.addResource<fluxgl::Texture>("albedo", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container.png")));
+            resources.addResource<fluxgl::Texture>("specular", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container_specular.png")));
+            resources.addResource<fluxgl::Texture>("emission", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/emission_map.jpg")));
+            resources.addResource<fluxgl::Mesh>("cube", fluxgl::Mesh::cube());
+            resources.addResource<fluxgl::Mesh>("sphere", fluxgl::Mesh::sphere());
 
             camera = createEntity();
             camera.registerBehavior<FirstPersonController>();
@@ -115,8 +115,8 @@ class Example : public fluxgl::Scene {
         }
 
         void onUpdate(float deltaTime) override {
-            if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) context->window.isMouseLocked() ? context->window.setMouseLocked(false) : context->window.setWindowShouldClose();
-            if(context->inputManager.isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) context->window.setMouseLocked(true);
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) getContext().window.isMouseLocked() ? getContext().window.setMouseLocked(false) : getContext().window.setWindowShouldClose();
+            if(getContext().inputManager.isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) getContext().window.setMouseLocked(true);
 
             // Animate point light around circle
             static float time = 0.0f; // animation elapsed time

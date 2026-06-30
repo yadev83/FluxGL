@@ -4,6 +4,15 @@
 
 namespace fluxgl {
     template<typename T>
+    ResourceStorage<T>::~ResourceStorage() {
+        for (auto& slot : m_slots)
+        {
+            delete slot.resource;
+            slot.resource = nullptr;
+        }
+    }
+
+    template<typename T>
     ResourceHandle<T> ResourceStorage<T>::add(T* resource, const std::string& name) {
         // Find the first available slot
         for (size_t i = 0; i < m_slots.size(); ++i) {
@@ -89,5 +98,79 @@ namespace fluxgl {
                 }
             }
         }
+    }
+
+    template<typename StorageType>
+    ResourceStorage<StorageType>& ResourceManager::getStorage() {
+        // Find the storage type index
+        auto type = std::type_index(typeid(StorageType));
+
+        // Grab the storage in the storages map
+        auto it = m_storages.find(type);
+
+        // If storage not found : create it and return it
+        if(it == m_storages.end()) {
+            auto* storage = new TypedStorage<StorageType>();
+            m_storages[type] = storage;
+
+            return storage->storage;
+        }
+
+        // Finally, return the storage properly if it was found
+        return static_cast<TypedStorage<StorageType>*>(it->second)->storage;
+    }
+
+    template<typename ResourceType>
+    ResourceHandle<ResourceType> ResourceManager::addResource(const std::string& name, ResourceType* itemPtr) {
+        return getStorage<ResourceType>().add(itemPtr, name);
+    }
+    
+    template<typename ResourceType>
+    ResourceHandle<ResourceType> ResourceManager::addResource(const std::string& name, ResourceType item) {
+        ResourceType* newResource = new ResourceType(std::move(item));
+        return getStorage<ResourceType>().add(newResource, name);
+    }
+    
+    template<typename ResourceType>
+    ResourceHandle<ResourceType> ResourceManager::findResource(const Resource& resource) {
+        return getStorage<ResourceType>().find(resource);
+    }
+    
+    template<typename ResourceType>
+    ResourceType* ResourceManager::getResource(ResourceHandle<ResourceType> handle) {
+        return getStorage<ResourceType>().get(handle);
+    }
+    
+    template<typename ResourceType>
+    ResourceType* ResourceManager::getResource(const Resource& item) {
+        return getResource<ResourceType>(findResource<ResourceType>(item));
+        
+    }
+    
+    template<typename ResourceType>
+    std::vector<ResourceType*> ResourceManager::getResources(const std::vector<ResourceHandle<ResourceType>>& handles) {
+        std::vector<ResourceType*> resources;
+        resources.reserve(handles.size());
+
+        for(const auto& handle : handles) {
+            ResourceType* resource = getStorage<ResourceType>().get(handle);
+            if(resource) {
+                resources.push_back(resource);
+            } else {
+                resources.push_back(nullptr); // Or handle this case as needed
+            }
+        }
+
+        return resources;
+    }
+    
+    template<typename ResourceType>
+    std::vector<ResourceType*> ResourceManager::getResources(const std::vector<Resource>& resources) {
+        std::vector<ResourceHandle<ResourceType>> handles;
+        for(Resource resource : resources) {
+            handles.push_back(findResource<ResourceType>(resource));
+        }
+
+        return getResources<ResourceType>(handles);
     }
 }

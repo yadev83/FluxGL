@@ -10,8 +10,8 @@ class Sprites : public fluxgl::Scene {
         void onLoad() override {
             registerSystem<fluxgl::RenderSystem>();
 
-            context->resourceManager.addShader("sprite_unlit", fluxgl::Shader::spriteUnlit());
-            context->resourceManager.addTexture("awesomeface", fluxgl::Texture::loadFromMemory(context->vfs.read("assets/textures/awesomeface.png")));
+            getContext().resourceManager.addResource<fluxgl::Shader>("sprite_unlit", fluxgl::Shader::spriteUnlit());
+            getContext().resourceManager.addResource<fluxgl::Texture>("awesomeface", fluxgl::Texture::loadFromMemory(getContext().vfs.read("assets/textures/awesomeface.png")));
         }
 
         void onInit() override {
@@ -29,8 +29,8 @@ class Sprites : public fluxgl::Scene {
         }
 
         void onUpdate(float deltaTime) override {
-            if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
-                context->window.setWindowShouldClose();
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
+                getContext().window.setWindowShouldClose();
             }
         }
 };
