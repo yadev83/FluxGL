@@ -7,7 +7,6 @@
 class Audio : public fluxgl::Scene {
     private:
         fluxgl::Entity entity;
-        fluxgl::Sound sound;
 
         ma_engine audioEngine;
         ma_audio_buffer audioBuffer;
@@ -20,8 +19,7 @@ class Audio : public fluxgl::Scene {
             auto& resources = context->resourceManager;
             auto& vfs = context->vfs;
 
-            fluxgl::Buffer soundBuffer = vfs.read("assets/bgm/solitude.wav");
-            sound = fluxgl::Sound::loadFromMemory(soundBuffer);
+            resources.addResource<fluxgl::Sound>("solitude", fluxgl::Sound::loadFromMemory(vfs.read("assets/bgm/solitude.wav")));
         }
 
         void onInit() override {
@@ -31,11 +29,13 @@ class Audio : public fluxgl::Scene {
                 throw fluxgl::Error{fluxgl::ErrorCode::AudioEngineError, "failed to create audio engine\n"};
             }
 
+            auto sound = getContext().resourceManager.getResource<fluxgl::Sound>("solitude");
+
             ma_audio_buffer_config bufferConfig = ma_audio_buffer_config_init(
                 ma_format_f32,
-                sound.getChannels(),
-                sound.getFrameCount(),
-                sound.getSamples().data(),
+                sound->getChannels(),
+                sound->getFrameCount(),
+                sound->getSamples().data(),
                 nullptr
             );
 

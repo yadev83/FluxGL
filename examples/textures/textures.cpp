@@ -12,13 +12,13 @@ class Texture : public fluxgl::Scene {
             auto& resources = context->resourceManager;
             auto& vfs = context->vfs;
 
-            resources.addShader("shader", fluxgl::Shader::loadFromSource(
+            resources.addResource<fluxgl::Shader>("shader", fluxgl::Shader::loadFromSource(
                 vfs.readText("assets/shaders/texture.vert"), 
                 vfs.readText("assets/shaders/texture.frag")
             ));
-            resources.addTexture("container", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container.jpg")));
-            resources.addTexture("awesomeface", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/awesomeface.png")));
-            resources.addMesh("mesh", fluxgl::Mesh::quad());
+            resources.addResource<fluxgl::Texture>("container", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container.jpg")));
+            resources.addResource<fluxgl::Texture>("awesomeface", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/awesomeface.png")));
+            resources.addResource<fluxgl::Mesh>("mesh", fluxgl::Mesh::quad());
         }
 
         void onInit() override {
@@ -41,10 +41,10 @@ class Texture : public fluxgl::Scene {
             auto& meshRenderer = entity.getComponent<fluxgl::MeshRenderer>();
             fluxgl::Renderer::beginFrame();
             fluxgl::Renderer::drawMesh(
-                context->resourceManager.getMesh(meshRenderer.mesh),
+                context->resourceManager.getResource<fluxgl::Mesh>(meshRenderer.mesh),
                 glm::mat4(1.0f),
-                context->resourceManager.getShader(meshRenderer.material.shader),
-                context->resourceManager.getTextures(meshRenderer.material.albedoTextures),
+                context->resourceManager.getResource<fluxgl::Shader>(meshRenderer.material.shader),
+                context->resourceManager.getResources<fluxgl::Texture>(meshRenderer.material.albedoTextures),
                 nullptr, nullptr, nullptr,
                 meshRenderer.material.albedoColor,
                 meshRenderer.material.specularColor,

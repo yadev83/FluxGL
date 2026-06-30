@@ -29,15 +29,15 @@ class Example : public fluxgl::Scene {
             auto& resources = context->resourceManager;
             auto& vfs = context->vfs;
 
-            resources.addShader("shader", fluxgl::Shader::loadFromSource(
+            resources.addResource<fluxgl::Shader>("shader", fluxgl::Shader::loadFromSource(
                 vfs.readText("assets/shaders/vertex.glsl"), 
                 vfs.readText("assets/shaders/fragment.glsl")
             ));
-            resources.addTexture("albedo", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container.png")));
-            resources.addTexture("specular", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container_specular.png")));
-            resources.addTexture("emission", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/emission_map.jpg")));
-            resources.addMesh("cube", fluxgl::Mesh::cube());
-            resources.addMesh("sphere", fluxgl::Mesh::sphere());
+            resources.addResource<fluxgl::Texture>("albedo", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container.png")));
+            resources.addResource<fluxgl::Texture>("specular", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container_specular.png")));
+            resources.addResource<fluxgl::Texture>("emission", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/emission_map.jpg")));
+            resources.addResource<fluxgl::Mesh>("cube", fluxgl::Mesh::cube());
+            resources.addResource<fluxgl::Mesh>("sphere", fluxgl::Mesh::sphere());
 
             camera = createEntity();
             camera.registerBehavior<FirstPersonController>();
