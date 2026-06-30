@@ -28,7 +28,7 @@ namespace fluxgl {
     };
 
     struct BoxCollider2D {
-        static constexpr const char* TypeName = "BoxCollider2D";
+        static constexpr const char* TypeName = "fluxgl::BoxCollider2D";
         static void Create(Registry& registry, EntityID entityID, const Json::Value& data) {
             BoxCollider2D boxCollider2D;
 

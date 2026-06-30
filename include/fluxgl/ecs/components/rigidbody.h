@@ -14,7 +14,7 @@ namespace fluxgl {
     };
 
     struct RigidBody2D {
-        static constexpr const char* TypeName = "RigidBody2D";
+        static constexpr const char* TypeName = "fluxgl::RigidBody2D";
         static void Create(Registry& registry, EntityID entityID, const Json::Value& data) {
             RigidBody2D rigidBody2D;
 
