@@ -23,12 +23,12 @@ namespace fluxgl {
 
     void App::run() {
         try {
-            AppContext ctx { m_window, m_vfs, m_inputManager, m_resourceManager, m_prefabLoader };
+            AppContext ctx { m_window, m_audioEngine, m_vfs, m_inputManager, m_resourceManager, m_prefabLoader };
 
             // Initialize subsystems
             SceneManager::get().setContext(&ctx);
 
-            // Debug only subsystems
+            // Debug only subsystems 
             #if FLUXGL_DEBUG
                 DebugRenderer::enable();
             #endif

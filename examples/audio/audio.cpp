@@ -7,10 +7,7 @@
 class Audio : public fluxgl::Scene {
     private:
         fluxgl::Entity entity;
-
-        ma_engine audioEngine;
-        ma_audio_buffer audioBuffer;
-        ma_sound soundInstance;
+        fluxgl::AudioVoiceHandle soundHandle;
 
     public:
         void onLoad() override {
@@ -25,40 +22,18 @@ class Audio : public fluxgl::Scene {
         void onInit() override {
             entity = createEntity();
 
-            if (ma_engine_init(nullptr, &audioEngine) != MA_SUCCESS) {
-                throw fluxgl::Error{fluxgl::ErrorCode::AudioEngineError, "failed to create audio engine\n"};
-            }
-
             auto sound = getContext().resourceManager.getResource<fluxgl::Sound>("solitude");
-
-            ma_audio_buffer_config bufferConfig = ma_audio_buffer_config_init(
-                ma_format_f32,
-                sound->getChannels(),
-                sound->getFrameCount(),
-                sound->getSamples().data(),
-                nullptr
-            );
-
-            if(ma_audio_buffer_init(&bufferConfig, &audioBuffer) != MA_SUCCESS) {
-                throw fluxgl::Error{fluxgl::ErrorCode::AudioEngineError, "failed to load audio buffer"};
-            }
-
-            if(ma_sound_init_from_data_source(
-                &audioEngine,
-                &audioBuffer,
-                0,
-                nullptr,
-                &soundInstance) != MA_SUCCESS
-            ) {
-                throw fluxgl::Error{fluxgl::ErrorCode::AudioEngineError, "failed to init sound instance from audio buffer"};
-            }
-
-            ma_sound_start(&soundInstance);
+            soundHandle = getContext().audioEngine.play(sound);
         }
 
         void onUpdate(float deltaTime) override {
             if(getContext().inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
                 getContext().window.setWindowShouldClose();
+            }
+
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_P)) {
+                if(getContext().audioEngine.isPlaying(soundHandle)) getContext().audioEngine.pause(soundHandle);
+                else getContext().audioEngine.resume(soundHandle);
             }
         }
 };

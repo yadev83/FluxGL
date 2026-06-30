@@ -1,6 +1,7 @@
 #pragma once
 
 #include <fluxgl/input/input_manager.h>
+#include <fluxgl/audio/audio_engine.h>
 #include <fluxgl/assets/resource_manager.h>
 #include <fluxgl/assets/prefab_loader.h>
 #include "window.h"
@@ -14,6 +15,7 @@ namespace fluxgl {
     
     struct AppContext {
         fluxgl::Window& window;
+        fluxgl::AudioEngine& audioEngine;
         fluxgl::VirtualFileSystem& vfs;
 
         fluxgl::InputManager& inputManager;
@@ -31,6 +33,7 @@ namespace fluxgl {
     class App {
         private:
             fluxgl::Window m_window;
+            fluxgl::AudioEngine m_audioEngine;
             fluxgl::VirtualFileSystem m_vfs;
             
             fluxgl::InputManager m_inputManager;
@@ -41,6 +44,8 @@ namespace fluxgl {
             App(int width, int height, const char* title, VFSSettings vfsSettings = {"assets.fgld", false});
             virtual ~App() = default;
 
+            fluxgl::AudioEngine& getAudio();
+            const fluxgl::AudioEngine& getAudio() const;
             fluxgl::InputManager& getInput();
             const fluxgl::InputManager& getInput() const;
             fluxgl::Window& getWindow();

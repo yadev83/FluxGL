@@ -38,6 +38,7 @@
 #include "graphics/debug_renderer.h"
 
 #include "audio/sound.h"
+#include "audio/audio_engine.h"
 
 #include "assets/assets.h"
 #include "assets/resource_manager.h"
