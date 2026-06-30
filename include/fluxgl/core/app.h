@@ -52,6 +52,8 @@ namespace fluxgl {
             const fluxgl::Window& getWindow() const;
             fluxgl::ResourceManager& getResourceManager();
             const fluxgl::ResourceManager& getResourceManager() const;
+            fluxgl::VirtualFileSystem& getVirtualFileSystem();
+            const fluxgl::VirtualFileSystem& getVirtualFileSystem() const;
 
             void run();
     };

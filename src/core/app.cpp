@@ -84,4 +84,12 @@ namespace fluxgl {
     const fluxgl::ResourceManager& App::getResourceManager() const {
         return m_resourceManager;
     }
+
+    fluxgl::VirtualFileSystem& App::getVirtualFileSystem() {
+        return m_vfs;
+    }
+
+    const fluxgl::VirtualFileSystem& App::getVirtualFileSystem() const {
+        return m_vfs;
+    }
 }
