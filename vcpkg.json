@@ -1,12 +1,13 @@
 {
-	"name": "fluxgl",
-	"version": "0.4.0",
-	"dependencies": [
-		"glfw3",
-		"glad",
-		"glm",
-		"stb",
-		"miniaudio",
-		"jsoncpp"
-	]
+  "name": "fluxgl",
+  "version": "0.4.0",
+  "dependencies": [
+    "glad",
+    "glfw3",
+    "glm",
+    "jsoncpp",
+    "miniaudio",
+    "stb",
+    "drlibs"
+  ]
 }
