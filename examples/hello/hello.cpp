@@ -10,7 +10,7 @@ class Hello : public fluxgl::Scene {
     public:
         void onLoad() override {
             // Load resources
-            auto& resources = context->resourceManager;
+            auto& resources = getContext().resourceManager;
 
             resources.addResource<fluxgl::Shader>("shader", fluxgl::Shader::loadFromSource(
                 getContext().vfs.readText("assets/shaders/vertex.glsl"),
@@ -24,7 +24,7 @@ class Hello : public fluxgl::Scene {
         }
 
         void onInit() override {
-            auto& resources = context->resourceManager;
+            auto& resources = getContext().resourceManager;
             entity = createEntity();
             auto& entityRenderer = entity.addComponent<fluxgl::MeshRenderer>();
             
@@ -33,17 +33,17 @@ class Hello : public fluxgl::Scene {
         }
 
         void onUpdate(float deltaTime) override {
-            if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
-                context->window.setWindowShouldClose();
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
+                getContext().window.setWindowShouldClose();
             }
 
             auto& entityRenderer = entity.getComponent<fluxgl::MeshRenderer>();
-            auto mesh = context->resourceManager.getResource<fluxgl::Mesh>(entityRenderer.mesh);
-            auto shader = context->resourceManager.getResource<fluxgl::Shader>(entityRenderer.material.shader);
-            auto albedoTextures = context->resourceManager.getResources<fluxgl::Texture>(entityRenderer.material.albedoTextures);
-            auto normalMap = context->resourceManager.getResource<fluxgl::Texture>(entityRenderer.material.normalMap);
-            auto specularMap = context->resourceManager.getResource<fluxgl::Texture>(entityRenderer.material.specularMap);
-            auto emissionMap = context->resourceManager.getResource<fluxgl::Texture>(entityRenderer.material.emissionMap);
+            auto mesh = getContext().resourceManager.getResource<fluxgl::Mesh>(entityRenderer.mesh);
+            auto shader = getContext().resourceManager.getResource<fluxgl::Shader>(entityRenderer.material.shader);
+            auto albedoTextures = getContext().resourceManager.getResources<fluxgl::Texture>(entityRenderer.material.albedoTextures);
+            auto normalMap = getContext().resourceManager.getResource<fluxgl::Texture>(entityRenderer.material.normalMap);
+            auto specularMap = getContext().resourceManager.getResource<fluxgl::Texture>(entityRenderer.material.specularMap);
+            auto emissionMap = getContext().resourceManager.getResource<fluxgl::Texture>(entityRenderer.material.emissionMap);
 
             fluxgl::Renderer::beginFrame();
             fluxgl::Renderer::drawMesh(

@@ -26,8 +26,8 @@ class Example : public fluxgl::Scene {
             registerSystem<fluxgl::RenderSystem>();
             fluxgl::Renderer::setClearColor(0.4f * ambientLightColor);
 
-            auto& resources = context->resourceManager;
-            auto& vfs = context->vfs;
+            auto& resources = getContext().resourceManager;
+            auto& vfs = getContext().vfs;
 
             resources.addResource<fluxgl::Shader>("shader", fluxgl::Shader::loadFromSource(
                 vfs.readText("assets/shaders/vertex.glsl"), 
@@ -115,8 +115,8 @@ class Example : public fluxgl::Scene {
         }
 
         void onUpdate(float deltaTime) override {
-            if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) context->window.isMouseLocked() ? context->window.setMouseLocked(false) : context->window.setWindowShouldClose();
-            if(context->inputManager.isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) context->window.setMouseLocked(true);
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) getContext().window.isMouseLocked() ? getContext().window.setMouseLocked(false) : getContext().window.setWindowShouldClose();
+            if(getContext().inputManager.isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) getContext().window.setMouseLocked(true);
 
             // Animate point light around circle
             static float time = 0.0f; // animation elapsed time

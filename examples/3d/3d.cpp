@@ -18,8 +18,8 @@ class Scene3D : public fluxgl::Scene {
         void onLoad() override {
             registerSystem<fluxgl::RenderSystem>();
 
-            auto& resources = context->resourceManager;
-            auto& vfs = context->vfs;
+            auto& resources = getContext().resourceManager;
+            auto& vfs = getContext().vfs;
 
             resources.addResource<fluxgl::Shader>("shader", fluxgl::Shader::loadFromSource(vfs.readText("assets/shaders/vertex.glsl"), vfs.readText("assets/shaders/fragment.glsl")));
             resources.addResource<fluxgl::Texture>("container", fluxgl::Texture::loadFromMemory(vfs.read("assets/textures/container.jpg")));
@@ -55,8 +55,8 @@ class Scene3D : public fluxgl::Scene {
         }
 
         void onUpdate(float deltaTime) override {
-            if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) context->window.isMouseLocked() ? context->window.setMouseLocked(false) : context->window.setWindowShouldClose();
-            if(context->inputManager.isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) context->window.setMouseLocked(true);
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) getContext().window.isMouseLocked() ? getContext().window.setMouseLocked(false) : getContext().window.setWindowShouldClose();
+            if(getContext().inputManager.isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) getContext().window.setMouseLocked(true);
 
             for(fluxgl::Entity& entity : entities) {
                 auto& transform = entity.getComponent<fluxgl::Transform>();

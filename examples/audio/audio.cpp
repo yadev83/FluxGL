@@ -16,8 +16,8 @@ class Audio : public fluxgl::Scene {
         void onLoad() override {
             registerSystem<fluxgl::RenderSystem>();
 
-            auto& resources = context->resourceManager;
-            auto& vfs = context->vfs;
+            auto& resources = getContext().resourceManager;
+            auto& vfs = getContext().vfs;
 
             resources.addResource<fluxgl::Sound>("solitude", fluxgl::Sound::loadFromMemory(vfs.read("assets/bgm/solitude.wav")));
         }
@@ -57,8 +57,8 @@ class Audio : public fluxgl::Scene {
         }
 
         void onUpdate(float deltaTime) override {
-            if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
-                context->window.setWindowShouldClose();
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
+                getContext().window.setWindowShouldClose();
             }
         }
 };

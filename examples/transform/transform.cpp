@@ -9,8 +9,8 @@ class TransformExample : public fluxgl::Scene {
 
     public:
         void onLoad() override {
-            auto& resources = context->resourceManager;
-            auto& vfs = context->vfs;
+            auto& resources = getContext().resourceManager;
+            auto& vfs = getContext().vfs;
 
             resources.addResource<fluxgl::Shader>("shader", fluxgl::Shader::loadFromSource(
                 vfs.readText("assets/shaders/vertex.glsl"), 
@@ -44,8 +44,8 @@ class TransformExample : public fluxgl::Scene {
         }
 
         void onUpdate(float deltaTime) override {
-            if(context->inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
-                context->window.setWindowShouldClose();
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
+                getContext().window.setWindowShouldClose();
             }
 
             entity.getComponent<fluxgl::Transform>().rotation.z += 20.0f * deltaTime; // Rotate around Z-axis
@@ -60,10 +60,10 @@ class TransformExample : public fluxgl::Scene {
 
             fluxgl::Renderer::setCamera(cameraComponent.getViewMatrix(cameraTransform), cameraComponent.getProjectionMatrix(), cameraTransform.position);
             fluxgl::Renderer::drawMesh(
-                context->resourceManager.getResource<fluxgl::Mesh>(meshRenderer.mesh),
+                getContext().resourceManager.getResource<fluxgl::Mesh>(meshRenderer.mesh),
                 meshTransform.getModelMatrix(),
-                context->resourceManager.getResource<fluxgl::Shader>(meshRenderer.material.shader),
-                context->resourceManager.getResources<fluxgl::Texture>(meshRenderer.material.albedoTextures),
+                getContext().resourceManager.getResource<fluxgl::Shader>(meshRenderer.material.shader),
+                getContext().resourceManager.getResources<fluxgl::Texture>(meshRenderer.material.albedoTextures),
                 nullptr, nullptr, nullptr,
                 meshRenderer.material.albedoColor,
                 meshRenderer.material.specularColor,
