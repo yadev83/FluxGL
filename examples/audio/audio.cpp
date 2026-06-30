@@ -12,6 +12,7 @@ class Audio : public fluxgl::Scene {
     public:
         void onLoad() override {
             registerSystem<fluxgl::RenderSystem>();
+            registerSystem<fluxgl::AudioSystem>();
 
             auto& resources = getContext().resourceManager;
             auto& vfs = getContext().vfs;
@@ -22,8 +23,8 @@ class Audio : public fluxgl::Scene {
         void onInit() override {
             entity = createEntity();
 
-            auto sound = getContext().resourceManager.getResource<fluxgl::Sound>("solitude");
-            soundHandle = getContext().audioEngine.play(sound);
+            auto& source = entity.addComponent<fluxgl::AudioSource>();
+            source.sound = "solitude";
         }
 
         void onUpdate(float deltaTime) override {
@@ -32,8 +33,18 @@ class Audio : public fluxgl::Scene {
             }
 
             if(getContext().inputManager.isKeyPressed(GLFW_KEY_P)) {
-                if(getContext().audioEngine.isPlaying(soundHandle)) getContext().audioEngine.pause(soundHandle);
-                else getContext().audioEngine.resume(soundHandle);
+                auto& audioSource = entity.getComponent<fluxgl::AudioSource>();
+                audioSource.shouldPause = true;
+            }
+
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_O)) {
+                auto& audioSource = entity.getComponent<fluxgl::AudioSource>();
+                audioSource.shouldPlay = true;
+            }
+
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_S)) {
+                auto& audioSource = entity.getComponent<fluxgl::AudioSource>();
+                audioSource.shouldStop = true;
             }
         }
 };

@@ -21,6 +21,28 @@ namespace fluxgl {
         ma_engine_uninit(&m_engine);
     }
 
+    bool AudioEngine::isValid(AudioVoiceHandle handle) {
+        auto it = m_voices.find(handle);
+        return it != m_voices.end();
+    }
+
+    void AudioEngine::cleanupUnusedVoices() {
+        for (auto it = m_voices.begin(); it != m_voices.end();) {
+            AudioVoiceHandle handle = it->first;
+            AudioVoice* voice = it->second;
+
+            if (voice->shouldStop || ma_sound_at_end(&voice->sound)) {
+                ma_sound_uninit(&voice->sound);
+                ma_audio_buffer_uninit(&voice->buffer);
+
+                it = m_voices.erase(it);
+                FLUXGL_LOG_TRACE("Clearing sound voice " + std::to_string(handle));
+            } else {
+                ++it;
+            }
+        }
+    }
+
     AudioVoiceHandle AudioEngine::play(const Sound* sound, AudioVoiceSettings settings) {
         AudioVoice* voice = new AudioVoice();
 
@@ -41,9 +63,10 @@ namespace fluxgl {
         AudioVoiceHandle handle = m_nextHandle++;
         m_voices.emplace(
             handle,
-            std::move(voice)
+            voice
         );
 
+        FLUXGL_LOG_TRACE("Creating audio voice " + std::to_string(handle));
         return handle;
     }
 
@@ -53,6 +76,9 @@ namespace fluxgl {
             return;
 
         ma_sound_stop(&it->second->sound);
+        it->second->isPaused = true;
+
+        FLUXGL_LOG_TRACE("Pausing audio voice " + std::to_string(it->first));
     }
 
     void AudioEngine::resume(AudioVoiceHandle handle) {
@@ -61,6 +87,9 @@ namespace fluxgl {
             return;
 
         ma_sound_start(&it->second->sound);
+        it->second->isPaused = false;
+
+        FLUXGL_LOG_TRACE("Resuming audio voice " + std::to_string(it->first));
     }
 
     void AudioEngine::stop(AudioVoiceHandle handle) {
@@ -68,16 +97,15 @@ namespace fluxgl {
         if (it == m_voices.end())
             return;
 
+        // Go to end for cleanup to detect it as stopped
         ma_sound_stop(&it->second->sound);
+        it->second->shouldStop = true;
 
-        ma_sound_uninit(&it->second->sound);
-        ma_audio_buffer_uninit(&it->second->buffer);
-
-        m_voices.erase(it);
+        FLUXGL_LOG_TRACE("Stopping audio voice " + std::to_string(it->first));
     }
 
     bool AudioEngine::isPlaying(AudioVoiceHandle handle) {
-         auto it = m_voices.find(handle);
+        auto it = m_voices.find(handle);
         if (it == m_voices.end())
             return false;
 
