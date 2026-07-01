@@ -1,5 +1,6 @@
 #include <fluxgl/ecs/systems/physics_system.h>
 #include <fluxgl/graphics/debug_renderer.h>
+#include <fluxgl/ecs/components/facing.h>
 #include <fluxgl/core/scene.h>
 
 namespace fluxgl {
@@ -25,7 +26,7 @@ namespace fluxgl {
             auto& rigidbody = e.getComponent<RigidBody2D>();
             auto& transform = e.getComponent<Transform>();
 
-                // No physics integration for static objects
+            // No physics integration for static objects
             if(rigidbody.type == RigidBodyType::Static) continue;
 
             // Apply forces only on dynamic objects
@@ -176,6 +177,15 @@ namespace fluxgl {
             auto& collider = entity.getComponent<BoxCollider2D>();
             auto aabb = collider.getAABB(transform);
             DebugRenderer::rect(aabb.min, aabb.max, color);
+
+            // Check if the entity has a facing direction to show
+            if(entity.hasComponent<Facing2D>()) {
+                auto& facing = entity.getComponent<Facing2D>();
+                glm::vec3 facingColor = glm::vec3(1.0f, 1.0f, 0.0f);
+                float facingLength = (facing.direction == FacingDirection::Right) ? 1.0f : -1.0f;
+                
+                DebugRenderer::line(transform.position, transform.position + transform.worldRight() * facingLength, facingColor);
+            }
         }
     }
 }

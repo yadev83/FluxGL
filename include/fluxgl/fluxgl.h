@@ -23,6 +23,7 @@
 #include "ecs/components/rigidbody.h"
 #include "ecs/components/box_collider.h"
 #include "ecs/components/audio_source.h"
+#include "ecs/components/facing.h"
 
 #include "ecs/systems/render_system.h"
 #include "ecs/systems/lifetime_system.h"

@@ -32,6 +32,7 @@ namespace fluxgl {
 
         RigidBodyType type = RigidBodyType::Dynamic;
         glm::vec2 velocity = {0.0f, 0.0f};
+        glm::vec2 direction = {0.0f, 0.0f}; // Automatically updated by the physics system, normalized vector of the velocity
 
         float gravityScale = 1.0f;
         bool grounded = false;
