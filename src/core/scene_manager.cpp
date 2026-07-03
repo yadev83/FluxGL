@@ -26,7 +26,11 @@ namespace fluxgl {
         }
 
         if(m_nextScene) {
-            if(m_currentScene) m_currentScene->onDestroy();
+            if(m_currentScene) {
+                m_currentScene->onDestroy();
+                m_currentScene->getRegistry().clear();
+                m_currentScene->clearSystems();
+            }
 
             m_currentScene = m_nextScene;
             m_currentScene->setContext(m_appContext);

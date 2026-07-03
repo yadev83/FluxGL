@@ -100,4 +100,11 @@ namespace fluxgl {
             system->onRender(*this, dt);
         }
     }
+
+    void Scene::clearSystems() {
+        for(auto& system : m_systems) {
+            delete system;
+        }
+        m_systems.clear();
+    }
 }

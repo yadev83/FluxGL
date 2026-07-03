@@ -56,6 +56,7 @@ namespace fluxgl {
                 throw std::runtime_error("System not found");
             }
 
+            void clearSystems();
             void initSystems();
             void updateSystems(float dt);
             void fixedUpdateSystems(float dt);

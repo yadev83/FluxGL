@@ -100,6 +100,20 @@ namespace fluxgl {
         removeEntitiesMarkedForDestruction();
     }
 
+    void Registry::clear() {
+        FLUXGL_LOG_DEBUG("Registry::clear: Clearing all entities, components and behaviors");
+        m_storages.clear();
+        m_behaviors.clear();
+        m_tags.clear();
+        m_hierarchy.clear();
+        m_entitiesToDelete.clear();
+
+        m_availableIDs.clear();
+        for(int i = (FLUXGL_MAX_ENTITIES); i > 0; i--) {
+            m_availableIDs.push_back(i);
+        }
+    }
+
     // Entities
     Entity Registry::createEntity() {
         if(m_availableIDs.empty()) throw std::runtime_error("Registry::CreateEntity: No available entities");

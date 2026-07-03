@@ -44,6 +44,7 @@ namespace fluxgl {
 
             // Registry frame mgt
             void update(float dt);
+            void clear(); // Clear all entities, components and behaviors
 
             // Entities management
             Entity createEntity();
