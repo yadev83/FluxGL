@@ -3,6 +3,7 @@
 #include <string>
 #include <unordered_map>
 #include "scene.h"
+#include "log.h"
 
 namespace fluxgl {
     struct AppContext;
@@ -37,7 +38,14 @@ namespace fluxgl {
 
             template<typename S>
             void registerScene(std::string name) {
+                FLUXGL_LOG_DEBUG("Registering scene " + name);
+
+                if(m_scenes.find(name) != m_scenes.end()) {
+                    FLUXGL_LOG_WARNING("Scene " + name + " already registered, overwriting");
+                }
+
                 m_scenes[name] = new S();
+                if(!m_nextScene) m_nextScene = m_scenes[name];
             }
 
             void loadScene(std::string name);

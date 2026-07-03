@@ -7,12 +7,11 @@
 
 namespace fluxgl {
     Registry::Registry() {
-        FLUXGL_LOG_DEBUG("Initializing registry...");
+        FLUXGL_LOG_DEBUG("Initializing registry slots...");
         for(int i = (FLUXGL_MAX_ENTITIES); i > 0; i--) {
             m_availableIDs.push_back(i);
-            if(i % 100 == 0) FLUXGL_LOG_DEBUG("Available entities: " + std::to_string(m_availableIDs.size()));
         }
-        FLUXGL_LOG_DEBUG("Available entities: " + std::to_string(m_availableIDs.size()));
+        FLUXGL_LOG_DEBUG("Registry initialized.Available entities: " + std::to_string(m_availableIDs.size()));
     }
 
     std::vector<std::type_index> Registry::getEntityComponentTypes(EntityID id) {
@@ -195,6 +194,18 @@ namespace fluxgl {
             auto& storage = m_tags[id];
             storage.erase(std::remove(storage.begin(), storage.end(), tag), storage.end());
         }
+    }
+
+    std::vector<Entity> Registry::queryByTag(const std::string& tag) {
+        std::vector<Entity> result;
+
+        for(auto& [id, tags] : m_tags) {
+            if(std::find(tags.begin(), tags.end(), tag) != tags.end()) {
+                result.push_back(Entity(id, this));
+            }
+        }
+
+        return result;
     }
 
     // Behaviors

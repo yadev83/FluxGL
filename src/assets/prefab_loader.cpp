@@ -146,7 +146,7 @@ namespace fluxgl {
 
             auto it = m_componentFactories.find(componentType);
             if(it == m_componentFactories.end()) {
-                FLUXGL_LOG_WARNING("Prefab component at index " + std::to_string(i) + " has an unkown 'type'. Skipping this component.");
+                FLUXGL_LOG_WARNING("Prefab component at index " + std::to_string(i) + " has an unknown 'type' (" + componentType + "). Skipping this component.");
                 continue;
             }
 
@@ -170,7 +170,7 @@ namespace fluxgl {
 
             auto it = m_behaviorFactories.find(behaviorType);
             if(it == m_behaviorFactories.end()) {
-                FLUXGL_LOG_WARNING("Prefab behavior at index " + std::to_string(i) + " has an unknown 'type' field. Skipping this behavior.");
+                FLUXGL_LOG_WARNING("Prefab behavior at index " + std::to_string(i) + " has an unknown 'type' (" + behaviorType + "). Skipping this behavior.");
                 continue;
             }
 
