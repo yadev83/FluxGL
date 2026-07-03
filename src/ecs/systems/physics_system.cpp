@@ -2,6 +2,7 @@
 #include <fluxgl/graphics/debug_renderer.h>
 #include <fluxgl/ecs/components/facing.h>
 #include <fluxgl/core/scene.h>
+#include <fluxgl/core/log.h>
 
 namespace fluxgl {
     bool PhysicsSystem::canBeMoved(RigidBodyType type) {
@@ -131,7 +132,7 @@ namespace fluxgl {
 
                     if(canBeMoved(rbb.type)) {
                         tb.position.y -= canBeMoved(rba.type) ? (mtvY * 0.5f) : mtvY;
-                        if(mtvY > 0.0f && rbb.velocity.y <= 0.0f) rbb.grounded = true;
+                        if(mtvY < 0.0f && rbb.velocity.y <= 0.0f) rbb.grounded = true;
                         if(mtvY != 0.0f) rbb.velocity.y = 0.0f;
                     }
                 }

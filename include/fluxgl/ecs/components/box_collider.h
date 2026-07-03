@@ -39,6 +39,12 @@ namespace fluxgl {
                 if(layerData.asString() == "hurtbox") boxCollider2D.layer = CollisionLayer::Hurtbox;
 
                 boxCollider2D.isTrigger = data.get("isTrigger", false).asBool();
+
+                Json::Value halfSizeData = data.get("halfSize", Json::Value());
+                if(halfSizeData.isObject()) {
+                    boxCollider2D.halfSize.x = halfSizeData.get("x", 0.5f).asFloat();
+                    boxCollider2D.halfSize.y = halfSizeData.get("y", 0.5f).asFloat();
+                }
             }
 
             registry.addComponent<BoxCollider2D>(entityID, boxCollider2D);

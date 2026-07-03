@@ -36,5 +36,15 @@ namespace fluxgl {
 
         float gravityScale = 1.0f;
         bool grounded = false;
+
+        std::string toString() const {
+            std::stringstream ss;
+            ss << "RigidBody2D(type=" << (type == RigidBodyType::Static ? "Static" : (type == RigidBodyType::Dynamic ? "Dynamic" : "Kinematic"))
+               << ", velocity=(" << velocity.x << ", " << velocity.y << ")"
+               << ", direction=(" << direction.x << ", " << direction.y << ")"
+               << ", gravityScale=" << gravityScale
+               << ", grounded=" << (grounded ? "true" : "false") << ")";
+            return ss.str();
+        }
     };
 }

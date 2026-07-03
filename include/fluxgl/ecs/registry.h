@@ -70,8 +70,11 @@ namespace fluxgl {
             template<typename ComponentT>
             void removeComponent(EntityID id);
 
+            // Entity Query
             template<typename FirstT, typename... RestT>
             std::vector<Entity> query();
+
+            std::vector<Entity> queryByTag(const std::string& tag);
 
             // Entity Tags
             void addTag(EntityID id, const std::string& tag);
