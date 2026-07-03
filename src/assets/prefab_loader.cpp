@@ -30,6 +30,7 @@ namespace fluxgl {
     }
 
     Json::Value PrefabLoader::interpretValue(const Json::Value& value, Registry* registry, EntityID entityID, EntityID parentID) {
+        // Recursive calls
         if(value.isObject()) {
             Json::Value result(Json::objectValue);
 
@@ -49,15 +50,40 @@ namespace fluxgl {
 
             return result;
         }
+
+        // Registry check
+        if(!registry) {
+            FLUXGL_LOG_WARNING("Prefab value interpretation failed: registry is null");
+            return value;
+        }
         
+        // String special cases
         if(value.isString()) {
             std::string str = value.asString();
+
+            // Strings starting by "@" are special interpretation values defined by the prefab loader (e.g. @parent, @self)
             if(!str.empty() && str[0] == '@') {
                 if(str == "@parent") return Json::Value(static_cast<int>(parentID));
                 if(str == "@self") return Json::Value(static_cast<int>(entityID));
 
                 FLUXGL_LOG_WARNING("Prefab special data value " + value.asString() + " is invalid");
                 return value;
+            }
+
+            // Strings starting by "#" are special interpretation values for entity tags
+            // If multiple entities have the same tag, the first one found will be used
+            if(!str.empty() && str[0] == '#') {
+                std::string tag = str.substr(1);
+                std::vector<Entity> matches = registry->queryByTag(tag);
+                if(!matches.empty()) {
+                    Entity entity = matches[0];
+                    if(entity.isValid()) {
+                        return Json::Value(static_cast<int>(entity.getID()));
+                    } else {
+                        FLUXGL_LOG_WARNING("Prefab special data value " + value.asString() + " is invalid: no entity found with tag " + tag);
+                        return value;
+                    }
+                }
             }
         }
 

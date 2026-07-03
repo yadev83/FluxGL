@@ -34,6 +34,10 @@ namespace fluxgl {
         glm::vec3 rotation  = glm::vec3(0.0f);
         glm::vec3 scale     = glm::vec3(1.0f);
 
+        std::string toString() const {
+            return "Transform(\nposition: (" + std::to_string(position.x) + ", " + std::to_string(position.y) + ", " + std::to_string(position.z) + "),\nrotation: (" + std::to_string(rotation.x) + ", " + std::to_string(rotation.y) + ", " + std::to_string(rotation.z) + "),\nscale: (" + std::to_string(scale.x) + ", " + std::to_string(scale.y) + ", " + std::to_string(scale.z) + "))";
+        }
+
         glm::mat4 getModelMatrix() const {
             glm::mat4 t = glm::translate(glm::mat4(1.0f), position);
             glm::mat4 r = glm::yawPitchRoll(glm::radians(rotation.y), glm::radians(rotation.x), glm::radians(rotation.z));

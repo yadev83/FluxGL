@@ -92,4 +92,12 @@ namespace fluxgl {
     const fluxgl::VirtualFileSystem& App::getVirtualFileSystem() const {
         return m_vfs;
     }
+
+    fluxgl::PrefabLoader& App::getPrefabLoader() {
+        return m_prefabLoader;
+    }
+
+    const fluxgl::PrefabLoader& App::getPrefabLoader() const {
+        return m_prefabLoader;
+    }
 }

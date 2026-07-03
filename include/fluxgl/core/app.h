@@ -54,6 +54,8 @@ namespace fluxgl {
             const fluxgl::ResourceManager& getResourceManager() const;
             fluxgl::VirtualFileSystem& getVirtualFileSystem();
             const fluxgl::VirtualFileSystem& getVirtualFileSystem() const;
+            fluxgl::PrefabLoader& getPrefabLoader();
+            const fluxgl::PrefabLoader& getPrefabLoader() const;
 
             void run();
     };
