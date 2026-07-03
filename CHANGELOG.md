@@ -30,11 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Registry can now create hierarchy between entities to (children => parent)
   - A lot of exceptions are now caught for easier debugging
   - Entity removal system and isAlive/isValid checks have been improved
+- Scene Manager now properly unloads entities/systems/components/behaviors on a new scene load
 
 ### Fixed
 
 - Added Orthographic camera view scaling to fix the ortho view.
 - OrthoCam worldWidth = 24 units by default. Height is calculated based on the aspect ratio.
+- Physics system mtvY sign is now properly used for grounded checks
 
 ## [0.4.0] - 2026-02-25
 
