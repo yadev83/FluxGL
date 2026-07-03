@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a Asset Packer tool
 - Added a Package File provider for the VFS that reads Assets files packed with the dedicated tool
 - Added a Facing2D component to track components directions. Has to be updated manually and is drawn by the physics system.
+- Added a Level Loader inside the engine. For now, tilesets are assumed 2D and use internal components. Might need an update to use prefabs instead
 
 ### Changed
 

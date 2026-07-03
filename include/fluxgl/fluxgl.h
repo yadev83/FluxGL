@@ -46,3 +46,4 @@
 #include "assets/assets.h"
 #include "assets/resource_manager.h"
 #include "assets/prefab_loader.h"
+#include "assets/level.h"
