@@ -8,8 +8,6 @@ namespace fluxgl {
             unsigned int m_ID = 0;
             int m_width, m_height, m_channels;
 
-            void load(const char *data, int width, int height, int channels);
-
         public:
             Texture() = default;
             ~Texture();
@@ -17,6 +15,8 @@ namespace fluxgl {
             bool isValid() const { return m_ID != 0; }
             void bind(unsigned int slot = 0) const; 
             void unbind(unsigned int slot = 0) const; 
+            
+            void load(const char *data, int width, int height, int channels);
             
             inline int getWidth() const { return m_width; } 
             inline int getHeight() const { return m_height; }

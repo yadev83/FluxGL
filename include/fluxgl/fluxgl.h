@@ -24,6 +24,9 @@
 #include "ecs/components/box_collider.h"
 #include "ecs/components/audio_source.h"
 #include "ecs/components/facing.h"
+#include "ecs/components/ui_transform.h"
+#include "ecs/components/ui_rect.h"
+#include "ecs/components/ui_text.h"
 
 #include "ecs/systems/render_system.h"
 #include "ecs/systems/lifetime_system.h"
@@ -42,6 +45,8 @@
 
 #include "audio/sound.h"
 #include "audio/audio_engine.h"
+
+#include "ui/font.h"
 
 #include "assets/assets.h"
 #include "assets/resource_manager.h"

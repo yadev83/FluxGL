@@ -1,6 +1,7 @@
 #include <vector>
 #include <fluxgl/core/app.h>
 #include <fluxgl/core/scene.h>
+#include <fluxgl/core/log.h>
 
 #include <fluxgl/ecs/registry.h>
 #include <fluxgl/ecs/entity.h>
@@ -10,7 +11,11 @@
 #include <fluxgl/ecs/components/camera.h>
 #include <fluxgl/ecs/components/mesh_renderer.h>
 #include <fluxgl/ecs/components/light.h>
+#include <fluxgl/ecs/components/ui_transform.h>
+#include <fluxgl/ecs/components/ui_rect.h>
+#include <fluxgl/ecs/components/ui_text.h>
 
+#include <fluxgl/ui/font.h>
 #include <fluxgl/graphics/renderer.h>
 #include <fluxgl/graphics/debug_renderer.h>
 
@@ -115,5 +120,93 @@ namespace fluxgl {
 
         // Debug renderer (if enabled)
         if(DebugRenderer::isEnabled()) DebugRenderer::flush();
+
+        
+        // Draw UI
+        Renderer::beginUIPass();
+        for(auto entity : registry.query<UITransform, UIRect>()) {
+            auto& transform = entity.getComponent<UITransform>();
+            auto& image = entity.getComponent<UIRect>();
+
+            auto shader = resources.getResource<Shader>(image.shader);
+            auto texture = resources.getResource<Texture>(image.texture);
+
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(
+                model,
+                glm::vec3(transform.position, 0.0f)
+            );
+
+            Renderer::drawUIQuad(
+                model,
+
+                shader,
+                texture,
+
+                transform.layer,
+
+                image.color,
+                transform.scale,
+
+                image.uvMin,
+                image.uvMax
+            );
+        }
+
+        for(auto entity : registry.query<UITransform, UIText>()) {
+            auto& transform = entity.getComponent<UITransform>();
+            auto& text = entity.getComponent<UIText>();
+
+            auto font = resources.getResource<Font>(text.font);
+            auto shader = resources.getResource<Shader>(text.shader);
+
+            if(!font) {
+                throw Error{ErrorCode::Error, "Error during RenderSystem::onUpdate: invalid font provided for UIText: " + text.font};
+            }
+
+            float cursorX = transform.position.x;
+            float scaleX = transform.scale.x * text.size;
+            float scaleY = transform.scale.y * text.size;
+
+            for(char c : text.text) {
+                const Glyph* glyph = font->getGlyph(c);
+                if(!glyph) {
+                    FLUXGL_LOG_WARNING("Font Glyph not found + " + c);
+                    continue;
+                }
+
+                float x = cursorX + glyph->bearingX * scaleX;
+                float y = transform.position.y + glyph->bearingY * scaleY;
+
+                glm::mat4 model(1.0f);
+                model = glm::translate(
+                    model,
+                    glm::vec3(x, y, 0)
+                );
+
+                Renderer::drawUIQuad(
+                    model,
+                    shader,
+                    font->getTexture(),
+                    transform.layer,
+                    text.color,
+                    {
+                        glyph->width * scaleX,
+                        glyph->height * scaleY
+                    },
+                    {
+                        glyph->u0,
+                        glyph->v0
+                    },
+                    {
+                        glyph->u1,
+                        glyph->v1
+                    }
+                );
+
+                cursorX += glyph->advance * scaleX;
+            }
+        }
+        Renderer::endUIPass();
     }
 }

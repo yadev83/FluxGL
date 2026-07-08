@@ -57,6 +57,8 @@ namespace fluxgl {
             static void setFramebufferSize(int width, int height);
             static float getViewportAspectRatio();
             static void beginFrame();
+            static void beginUIPass();
+            static void endUIPass();
 
             static void setCamera(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& position);
             static void setClearColor(const glm::vec3& color);
@@ -71,6 +73,18 @@ namespace fluxgl {
                 const Texture* texture = nullptr,
                 const int layer = 0,
                 const glm::vec3& color = glm::vec3(1.0f),
+                const glm::vec2& size = glm::vec2(1.0f),
+                const glm::vec2& uvMin = glm::vec2(0.0f),
+                const glm::vec2& uvMax = glm::vec2(1.0f)
+            );
+
+            static void drawUIQuad(
+                const glm::mat4& modelMatrix = glm::mat4(1.0f),
+                
+                const Shader* shader = nullptr,
+                const Texture* texture = nullptr,
+                const int layer = 0,
+                const glm::vec4& color = glm::vec4(1.0f),
                 const glm::vec2& size = glm::vec2(1.0f),
                 const glm::vec2& uvMin = glm::vec2(0.0f),
                 const glm::vec2& uvMax = glm::vec2(1.0f)

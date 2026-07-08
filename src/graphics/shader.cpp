@@ -105,6 +105,10 @@ namespace fluxgl {
         glUniform3f(glGetUniformLocation(m_ID, name.c_str()), value.x, value.y, value.z);
     }
 
+    void Shader::setUniform(const std::string& name, const glm::vec4& value) const {
+        glUniform4f(glGetUniformLocation(m_ID, name.c_str()), value.x, value.y, value.z, value.w);
+    }
+
     void Shader::setUniform(const std::string& name, const glm::mat4& value) const {
         glUniformMatrix4fv(glGetUniformLocation(m_ID, name.c_str()), 1, GL_FALSE, &value[0][0]);
     }
@@ -392,6 +396,100 @@ namespace fluxgl {
             void main()
             {
                 FragColor = vec4(vColor,1.0);
+            }
+        )";
+
+        return loadFromSource(vertexSrc, fragmentSrc);
+    }
+
+    Shader Shader::defaultUi() {
+        const char *vertexSrc = R"(
+            #version 330 core
+
+            layout (location = 0) in vec3 aPos;
+            layout (location = 1) in vec3 aNormal;
+            layout (location = 2) in vec3 aColor;
+            layout (location = 3) in vec2 aUV;
+
+            uniform mat4 u_Projection;
+            uniform mat4 u_Model;
+
+            out vec2 v_UV;
+
+            void main() {
+                v_UV = aUV;
+                gl_Position = u_Projection * u_Model * vec4(aPos, 1.0);
+            }
+        )";
+
+        const char *fragmentSrc = R"(
+            #version 330 core
+
+            in vec2 v_UV;
+            out vec4 FragColor;
+
+            uniform sampler2D u_Texture;
+            uniform bool u_UseTexture;
+
+            uniform vec4 u_Color;
+            uniform vec2 u_UVMin;
+            uniform vec2 u_UVMax;
+
+            void main() {
+                vec2 uv = mix(u_UVMin, u_UVMax, v_UV);
+                vec4 color = u_Color;
+
+                if(u_UseTexture) {
+                    color *= texture(u_Texture, uv);
+                }
+
+                FragColor = color;
+            }
+        )";
+
+        return loadFromSource(vertexSrc, fragmentSrc);
+    }
+
+    Shader Shader::defaultText() {
+        const char *vertexSrc = R"(
+            #version 330 core
+
+            layout (location = 0) in vec3 aPos;
+            layout (location = 1) in vec3 aNormal;
+            layout (location = 2) in vec3 aColor;
+            layout (location = 3) in vec2 aUV;
+
+            uniform mat4 u_Projection;
+            uniform mat4 u_Model;
+
+            out vec2 v_UV;
+
+            void main() {
+                v_UV = aUV;
+                gl_Position = u_Projection * u_Model * vec4(aPos, 1.0);
+            }
+        )";
+
+        const char *fragmentSrc = R"(
+            #version 330 core
+
+            in vec2 v_UV;
+
+            out vec4 FragColor;
+
+            uniform sampler2D u_Texture;
+            uniform vec4 u_Color;
+            uniform vec2 u_UVMin;
+            uniform vec2 u_UVMax;
+
+            void main() {
+                vec2 uv = mix(u_UVMin, u_UVMax, v_UV);
+                float alpha = texture(u_Texture, uv).r;
+
+                FragColor = vec4(
+                    u_Color.rgb,
+                    u_Color.a * alpha
+                );
             }
         )";
 

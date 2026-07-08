@@ -71,6 +71,19 @@ namespace fluxgl {
         m_sceneState.ambientLights.clear();
     }
 
+    void Renderer::beginUIPass() {
+        glEnable(GL_BLEND);
+
+        glBlendFunc(
+            GL_SRC_ALPHA,
+            GL_ONE_MINUS_SRC_ALPHA
+        );
+    }
+
+    void Renderer::endUIPass() {
+        glDisable(GL_BLEND);
+    }
+
     void Renderer::setCamera(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& position) {
         m_sceneState.viewMatrix = viewMatrix;
         m_sceneState.projectionMatrix = projectionMatrix;
@@ -112,7 +125,7 @@ namespace fluxgl {
         const int layer,
         const glm::vec3& color,
         const glm::vec2& size,
-        const glm::vec2& uvMin,
+            const glm::vec2& uvMin,
         const glm::vec2& uvMax
     ) {
         if(!(shader && shader->isValid())) throw std::runtime_error("Invalid shader provided to Renderer::drawSprite");
@@ -136,6 +149,60 @@ namespace fluxgl {
 
         shader->setUniform("u_View", m_sceneState.viewMatrix);
         shader->setUniform("u_Projection", m_sceneState.projectionMatrix);
+        shader->setUniform("u_Model", model);
+
+        static Mesh quad = Mesh::quad();
+        unsigned int vao = quad.getVAO();
+        size_t indexCount = quad.getIndexCount();
+        size_t verticesCount = quad.getVerticesCount();
+        if (vao > 0) { 
+            glBindVertexArray(vao); 
+            if (indexCount > 0) { 
+                glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, 0); 
+            } else { 
+                glDrawArrays(GL_TRIANGLES, 0, verticesCount); 
+            } 
+        }
+    }
+
+    void Renderer::drawUIQuad(
+        const glm::mat4& modelMatrix,
+        
+        const Shader* shader,
+        const Texture* texture,
+        const int layer,
+        const glm::vec4& color,
+        const glm::vec2& size,
+        const glm::vec2& uvMin,
+        const glm::vec2& uvMax
+    ) {
+        if(!(shader && shader->isValid())) throw std::runtime_error("Invalid shader provided to Renderer::drawSprite");
+        shader->bind();
+
+        if(texture && texture->isValid()) {
+            texture->bind(0);
+            shader->setUniform("u_Texture", 0);
+            shader->setUniform("u_UseTexture", true);
+        } else {
+            shader->setUniform("u_UseTexture", false);
+        }
+
+        shader->setUniform("u_Color", color);
+        shader->setUniform("u_UVMin", uvMin);
+        shader->setUniform("u_UVMax", uvMax);
+
+        glm::mat4 model = modelMatrix;
+        model = glm::scale(model, glm::vec3(size, 1.0f));
+        model = glm::translate(model, glm::vec3(0.0f, 0.0f, layer));
+
+        shader->setUniform("u_Projection", glm::ortho(
+            0.0f,
+            (float)(m_state.framebufferWidth),
+            (float)(m_state.framebufferHeight),
+            0.0f,
+            -1000.0f,
+            1000.0f
+        ));
         shader->setUniform("u_Model", model);
 
         static Mesh quad = Mesh::quad();
