@@ -18,7 +18,7 @@ namespace fluxgl {
                 text.text = data.get("text", "").asString();
                 text.font = data.get("font", "").asString();
                 text.shader = data.get("shader", "").asString();
-                text.size = data.get("size", 1.0f).asFloat();
+                text.fontSize = data.get("fontSize", 32.0f).asFloat();
 
                 Json::Value colorData = data.get("color", Json::objectValue);
                 text.color = {colorData.get("r", 1.0f).asFloat(), colorData.get("g", 1.0f).asFloat(), colorData.get("b", 1.0f).asFloat(), colorData.get("a", 1.0f).asFloat()};
@@ -32,6 +32,6 @@ namespace fluxgl {
         Resource shader; 
 
         glm::vec4 color = {1, 1, 1, 1};
-        float size = 1.0f;
+        float fontSize = 32.0f;
     };
 }

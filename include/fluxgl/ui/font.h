@@ -1,6 +1,10 @@
 #pragma once
 
 #include <fluxgl/core/virtual_file_system.h>
+#include <stb_truetype.h>
+
+#include <vector>
+#include <array>
 #include <unordered_map>
 
 namespace fluxgl {
@@ -18,6 +22,7 @@ namespace fluxgl {
         int bearingX, bearingY; // Bearing is the "empty space" on the Left / Top for a glyph, based on it's origin point
 
         float advance; // Is the full width including bearings of a glyph
+        float sourceSize; // Internal font size used for the atlas rasterization
     };
 
     /**
@@ -36,6 +41,14 @@ namespace fluxgl {
     class Font {
         private:
             FontAtlas m_atlas;
+            bool generatePack(
+                Buffer data, 
+                int atlasWidth, 
+                int atlasHeight, 
+                float fontSize,
+                std::vector<unsigned char>& bitmap,
+                std::array<stbtt_packedchar, 96>& chars
+            );
 
         public:
             Font() = default;
@@ -59,6 +72,6 @@ namespace fluxgl {
             Font& operator=(Font&& other) noexcept;
 
             // Builder
-            static Font loadFromMemory(Buffer data);
+            static Font loadFromMemory(Buffer data, float fontSize = 64.0f);
     };
 }

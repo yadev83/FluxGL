@@ -165,8 +165,6 @@ namespace fluxgl {
             }
 
             float cursorX = transform.position.x;
-            float scaleX = transform.scale.x * text.size;
-            float scaleY = transform.scale.y * text.size;
 
             for(char c : text.text) {
                 const Glyph* glyph = font->getGlyph(c);
@@ -174,6 +172,10 @@ namespace fluxgl {
                     FLUXGL_LOG_WARNING("Font Glyph not found + " + c);
                     continue;
                 }
+
+                float glyphScale = (text.fontSize / glyph->sourceSize);
+                float scaleX = transform.scale.x * glyphScale;
+                float scaleY = transform.scale.y * glyphScale;
 
                 float x = cursorX + glyph->bearingX * scaleX;
                 float y = transform.position.y + glyph->bearingY * scaleY;

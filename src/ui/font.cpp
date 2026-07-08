@@ -1,44 +1,81 @@
 #include <fluxgl/ui/font.h>
 #include <fluxgl/graphics/texture.h>
+#include <fluxgl/core/error.h>
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #include <stb_truetype.h>
+
+#define FLUXGL_MAX_ATLAS_WIDTH 4096
+#define FLUXGL_MAX_ATLAS_HEIGHT 4096
 
 namespace fluxgl {
     Font::~Font() {
         delete m_atlas.texture;
     }
 
-    Font Font::loadFromMemory(Buffer data) {
-        Font font;
-
-        constexpr int AtlasWidth = 512;
-        constexpr int AtlasHeight = 512;
-        unsigned char bitmap[AtlasWidth * AtlasHeight];
-
+    bool Font::generatePack(
+        Buffer data, 
+        int atlasWidth, 
+        int atlasHeight, 
+        float fontSize,
+        std::vector<unsigned char>& bitmap,
+        std::array<stbtt_packedchar, 96>& chars
+    ) {
+        bitmap.resize(atlasWidth * atlasHeight);
         stbtt_pack_context context;
-
-        stbtt_PackBegin(
+        if(!stbtt_PackBegin(
             &context,
-            bitmap,
-            AtlasWidth,
-            AtlasHeight,
+            bitmap.data(),
+            atlasWidth,
+            atlasHeight,
             0,
             1,
             nullptr
-        );
+        )) {
+            return false;
+        }
 
-        stbtt_packedchar chars[96];
-        stbtt_PackFontRange(
+        bool success = stbtt_PackFontRange(
             &context,
             data.data(),
             0,
-            32.0f,
+            fontSize,
             32,
             96,
-            chars
+            chars.data()
         );
+
         stbtt_PackEnd(&context);
+
+        return success;
+    }
+
+    Font Font::loadFromMemory(Buffer data, float fontSize) {
+        Font font;
+
+        int atlasWidth = 512;
+        int atlasHeight = 512;
+        std::vector<unsigned char> bitmap;
+        std::array<stbtt_packedchar, 96> chars;
+
+        while(!font.generatePack(
+            data,
+            atlasWidth,
+            atlasHeight,
+            fontSize,
+            bitmap,
+            chars
+        )) {
+            if(atlasWidth <= atlasHeight) {
+                atlasWidth *= 2;
+            } else {
+                atlasHeight *= 2;
+            }
+
+            if(atlasWidth > FLUXGL_MAX_ATLAS_WIDTH || atlasHeight > FLUXGL_MAX_ATLAS_HEIGHT) {
+                throw Error{ErrorCode::Error, "Unable to fit font atlas"};
+            }
+        }
 
         // Generate glyphs
         for(int i = 0; i < 96; ++i) {
@@ -46,11 +83,11 @@ namespace fluxgl {
 
             Glyph glyph;
 
-            glyph.u0 = c.x0 / float(AtlasWidth);
-            glyph.v0 = c.y0 / float(AtlasHeight);
+            glyph.u0 = c.x0 / float(atlasWidth);
+            glyph.v0 = c.y0 / float(atlasHeight);
 
-            glyph.u1 = c.x1 / float(AtlasWidth);
-            glyph.v1 = c.y1 / float(AtlasHeight);
+            glyph.u1 = c.x1 / float(atlasWidth);
+            glyph.v1 = c.y1 / float(atlasHeight);
 
             glyph.width = c.x1 - c.x0;
             glyph.height = c.y1 - c.y0;
@@ -59,19 +96,20 @@ namespace fluxgl {
             glyph.bearingY = c.yoff;
 
             glyph.advance = c.xadvance;
+            glyph.sourceSize = fontSize;
 
             font.m_atlas.glyphs[char(i + 32)] = glyph;
         }
 
         // Generate Atlas Texture
-        font.m_atlas.width = AtlasWidth;
-        font.m_atlas.height = AtlasHeight;
-        font.m_atlas.fontSize = 32;
+        font.m_atlas.width = atlasWidth;
+        font.m_atlas.height = atlasHeight;
+        font.m_atlas.fontSize = fontSize;
         font.m_atlas.texture = new Texture();
         font.m_atlas.texture->load(
-            reinterpret_cast<const char*>(bitmap),
-            AtlasWidth,
-            AtlasHeight,
+            reinterpret_cast<const char*>(bitmap.data()),
+            atlasWidth,
+            atlasHeight,
             1
         );
 

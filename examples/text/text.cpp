@@ -10,7 +10,7 @@
             void onLoad() override {
                 registerSystem<fluxgl::RenderSystem>();
 
-                getContext().resourceManager.addResource<fluxgl::Font>("arial", fluxgl::Font::loadFromMemory(getContext().vfs.read("assets/fonts/arial.ttf")));
+                getContext().resourceManager.addResource<fluxgl::Font>("arial", fluxgl::Font::loadFromMemory(getContext().vfs.read("assets/fonts/arial.ttf"), 128));
                 getContext().resourceManager.addResource<fluxgl::Shader>("text", fluxgl::Shader::defaultText());
                 getContext().resourceManager.addResource<fluxgl::Shader>("ui", fluxgl::Shader::defaultUi());
             }
@@ -23,7 +23,8 @@
                 uiTransform.position = {400, 300};
                 uiText.text = "Bonjour";
                 uiText.font = "arial";
-                uiText.shader = "text";                
+                uiText.fontSize = 32.0f;
+                uiText.shader = "ui";                
             }
 
             void onUpdate(float deltaTime) override {
