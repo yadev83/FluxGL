@@ -4,6 +4,7 @@
 
 #define STB_TRUETYPE_IMPLEMENTATION
 #include <stb_truetype.h>
+#include <cfloat>
 
 #define FLUXGL_MAX_ATLAS_WIDTH 4096
 #define FLUXGL_MAX_ATLAS_HEIGHT 4096
@@ -17,7 +18,7 @@ namespace fluxgl {
         Buffer data, 
         int atlasWidth, 
         int atlasHeight, 
-        float fontSize,
+        float sourceSize,
         std::vector<unsigned char>& bitmap,
         std::array<stbtt_packedchar, 96>& chars
     ) {
@@ -39,7 +40,7 @@ namespace fluxgl {
             &context,
             data.data(),
             0,
-            fontSize,
+            sourceSize,
             32,
             96,
             chars.data()
@@ -50,7 +51,7 @@ namespace fluxgl {
         return success;
     }
 
-    Font Font::loadFromMemory(Buffer data, float fontSize) {
+    Font Font::loadFromMemory(Buffer data, float sourceSize) {
         Font font;
 
         int atlasWidth = 512;
@@ -62,7 +63,7 @@ namespace fluxgl {
             data,
             atlasWidth,
             atlasHeight,
-            fontSize,
+            sourceSize,
             bitmap,
             chars
         )) {
@@ -96,7 +97,7 @@ namespace fluxgl {
             glyph.bearingY = c.yoff;
 
             glyph.advance = c.xadvance;
-            glyph.sourceSize = fontSize;
+            glyph.sourceSize = sourceSize;
 
             font.m_atlas.glyphs[char(i + 32)] = glyph;
         }
@@ -104,7 +105,7 @@ namespace fluxgl {
         // Generate Atlas Texture
         font.m_atlas.width = atlasWidth;
         font.m_atlas.height = atlasHeight;
-        font.m_atlas.fontSize = fontSize;
+        font.m_atlas.fontSize = sourceSize;
         font.m_atlas.texture = new Texture();
         font.m_atlas.texture->load(
             reinterpret_cast<const char*>(bitmap.data()),
@@ -141,5 +142,44 @@ namespace fluxgl {
         }
 
         return *this;
+    }
+
+    TextMetrics Font::measureText(const std::string& string, float fontSize) {
+        float cursorX = 0.0f;
+
+        float minX = FLT_MAX;
+        float minY = FLT_MAX;
+        float maxX = -FLT_MAX;
+        float maxY = -FLT_MAX;
+
+        for(char c : string) {
+            const Glyph* glyph = getGlyph(c);
+            if(!glyph) {
+                continue;
+            }
+
+            float scale = fontSize / glyph->sourceSize;
+
+            float x0 = cursorX + glyph->bearingX * scale;
+            float y0 = glyph->bearingY * scale;
+
+            float x1 = x0 + glyph->width * scale;
+            float y1 = y0 + glyph->height * scale;
+
+            minX = std::min(minX, x0);
+            minY = std::min(minY, y0);
+
+            maxX = std::max(maxX, x1);
+            maxY = std::max(maxY, y1);
+
+            cursorX += glyph->advance * scale;
+        }
+
+        return {
+            maxX - minX,
+            maxY - minY,
+            minX,
+            minY
+        };
     }
 }

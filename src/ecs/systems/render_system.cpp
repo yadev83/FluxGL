@@ -126,15 +126,19 @@ namespace fluxgl {
         Renderer::beginUIPass();
         for(auto entity : registry.query<UITransform, UIRect>()) {
             auto& transform = entity.getComponent<UITransform>();
-            auto& image = entity.getComponent<UIRect>();
+            auto& rect = entity.getComponent<UIRect>();
 
-            auto shader = resources.getResource<Shader>(image.shader);
-            auto texture = resources.getResource<Texture>(image.texture);
+            auto shader = resources.getResource<Shader>(rect.shader);
+            auto texture = resources.getResource<Texture>(rect.texture);
 
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(
                 model,
-                glm::vec3(transform.position, 0.0f)
+                glm::vec3(
+                    transform.position.x + rect.size.x * 0.5f,
+                    transform.position.y - rect.size.y * 0.5f,
+                    0.0f
+                )
             );
 
             Renderer::drawUIQuad(
@@ -145,11 +149,11 @@ namespace fluxgl {
 
                 transform.layer,
 
-                image.color,
-                transform.scale,
+                rect.color,
+                transform.scale * rect.size,
 
-                image.uvMin,
-                image.uvMax
+                rect.uvMin,
+                rect.uvMax
             );
         }
 
@@ -176,14 +180,18 @@ namespace fluxgl {
                 float glyphScale = (text.fontSize / glyph->sourceSize);
                 float scaleX = transform.scale.x * glyphScale;
                 float scaleY = transform.scale.y * glyphScale;
+                
+                float glyphAdvance = glyph->advance * scaleX;
+                float glyphWidth = glyph->width * scaleX;
+                float glyphHeight = glyph->height * scaleY;
 
-                float x = cursorX + glyph->bearingX * scaleX;
-                float y = transform.position.y + glyph->bearingY * scaleY;
+                float x = cursorX + (glyph->bearingX * scaleX) + (glyphWidth * 0.5f);
+                float y = transform.position.y + (glyph->bearingY * scaleY) + (glyphHeight * 0.5f);
 
                 glm::mat4 model(1.0f);
                 model = glm::translate(
                     model,
-                    glm::vec3(x, y, 0)
+                    glm::vec3(x, y, transform.layer)
                 );
 
                 Renderer::drawUIQuad(
@@ -192,21 +200,12 @@ namespace fluxgl {
                     font->getTexture(),
                     transform.layer,
                     text.color,
-                    {
-                        glyph->width * scaleX,
-                        glyph->height * scaleY
-                    },
-                    {
-                        glyph->u0,
-                        glyph->v0
-                    },
-                    {
-                        glyph->u1,
-                        glyph->v1
-                    }
+                    {glyphWidth, glyphHeight},
+                    {glyph->u0, glyph->v0},
+                    {glyph->u1, glyph->v1}
                 );
 
-                cursorX += glyph->advance * scaleX;
+                cursorX += glyphAdvance;
             }
         }
         Renderer::endUIPass();

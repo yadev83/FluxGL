@@ -38,6 +38,13 @@ namespace fluxgl {
         std::unordered_map<char, Glyph> glyphs; // A storage for glyph settings associated with their char counterpart
     };
 
+    struct TextMetrics {
+        float width;
+        float height;
+        float offsetX;
+        float offsetY;
+    };
+
     class Font {
         private:
             FontAtlas m_atlas;
@@ -45,7 +52,7 @@ namespace fluxgl {
                 Buffer data, 
                 int atlasWidth, 
                 int atlasHeight, 
-                float fontSize,
+                float sourceSize,
                 std::vector<unsigned char>& bitmap,
                 std::array<stbtt_packedchar, 96>& chars
             );
@@ -71,7 +78,10 @@ namespace fluxgl {
             Font(Font&& other) noexcept;
             Font& operator=(Font&& other) noexcept;
 
+            // Utils
+            TextMetrics measureText(const std::string& string, float fontSize = 32.0f);
+
             // Builder
-            static Font loadFromMemory(Buffer data, float fontSize = 64.0f);
+            static Font loadFromMemory(Buffer data, float sourceSize = 64.0f);
     };
 }

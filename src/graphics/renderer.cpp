@@ -176,7 +176,7 @@ namespace fluxgl {
         const glm::vec2& uvMin,
         const glm::vec2& uvMax
     ) {
-        if(!(shader && shader->isValid())) throw std::runtime_error("Invalid shader provided to Renderer::drawSprite");
+        if(!(shader && shader->isValid())) throw std::runtime_error("Invalid shader provided to Renderer::drawUIQuad");
         shader->bind();
 
         if(texture && texture->isValid()) {
