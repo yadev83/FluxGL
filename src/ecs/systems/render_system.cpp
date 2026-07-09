@@ -184,8 +184,18 @@ namespace fluxgl {
             auto textPosition = transform.getComputedPosition({textSz.width, textSz.height}, Renderer::getFramebufferSize());
 
             float cursorX = textPosition.x;
-            float cursorY = textPosition.y + textSz.height;
+            float cursorY = textPosition.y + textSz.lineHeight;
+
+            float lineHeight = textSz.lineHeight;
+            float startX = cursorX;
+
             for(char c : text.text) {
+                if(c == '\n') {
+                    cursorX = startX;
+                    cursorY += lineHeight;
+                    continue;
+                }
+
                 const Glyph* glyph = font->getGlyph(c);
                 if(!glyph) {
                     FLUXGL_LOG_WARNING("Font Glyph not found + " + c);

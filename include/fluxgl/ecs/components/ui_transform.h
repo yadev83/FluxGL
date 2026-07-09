@@ -57,6 +57,28 @@ namespace fluxgl {
                 transform.scale = {scaleData.get("x", 1.0f).asFloat(), scaleData.get("y", 1.0f).asFloat()};
 
                 transform.layer = data.get("layer", 0).asInt();
+
+                Json::Value anchorData = data.get("anchor", "TopLeft");
+                if(anchorData.asString() == "TopLeft") transform.anchor = UIAlignment::TopLeft;
+                if(anchorData.asString() == "TopCenter") transform.anchor = UIAlignment::TopCenter;
+                if(anchorData.asString() == "TopRight") transform.anchor = UIAlignment::TopRight;
+                if(anchorData.asString() == "CenterLeft") transform.anchor = UIAlignment::CenterLeft;
+                if(anchorData.asString() == "Center") transform.anchor = UIAlignment::Center;
+                if(anchorData.asString() == "CenterRight") transform.anchor = UIAlignment::CenterRight;
+                if(anchorData.asString() == "BottomLeft") transform.anchor = UIAlignment::BottomLeft;
+                if(anchorData.asString() == "BottomCenter") transform.anchor = UIAlignment::BottomCenter;
+                if(anchorData.asString() == "BottomRight") transform.anchor = UIAlignment::BottomRight;
+
+                Json::Value pivotData = data.get("pivot", "TopLeft");
+                if(pivotData.asString() == "TopLeft") transform.pivot = UIAlignment::TopLeft;
+                if(pivotData.asString() == "TopCenter") transform.pivot = UIAlignment::TopCenter;
+                if(pivotData.asString() == "TopRight") transform.pivot = UIAlignment::TopRight;
+                if(pivotData.asString() == "CenterLeft") transform.pivot = UIAlignment::CenterLeft;
+                if(pivotData.asString() == "Center") transform.pivot = UIAlignment::Center;
+                if(pivotData.asString() == "CenterRight") transform.pivot = UIAlignment::CenterRight;
+                if(pivotData.asString() == "BottomLeft") transform.pivot = UIAlignment::BottomLeft;
+                if(pivotData.asString() == "BottomCenter") transform.pivot = UIAlignment::BottomCenter;
+                if(pivotData.asString() == "BottomRight") transform.pivot = UIAlignment::BottomRight;
             }
 
             registry.addComponent<UITransform>(entityID, transform);

@@ -2,6 +2,7 @@
 
 #include <fluxgl/core/virtual_file_system.h>
 #include <stb_truetype.h>
+#include <glm/glm.hpp>
 
 #include <vector>
 #include <array>
@@ -41,8 +42,11 @@ namespace fluxgl {
     struct TextMetrics {
         float width;
         float height;
-        float offsetX;
-        float offsetY;
+        glm::vec2 boundsMin;
+        glm::vec2 boundsMax;
+
+        int lines = 1;
+        float lineHeight;
     };
 
     class Font {

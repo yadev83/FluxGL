@@ -145,26 +145,40 @@ namespace fluxgl {
     }
 
     TextMetrics Font::measureText(const std::string& string, float fontSize) {
+       TextMetrics metrics;
+
+        float scale = fontSize / m_atlas.fontSize;
+        float lineHeight = fontSize;
+
         float cursorX = 0.0f;
+        float cursorY = 0.0f;
 
         float minX = FLT_MAX;
         float minY = FLT_MAX;
         float maxX = -FLT_MAX;
         float maxY = -FLT_MAX;
 
+        int lines = 1;
+        
         for(char c : string) {
-            const Glyph* glyph = getGlyph(c);
-            if(!glyph) {
+            if(c == '\n') {
+                cursorX = 0.0f;
+                cursorY += lineHeight;
+                lines++;
                 continue;
             }
 
-            float scale = fontSize / glyph->sourceSize;
+            const Glyph* glyph = getGlyph(c);
+            if(!glyph)
+                continue;
 
-            float x0 = cursorX + glyph->bearingX * scale;
-            float y0 = glyph->bearingY * scale;
+            float glyphScale = fontSize / glyph->sourceSize;
 
-            float x1 = x0 + glyph->width * scale;
-            float y1 = y0 + glyph->height * scale;
+            float x0 = cursorX + glyph->bearingX * glyphScale;
+            float y0 = cursorY + glyph->bearingY * glyphScale;
+
+            float x1 = x0 + glyph->width * glyphScale;
+            float y1 = y0 + glyph->height * glyphScale;
 
             minX = std::min(minX, x0);
             minY = std::min(minY, y0);
@@ -172,14 +186,24 @@ namespace fluxgl {
             maxX = std::max(maxX, x1);
             maxY = std::max(maxY, y1);
 
-            cursorX += glyph->advance * scale;
+            cursorX += glyph->advance * glyphScale;
         }
 
-        return {
-            maxX - minX,
-            maxY - minY,
-            minX,
-            minY
-        };
+        if(maxX == -FLT_MAX) {
+            metrics.width = 0;
+            metrics.height = 0;
+            return metrics;
+        }
+
+        metrics.width = maxX - minX;
+        metrics.height = lines * lineHeight;
+
+        metrics.boundsMin = {minX, minY};
+        metrics.boundsMax = {maxX, maxY};
+
+        metrics.lines = lines;
+        metrics.lineHeight = lineHeight;
+
+        return metrics;
     }
 }
