@@ -14,4 +14,9 @@ namespace fluxgl {
 
         return std::string(reinterpret_cast<const char*>(bytes.data()), bytes.size());
     }
+
+    bool VirtualFileSystem::fileExists(std::string path) {
+        if(!m_provider) throw Error{ErrorCode::IOError, "VirtualFileSystem could not find storage provider"};
+        return m_provider->fileExists(path);
+    }
 }

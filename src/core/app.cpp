@@ -7,6 +7,7 @@
 #include <fluxgl/graphics/debug_renderer.h>
 #include <fluxgl/assets/resource_manager.h>
 
+#include <stb_image.h>
 #include <iostream>
 #include <sstream>
 
@@ -33,6 +34,22 @@ namespace fluxgl {
                 DebugRenderer::enable();
             #endif
 
+            // Setup window icon => Assumes the the path is assets/img/icon.png
+            if(m_vfs.fileExists("assets/img/icon.png")) {
+                Buffer iconBuf = m_vfs.read("assets/img/icon.png");
+                int width, height, channels;
+                unsigned char* decoded = stbi_load_from_memory(
+                    iconBuf.data(),
+                    iconBuf.size(),
+                    &width,
+                    &height,
+                    &channels,
+                    4
+                );
+                m_window.setWindowIcon(width, height, decoded);
+                stbi_image_free(decoded);
+            }
+            
             float lastTime = 0.0f;
             while (!m_window.shouldClose()) {
                 float currentTime = static_cast<float>(glfwGetTime());

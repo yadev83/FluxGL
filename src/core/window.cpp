@@ -88,6 +88,11 @@ namespace fluxgl {
         glfwSetWindowShouldClose(m_window, value);
     }
 
+    void Window::setWindowIcon(int width, int height, unsigned char* pixels) {
+        GLFWimage images[1] = {{width, height, pixels}};
+        glfwSetWindowIcon(m_window, 1, images);
+    }
+
     bool Window::isMouseLocked() const {
         return glfwGetInputMode(m_window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED;
     }

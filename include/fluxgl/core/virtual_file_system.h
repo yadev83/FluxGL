@@ -10,6 +10,7 @@ namespace fluxgl {
     class IStorageProvider {
         public:
             virtual Buffer read(std::string path) = 0;
+            virtual bool fileExists(std::string path) = 0;
     };
 
     class VirtualFileSystem {
@@ -20,5 +21,6 @@ namespace fluxgl {
             VirtualFileSystem(IStorageProvider *provider = nullptr);
             Buffer read(std::string path);
             std::string readText(std::string path);
+            bool fileExists(std::string path);
     };
 }

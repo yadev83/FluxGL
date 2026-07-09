@@ -34,6 +34,7 @@ namespace fluxgl {
 
             bool shouldClose() const;
             void setWindowShouldClose(bool value = true);
+            void setWindowIcon(int width, int height, unsigned char* pixels);
             bool isMouseLocked() const;
             void setMouseLocked(bool value = true);
     };

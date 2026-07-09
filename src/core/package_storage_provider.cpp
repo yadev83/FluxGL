@@ -109,4 +109,27 @@ namespace fluxgl {
         
         throw Error{ErrorCode::IOError, "Package not found for path: " + path};
     }
+
+    bool PackageStorageProvider::fileExists(std::string path) {
+        fs::path current(path);
+
+        while(!current.empty()) {
+            auto it = m_packages.find(current.generic_string());
+
+            if(it != m_packages.end()) {
+                Package& package = it->second;
+
+                fs::path assetPath = fs::relative(
+                    fs::path(path),
+                    current
+                );
+
+                return package.entries.find(assetPath.generic_string()) != package.entries.end();
+            }
+
+            current = current.parent_path();
+        }
+
+        return false;
+    }
 }

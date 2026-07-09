@@ -42,5 +42,7 @@ namespace fluxgl {
              * @return Buffer 
              */
             Buffer read(std::string path) override;
+
+            bool fileExists(std::string path) override;
     };
 }

@@ -26,4 +26,8 @@ namespace fluxgl {
 
         return buffer;
     }
+
+    bool DirectoryStorageProvider::fileExists(std::string path) {
+        return std::filesystem::exists(path);
+    }
 }
