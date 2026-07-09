@@ -38,6 +38,7 @@ namespace fluxgl {
         float fontSize = 32.0f;
 
         float maxWidth = 0.0f;
+        float maxHeight = 0.0f;
         bool autoScale = false;
     };
 }

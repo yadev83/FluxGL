@@ -86,10 +86,13 @@ namespace fluxgl {
             GL_SRC_ALPHA,
             GL_ONE_MINUS_SRC_ALPHA
         );
+
+        glDisable(GL_DEPTH_TEST);
     }
 
     void Renderer::endUIPass() {
         glDisable(GL_BLEND);
+        glEnable(GL_DEPTH_TEST);
     }
 
     void Renderer::setCamera(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& position) {
@@ -200,8 +203,8 @@ namespace fluxgl {
         shader->setUniform("u_UVMax", uvMax);
 
         glm::mat4 model = modelMatrix;
-        model = glm::scale(model, glm::vec3(size, 1.0f));
         model = glm::translate(model, glm::vec3(0.0f, 0.0f, layer));
+        model = glm::scale(model, glm::vec3(size, 1.0f));
 
         shader->setUniform("u_Projection", glm::ortho(
             0.0f,
