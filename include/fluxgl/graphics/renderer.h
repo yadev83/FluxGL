@@ -55,7 +55,9 @@ namespace fluxgl {
 
         public:
             static void setFramebufferSize(int width, int height);
+            static glm::vec2 getFramebufferSize();
             static float getViewportAspectRatio();
+            static glm::vec2 getViewportSize();
             static void beginFrame();
             static void beginUIPass();
             static void endUIPass();

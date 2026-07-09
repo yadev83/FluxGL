@@ -6,13 +6,15 @@
         fluxgl::Entity text;
         fluxgl::Entity rect;
 
+        int anchorIndex = 0;
+        int pivotIndex = 0;
+
         public:
             void onLoad() override {
                 registerSystem<fluxgl::RenderSystem>();
 
                 getContext().resourceManager.addResource<fluxgl::Font>("arial", fluxgl::Font::loadFromMemory(getContext().vfs.read("assets/fonts/arial.ttf"), 64));
                 getContext().resourceManager.addResource<fluxgl::Shader>("text", fluxgl::Shader::defaultText());
-                getContext().resourceManager.addResource<fluxgl::Shader>("ui", fluxgl::Shader::defaultUi());
             }
 
             void onInit() override {
@@ -24,9 +26,6 @@
                 uiText.font = "arial";
                 uiText.fontSize = 32;
                 uiText.shader = "text";
-                
-                fluxgl::TextMetrics sz = getContext().resourceManager.getResource<fluxgl::Font>("arial")->measureText(uiText.text, uiText.fontSize);
-                uiTransform.position = {sz.offsetX, sz.height};
             }
 
             void onUpdate(float deltaTime) override {
@@ -35,17 +34,33 @@
                 }
 
                 if(getContext().inputManager.isKeyDown(GLFW_KEY_LEFT)) {
-                    text.getComponent<fluxgl::UITransform>().position.x -= deltaTime * 100;
+                    text.getComponent<fluxgl::UITransform>().offset.x -= deltaTime * 100;
                 }
                 if(getContext().inputManager.isKeyDown(GLFW_KEY_RIGHT)) {
-                    text.getComponent<fluxgl::UITransform>().position.x += deltaTime * 100;
+                    text.getComponent<fluxgl::UITransform>().offset.x += deltaTime * 100;
                 }
 
                 if(getContext().inputManager.isKeyDown(GLFW_KEY_UP)) {
-                    text.getComponent<fluxgl::UITransform>().position.y -= deltaTime * 100;
+                    text.getComponent<fluxgl::UITransform>().offset.y -= deltaTime * 100;
                 }
                 if(getContext().inputManager.isKeyDown(GLFW_KEY_DOWN)) {
-                    text.getComponent<fluxgl::UITransform>().position.y += deltaTime * 100;
+                    text.getComponent<fluxgl::UITransform>().offset.y += deltaTime * 100;
+                }
+
+                if(getContext().inputManager.isKeyPressed(GLFW_KEY_Q)) {
+                    text.getComponent<fluxgl::UITransform>().anchor = fluxgl::alignmentFromIndex(++anchorIndex);
+                }
+
+                if(getContext().inputManager.isKeyPressed(GLFW_KEY_P)) {
+                    text.getComponent<fluxgl::UITransform>().pivot = fluxgl::alignmentFromIndex(++pivotIndex);
+                }
+
+                if(getContext().inputManager.isKeyPressed(GLFW_KEY_R)) {
+                    text.getComponent<fluxgl::UITransform>().offset = {0, 0};
+                    anchorIndex = 0;
+                    text.getComponent<fluxgl::UITransform>().anchor = fluxgl::alignmentFromIndex(anchorIndex);
+                    pivotIndex = 0;
+                    text.getComponent<fluxgl::UITransform>().pivot = fluxgl::alignmentFromIndex(pivotIndex);
                 }
             }
     };

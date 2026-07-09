@@ -124,6 +124,7 @@ namespace fluxgl {
         
         // Draw UI
         Renderer::beginUIPass();
+        // Render UI Rects (textures, and stuff)
         for(auto entity : registry.query<UITransform, UIRect>()) {
             auto& transform = entity.getComponent<UITransform>();
             auto& rect = entity.getComponent<UIRect>();
@@ -131,14 +132,14 @@ namespace fluxgl {
             auto shader = resources.getResource<Shader>(rect.shader);
             auto texture = resources.getResource<Texture>(rect.texture);
 
+            auto position = transform.getComputedPosition(rect.size, Renderer::getFramebufferSize());
+            position.x += (rect.size.x * 0.5f);
+            position.y += (rect.size.y * 0.5f);
+
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(
                 model,
-                glm::vec3(
-                    transform.position.x + rect.size.x * 0.5f,
-                    transform.position.y - rect.size.y * 0.5f,
-                    0.0f
-                )
+                position
             );
 
             Renderer::drawUIQuad(
@@ -157,6 +158,7 @@ namespace fluxgl {
             );
         }
 
+        // Render UI Texts
         for(auto entity : registry.query<UITransform, UIText>()) {
             auto& transform = entity.getComponent<UITransform>();
             auto& text = entity.getComponent<UIText>();
@@ -168,8 +170,21 @@ namespace fluxgl {
                 throw Error{ErrorCode::Error, "Error during RenderSystem::onUpdate: invalid font provided for UIText: " + text.font};
             }
 
-            float cursorX = transform.position.x;
+            // Before printing text, compute the fontSize that we will be using if autoScale is set to match maxWidth
+            float renderFontSize = text.fontSize;
+            if(text.autoScale && text.maxWidth) {
+                float width = font->measureText(text.text, text.fontSize).width;
 
+                if(width > text.maxWidth) {
+                    renderFontSize *= (text.maxWidth / width);
+                }
+            }
+
+            TextMetrics textSz = font->measureText(text.text, renderFontSize);
+            auto textPosition = transform.getComputedPosition({textSz.width, textSz.height}, Renderer::getFramebufferSize());
+
+            float cursorX = textPosition.x;
+            float cursorY = textPosition.y + textSz.height;
             for(char c : text.text) {
                 const Glyph* glyph = font->getGlyph(c);
                 if(!glyph) {
@@ -177,7 +192,7 @@ namespace fluxgl {
                     continue;
                 }
 
-                float glyphScale = (text.fontSize / glyph->sourceSize);
+                float glyphScale = (renderFontSize / glyph->sourceSize);
                 float scaleX = transform.scale.x * glyphScale;
                 float scaleY = transform.scale.y * glyphScale;
                 
@@ -186,7 +201,7 @@ namespace fluxgl {
                 float glyphHeight = glyph->height * scaleY;
 
                 float x = cursorX + (glyph->bearingX * scaleX) + (glyphWidth * 0.5f);
-                float y = transform.position.y + (glyph->bearingY * scaleY) + (glyphHeight * 0.5f);
+                float y = cursorY + (glyph->bearingY * scaleY) + (glyphHeight * 0.5f);
 
                 glm::mat4 model(1.0f);
                 model = glm::translate(

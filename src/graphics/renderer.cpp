@@ -34,8 +34,16 @@ namespace fluxgl {
         }
     }
 
+    glm::vec2 Renderer::getFramebufferSize() {
+        return {m_state.framebufferWidth, m_state.framebufferHeight};
+    }
+
     float Renderer::getViewportAspectRatio() {
         return (float)m_state.viewportWidth / m_state.viewportHeight;
+    }
+
+    glm::vec2 Renderer::getViewportSize() {
+        return {m_state.viewportWidth, m_state.viewportHeight};
     }
 
     void Renderer::beginFrame() {
