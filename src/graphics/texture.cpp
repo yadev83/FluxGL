@@ -86,7 +86,11 @@ namespace fluxgl {
             0            
         );
 
-        texture.load(reinterpret_cast<const char*>(decoded), width, height, channels); 
+        texture.load(reinterpret_cast<const char*>(decoded), width, height, channels);
+
+        stbi_image_free(decoded);
+        stbi_set_flip_vertically_on_load(false);
+        
         return texture;
     }
 }
