@@ -11,6 +11,7 @@
 
 namespace fluxgl {
     class Entity;
+    struct EntityState;
     class Behavior;
     
     using EntityID = unsigned int;
@@ -30,7 +31,9 @@ namespace fluxgl {
             // Map entities to tags
             std::unordered_map<EntityID, TagsStorage> m_tags;
             // Map entities to parent entities (hierarchy)
-            std::unordered_map<EntityID, EntityID> m_hierarchy; // parent > children
+            std::unordered_map<EntityID, EntityID> m_hierarchy; // (m_hierarchy[child] = parent;)
+            // Map entities to state
+            std::unordered_map<EntityID, EntityState> m_states;
 
             // Entities to delete on next frame
             std::set<EntityID> m_entitiesToDelete;
@@ -52,8 +55,10 @@ namespace fluxgl {
             bool isValidEntity(EntityID id);
             bool isAliveEntity(EntityID id);
             bool isEntityInUse(EntityID id);
+            bool isEntityEnabled(EntityID id);
             Entity getEntity(EntityID id);
             void setParent(EntityID child, EntityID parent = 0);
+            void setEntityEnabled(EntityID id, bool enabled);
             void removeChild(EntityID child);
             std::vector<Entity> getChildren(EntityID id);
             Entity getParent(EntityID id);

@@ -30,6 +30,7 @@ namespace fluxgl {
         std::string indent(depth * 2, ' ');
 
         ss << indent << "Entity " << id << '\n';
+        ss << indent << (isEntityEnabled(id) ? "Enabled" : "Disabled") << '\n';
 
         if(auto tagIt = m_tags.find(id); tagIt != m_tags.end()) {
             ss << indent << "   Tags: ";
@@ -86,6 +87,8 @@ namespace fluxgl {
         // Remove behaviors and tags
         m_behaviors.erase(id);
         m_tags.erase(id);
+        m_states.erase(id);
+        m_hierarchy.erase(id);
 
         // Make the id available again for reuse
         m_availableIDs.push_back(id);
@@ -102,6 +105,7 @@ namespace fluxgl {
 
     void Registry::clear() {
         FLUXGL_LOG_DEBUG("Registry::clear: Clearing all entities, components and behaviors");
+        m_states.clear();
         m_storages.clear();
         m_behaviors.clear();
         m_tags.clear();
@@ -120,6 +124,9 @@ namespace fluxgl {
 
         EntityID id = m_availableIDs.back();
         m_availableIDs.pop_back();
+
+        // Push a default entity State
+        m_states[id] = EntityState();
 
         FLUXGL_LOG_TRACE("Registry::createEntity: " + std::to_string(id));
         return Entity(id, this);
@@ -145,6 +152,16 @@ namespace fluxgl {
         return std::find(m_availableIDs.begin(), m_availableIDs.end(), id) == m_availableIDs.end();
     }
 
+    bool Registry::isEntityEnabled(EntityID id) {
+        if(!isAliveEntity(id)) return false;
+
+        auto it = m_states.find(id);
+        if(it == m_states.end()) throw std::runtime_error("Registry::isEntityEnabled: invalid state for Entity ID" + std::to_string(id));
+
+        EntityState& state = it->second;
+        return state.enabled;
+    }
+
     void Registry::setParent(EntityID child, EntityID parent) {
         // Make sure that the child is valid
         if(!isValidEntity(child)) throw std::runtime_error("Registry::SetParent: Invalid child entity" + std::to_string(child));
@@ -158,6 +175,14 @@ namespace fluxgl {
         // If the parent is not valid, remove the child from the hierarchy system
         m_hierarchy.erase(child);
     }
+
+    void Registry::setEntityEnabled(EntityID id, bool enabled) {
+        auto it = m_states.find(id);
+        if(it == m_states.end()) throw std::runtime_error("Registry::setEntityEnabled: Could not setEntityEnabled on entity without a valid state " + std::to_string(id));
+        
+        m_states[id].enabled = enabled;
+    }
+
 
     std::vector<Entity> Registry::getChildren(EntityID id) {
         if(!isValidEntity(id)) throw std::runtime_error("Registry::GetChildren: Invalid entity" + std::to_string(id));

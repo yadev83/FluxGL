@@ -19,6 +19,7 @@ namespace fluxgl {
         audioEngine.cleanupUnusedVoices();
 
         for(auto e : registry.query<AudioSource>()) {
+            if(!e.isEnabled()) continue;
             auto& source = e.getComponent<AudioSource>();
 
             // CREATE

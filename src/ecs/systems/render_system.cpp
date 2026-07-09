@@ -29,6 +29,7 @@ namespace fluxgl {
 
         // Setup lights
         for(auto entity : registry.query<Light>()) {
+            if(!entity.isEnabled()) continue;
             auto& light = entity.getComponent<Light>();
 
             switch(light.type) {
@@ -55,6 +56,7 @@ namespace fluxgl {
         Transform* cameraTransform = nullptr;
         
         for(auto entity : registry.query<Camera, Transform>()) {
+            if(!entity.isEnabled()) continue;
             camera = &entity.getComponent<Camera>();
             cameraTransform = &entity.getComponent<Transform>();
             break;
@@ -70,6 +72,8 @@ namespace fluxgl {
 
         // Draw sprites
         for(auto entity : registry.query<Sprite, Transform>()) {
+            if(!entity.isEnabled()) continue;
+
             auto& sprite = entity.getComponent<Sprite>();
             auto& transform = entity.getComponent<Transform>();
 
@@ -91,6 +95,8 @@ namespace fluxgl {
 
         // Draw meshes
         for(auto entity : registry.query<MeshRenderer, Transform>()) {
+            if(!entity.isEnabled()) continue;
+
             auto& meshRenderer = entity.getComponent<MeshRenderer>();
             auto& transform = entity.getComponent<Transform>();
             
@@ -121,11 +127,12 @@ namespace fluxgl {
         // Debug renderer (if enabled)
         if(DebugRenderer::isEnabled()) DebugRenderer::flush();
 
-        
         // Draw UI
         Renderer::beginUIPass();
         // Render UI Rects (textures, and stuff)
         for(auto entity : registry.query<UITransform, UIRect>()) {
+            if(!entity.isEnabled()) continue;
+
             auto& transform = entity.getComponent<UITransform>();
             auto& rect = entity.getComponent<UIRect>();
 
@@ -160,6 +167,8 @@ namespace fluxgl {
 
         // Render UI Texts
         for(auto entity : registry.query<UITransform, UIText>()) {
+            if(!entity.isEnabled()) continue;
+
             auto& transform = entity.getComponent<UITransform>();
             auto& text = entity.getComponent<UIText>();
 
@@ -173,10 +182,19 @@ namespace fluxgl {
             // Before printing text, compute the fontSize that we will be using if autoScale is set to match maxWidth
             float renderFontSize = text.fontSize;
             if(text.autoScale && text.maxWidth) {
-                float width = font->measureText(text.text, text.fontSize).width;
+                float width = font->measureText(text.text, renderFontSize).width;
 
                 if(width > text.maxWidth) {
                     renderFontSize *= (text.maxWidth / width);
+                }
+            }
+
+            // After that, check on the maxHeight as well, just in case (using the already updated fontsize from width if it happened)
+            if(text.autoScale && text.maxHeight) {
+                float height = font->measureText(text.text, renderFontSize).height;
+
+                if(height > text.maxHeight) {
+                    renderFontSize *= (text.maxHeight / height);
                 }
             }
 

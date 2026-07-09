@@ -26,6 +26,18 @@ namespace fluxgl {
         m_registry->destroyEntity(m_id);
     }
 
+    void Entity::disable() {
+        m_registry->setEntityEnabled(m_id, false);
+    }
+
+    void Entity::enable() {
+        m_registry->setEntityEnabled(m_id, true);
+    }
+
+    bool Entity::isEnabled() {
+        return m_registry->isEntityEnabled(m_id);
+    }
+
     EntityID Entity::getID() const {
         return m_id; 
     }

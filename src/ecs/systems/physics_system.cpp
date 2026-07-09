@@ -24,6 +24,7 @@ namespace fluxgl {
 
         // Gravity & Integration
         for(auto e : registry.query<RigidBody2D, Transform>()) {
+            if(!e.isEnabled()) continue;
             auto& rigidbody = e.getComponent<RigidBody2D>();
             auto& transform = e.getComponent<Transform>();
 
@@ -45,6 +46,8 @@ namespace fluxgl {
 
         for(auto a : collidables) {
             for(auto b : collidables) {
+                if(!(a.isEnabled() && b.isEnabled())) continue;
+
                 // Skip self collision check and avoid doubles
                 if(a.getID() >= b.getID()) continue;
                 // Make sure that both a and b are valid entities

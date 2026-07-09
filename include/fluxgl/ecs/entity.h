@@ -7,6 +7,10 @@ namespace fluxgl {
     using EntityID = unsigned int;
     class Registry;
 
+    struct EntityState {
+        bool enabled = true;
+    };
+
     class Entity {
         private:
             EntityID m_id;
@@ -20,6 +24,9 @@ namespace fluxgl {
             Entity getParent();
             std::vector<Entity> getChildren();
             void destroy();
+            void disable();
+            void enable();
+            bool isEnabled();
 
             EntityID getID() const;
             void addTag(const std::string& tag);

@@ -11,6 +11,7 @@ namespace fluxgl {
 
         std::set<EntityID> entitiesToDelete; // Set to avoid removing the same entity multiple times
         for(auto e : registry.query<Lifetime>()) {
+            if(!e.isEnabled()) continue;
             auto& lifetime = e.getComponent<Lifetime>();
             lifetime.remaining -= dt;
 
