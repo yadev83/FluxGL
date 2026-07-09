@@ -181,6 +181,7 @@ namespace fluxgl {
             auto& collider = entity.getComponent<BoxCollider2D>();
             auto aabb = collider.getAABB(transform);
             DebugRenderer::rect(aabb.min, aabb.max, color);
+            DebugRenderer::cross({transform.position.x, transform.position.y}, glm::vec3(1.0f));
 
             // Check if the entity has a facing direction to show
             if(entity.hasComponent<Facing2D>()) {

@@ -78,7 +78,7 @@ namespace fluxgl {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
 
-        // Renable depth testing
+        // Re-nable depth testing
         glEnable(GL_DEPTH_TEST);
 
         // Clear queue
@@ -99,5 +99,18 @@ namespace fluxgl {
         line({max.x, min.y, 0.0f}, {max.x, max.y, 0.0f}, color);
         line({max.x, max.y, 0.0f}, {min.x, max.y, 0.0f}, color);
         line({min.x, max.y, 0.0f}, {min.x, min.y, 0.0f}, color);
+    }
+
+    void DebugRenderer::dot(const glm::vec2& position, const glm::vec3& color) {
+        if(!m_enabled) return;
+
+        line({position.x, position.y, 0.0f}, {position.x, position.y, 0.0f}, color);
+    }
+
+    void DebugRenderer::cross(const glm::vec2& position, const glm::vec3& color) {
+        if(!m_enabled) return;
+
+        line({position.x, position.y - 0.1f, 0.0f}, {position.x, position.y + 0.1f, 0.0f}, color);
+        line({position.x - 0.1f, position.y, 0.0f}, {position.x + 0.1f, position.y, 0.0f}, color);
     }
 }
