@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a Package File provider for the VFS that reads Assets files packed with the dedicated tool
 - Added a Facing2D component to track components directions. Has to be updated manually and is drawn by the physics system.
 - Added UIText, UITransform and UIRect components to allow for UI render. Positionned using screen pixels coordinates for UIs
+- App now loads an icon for the window automatically. It looks for the assets/img/icon.png file by default. Not parameterized yet
 
 ### Changed
 
@@ -38,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Orthographic camera view scaling to fix the ortho view.
 - OrthoCam worldWidth = 24 units by default. Height is calculated based on the aspect ratio.
 - Physics system mtvY sign is now properly used for grounded checks
+- Fixed a memory leak on texture::loadFromMemory()
 
 ## [0.4.0] - 2026-02-25
 
