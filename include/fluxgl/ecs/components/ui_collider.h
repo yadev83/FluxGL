@@ -29,10 +29,9 @@ namespace fluxgl {
         inline AABB getAABB(const UITransform& transform, const glm::vec2& screenSize) const {
             glm::vec2 transformPosition = glm::vec2(transform.getComputedPosition(size, screenSize));
             
-            // Compute top left (for min) agnostic of pivot used by the UITransform (rempove the pivot offset)
-            glm::vec2 min = transformPosition - transform.getPivotOffset(size);
+            // Compute top left (for min) agnostic of pivot used by the UITransform
+            glm::vec2 min = transformPosition;
             glm::vec2 max = min + size;
-
             return {min, max};
         } 
     };

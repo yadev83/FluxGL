@@ -31,7 +31,6 @@ namespace fluxgl {
 
             static void line(const glm::vec3& a, const glm::vec3& b, const glm::vec3& color);
             static void rect(const glm::vec2& min, const glm::vec2& max, const glm::vec3& color);
-            static void dot(const glm::vec2& position, const glm::vec3& color);
             static void cross(const glm::vec2& position, const glm::vec3& color);
             static void flush();
     };

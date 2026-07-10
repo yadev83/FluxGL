@@ -101,12 +101,6 @@ namespace fluxgl {
         line({min.x, max.y, 0.0f}, {min.x, min.y, 0.0f}, color);
     }
 
-    void DebugRenderer::dot(const glm::vec2& position, const glm::vec3& color) {
-        if(!m_enabled) return;
-
-        line({position.x, position.y, 0.0f}, {position.x, position.y, 0.0f}, color);
-    }
-
     void DebugRenderer::cross(const glm::vec2& position, const glm::vec3& color) {
         if(!m_enabled) return;
 

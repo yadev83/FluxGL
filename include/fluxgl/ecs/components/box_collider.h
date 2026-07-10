@@ -28,17 +28,17 @@ namespace fluxgl {
 
                 boxCollider2D.isTrigger = data.get("isTrigger", false).asBool();
 
-                Json::Value halfSizeData = data.get("halfSize", Json::Value());
-                if(halfSizeData.isObject()) {
-                    boxCollider2D.halfSize.x = halfSizeData.get("x", 0.5f).asFloat();
-                    boxCollider2D.halfSize.y = halfSizeData.get("y", 0.5f).asFloat();
+                Json::Value sizeData = data.get("size", Json::Value());
+                if(sizeData.isObject()) {
+                    boxCollider2D.size.x = sizeData.get("x", 1.0f).asFloat();
+                    boxCollider2D.size.y = sizeData.get("y", 1.0f).asFloat();
                 }
             }
 
             registry.addComponent<BoxCollider2D>(entityID, boxCollider2D);
         }
         
-        glm::vec2 halfSize = {0.5f, 0.5f};
+        glm::vec2 size = {1.0f, 1.0f};
         glm::vec2 offset = {0.0f, 0.0f}; 
 
         CollisionLayer layer = CollisionLayer::Default;
@@ -48,8 +48,8 @@ namespace fluxgl {
             AABB aabb;
 
             glm::vec2 center2D = glm::vec2(transform.position) + offset;
-            aabb.min = center2D - halfSize;
-            aabb.max = center2D + halfSize;
+            aabb.min = center2D - size * 0.5f;
+            aabb.max = center2D + size * 0.5f;
 
             return aabb;
         }
