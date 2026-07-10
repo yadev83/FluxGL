@@ -6,25 +6,13 @@
 #include <fluxgl/ecs/registry.h>
 #include <fluxgl/ecs/entity.h>
 #include <fluxgl/ecs/components/transform.h>
+#include <fluxgl/math/aabb.h>
 
 namespace fluxgl {
     enum class CollisionLayer {
         Default,    // Default layer : everything collides with everything
         Hitbox,     // Hitbox layer : hitboxes are usually triggers that collide with hurtboxes
         Hurtbox     // Hurtbox layer : collides with hitboxes
-    };
-
-    struct AABB {
-        glm::vec2 min = {0.0f, 0.0f};
-        glm::vec2 max = {0.0f, 0.0f};
-
-        bool intersects(const AABB& other) const {
-            return
-                min.x <= other.max.x &&
-                max.x >= other.min.x &&
-                min.y <= other.max.y &&
-                max.y >= other.min.y;
-        }
     };
 
     struct BoxCollider2D {

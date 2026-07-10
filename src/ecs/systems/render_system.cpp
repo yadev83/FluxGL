@@ -180,24 +180,7 @@ namespace fluxgl {
             }
 
             // Before printing text, compute the fontSize that we will be using if autoScale is set to match maxWidth
-            float renderFontSize = text.fontSize;
-            if(text.autoScale && text.maxWidth) {
-                float width = font->measureText(text.text, renderFontSize).width;
-
-                if(width > text.maxWidth) {
-                    renderFontSize *= (text.maxWidth / width);
-                }
-            }
-
-            // After that, check on the maxHeight as well, just in case (using the already updated fontsize from width if it happened)
-            if(text.autoScale && text.maxHeight) {
-                float height = font->measureText(text.text, renderFontSize).height;
-
-                if(height > text.maxHeight) {
-                    renderFontSize *= (text.maxHeight / height);
-                }
-            }
-
+            float renderFontSize = text.getComputedFontSize(resources);
             TextMetrics textSz = font->measureText(text.text, renderFontSize);
             auto textPosition = transform.getComputedPosition({textSz.width, textSz.height}, Renderer::getFramebufferSize());
 

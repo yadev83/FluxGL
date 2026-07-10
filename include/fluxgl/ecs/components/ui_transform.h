@@ -91,11 +91,14 @@ namespace fluxgl {
         UIAlignment anchor = UIAlignment::TopLeft; // Anchor point in the ui window
         UIAlignment pivot = UIAlignment::TopLeft; // Pivot anchor point of the ui element (offset is an offset to this)
 
-        inline glm::vec3 getComputedPosition(const glm::vec2& elementSize, const glm::vec2& screenSize) {
+        inline glm::vec3 getComputedPosition(const glm::vec2& elementSize, const glm::vec2& screenSize) const {
             glm::vec2 anchorPosition = toAlignment(anchor) * screenSize;
-            glm::vec2 pivotOffset = toAlignment(pivot) * elementSize;
 
-            return glm::vec3(anchorPosition + offset - pivotOffset, layer);
+            return glm::vec3(anchorPosition + offset - getPivotOffset(elementSize), layer);
+        }
+
+        inline glm::vec2 getPivotOffset(const glm::vec2& elementSize) const {
+            return toAlignment(pivot) * elementSize;
         }
     };
 }

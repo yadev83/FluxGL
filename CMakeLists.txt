@@ -46,6 +46,7 @@ add_library(FluxGL STATIC)
 add_library(FluxGL::FluxGL ALIAS FluxGL)
 
 target_sources(FluxGL PRIVATE
+    src/math/aabb.cpp
     src/core/app.cpp
     src/core/window.cpp
     src/core/error.cpp
@@ -62,6 +63,7 @@ target_sources(FluxGL PRIVATE
     src/ecs/systems/lifetime_system.cpp
     src/ecs/systems/physics_system.cpp
     src/ecs/systems/audio_system.cpp
+    src/ecs/systems/ui_system.cpp
     src/input/input_manager.cpp
     src/graphics/mesh.cpp
     src/graphics/shader.cpp
