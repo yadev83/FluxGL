@@ -30,6 +30,7 @@
 #include "ecs/components/ui_rect.h"
 #include "ecs/components/ui_text.h"
 #include "ecs/components/ui_collider.h"
+#include "ecs/components/ui_button.h"
 
 #include "ecs/systems/render_system.h"
 #include "ecs/systems/lifetime_system.h"

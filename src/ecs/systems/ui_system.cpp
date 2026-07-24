@@ -6,24 +6,30 @@
 #include <fluxgl/graphics/renderer.h>
 #include <fluxgl/ecs/components/ui_transform.h>
 #include <fluxgl/ecs/components/ui_collider.h>
+#include <fluxgl/ecs/components/ui_button.h>
 
 namespace fluxgl {
     void UISystem::onUpdate(Scene& scene, float dt) {
         auto& registry = scene.getRegistry();
         auto& inputManager = scene.getContext().inputManager;
 
-        glm::vec2 mousePos = {inputManager.getMouseX(), inputManager.getMouseY()};
+        // We have to compute the mouse position with respect to the viewport size (because scaling could have occured)
+        glm::vec2 mousePos = Renderer::screenToViewport({inputManager.getMouseX(), inputManager.getMouseY()});
 
         for(auto e : registry.query<UICollider, UITransform>()) {
             if(!e.isEnabled()) continue;
             
             auto& collider = e.getComponent<UICollider>();
             auto& transform = e.getComponent<UITransform>();
+            auto colliderAABB = collider.getAABB(transform, Renderer::getViewportSize());
+            
+            if(e.hasComponent<UIButton>()) {
+                auto& button = e.getComponent<UIButton>();
+                bool hovered = colliderAABB.contains(mousePos);
 
-            auto colliderAABB = collider.getAABB(transform, Renderer::getFramebufferSize());
-            if(colliderAABB.contains(mousePos)) {
-                FLUXGL_LOG_TRACE("UI SYSTEM : MOUSE IN COLLIDER " + e.getID());
-            }
+                button.hovered = hovered;
+                button.pressed = hovered && inputManager.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT);
+            }                
         }
     }
 }

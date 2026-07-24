@@ -58,9 +58,12 @@ namespace fluxgl {
             static glm::vec2 getFramebufferSize();
             static float getViewportAspectRatio();
             static glm::vec2 getViewportSize();
+            static glm::vec2 getViewportPosition();
             static void beginFrame();
             static void beginUIPass();
             static void endUIPass();
+
+            static glm::vec2 screenToViewport(glm::vec2 position);
 
             static void setCamera(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix, const glm::vec3& position);
             static void setClearColor(const glm::vec3& color);

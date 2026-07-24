@@ -20,7 +20,7 @@ namespace fluxgl {
     }
 
     void InputManager::setMouseButton(int button, bool value) {
-        if(button < 0 || button > GLFW_KEY_LAST) return;
+        if(button < 0 || button > GLFW_MOUSE_BUTTON_LAST) return;
         m_mouseButtons[button] = value;
     }
 

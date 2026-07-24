@@ -46,6 +46,17 @@ namespace fluxgl {
         return {m_state.viewportWidth, m_state.viewportHeight};
     }
 
+    glm::vec2 Renderer::getViewportPosition() {
+        return {m_state.viewportX, m_state.viewportY};
+    }
+
+    glm::vec2 Renderer::screenToViewport(glm::vec2 position) {
+        return {
+            position.x - m_state.viewportX,
+            position.y - m_state.viewportY
+        };
+    }
+
     void Renderer::beginFrame() {
         // OPENGL STATE RESET
         glViewport(0, 0, m_state.framebufferWidth, m_state.framebufferHeight);
