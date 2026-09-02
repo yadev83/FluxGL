@@ -49,6 +49,10 @@ class Text : public fluxgl::Scene {
             if(getContext().inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
                 getContext().window.setWindowShouldClose();
             }
+            
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_F11)) {
+                getContext().window.setWindowFullscreenMode(!getContext().window.getWindowFullscreenMode());
+            }
 
             if(getContext().inputManager.isKeyDown(GLFW_KEY_LEFT)) {
                 text.getComponent<fluxgl::UITransform>().offset.x -= deltaTime * 100;

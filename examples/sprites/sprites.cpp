@@ -32,6 +32,10 @@ class Sprites : public fluxgl::Scene {
             if(getContext().inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) {
                 getContext().window.setWindowShouldClose();
             }
+
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_F11)) {
+                getContext().window.setWindowFullscreenMode(!getContext().window.getWindowFullscreenMode());
+            }
         }
 };
 

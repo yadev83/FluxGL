@@ -48,6 +48,10 @@ class TransformExample : public fluxgl::Scene {
                 getContext().window.setWindowShouldClose();
             }
 
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_F11)) {
+                getContext().window.setWindowFullscreenMode(!getContext().window.getWindowFullscreenMode());
+            }
+            
             entity.getComponent<fluxgl::Transform>().rotation.z += 20.0f * deltaTime; // Rotate around Z-axis
 
             fluxgl::Renderer::beginFrame();

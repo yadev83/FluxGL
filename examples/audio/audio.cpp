@@ -32,6 +32,10 @@ class Audio : public fluxgl::Scene {
                 getContext().window.setWindowShouldClose();
             }
 
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_F11)) {
+                getContext().window.setWindowFullscreenMode(!getContext().window.getWindowFullscreenMode());
+            }
+
             if(getContext().inputManager.isKeyPressed(GLFW_KEY_P)) {
                 auto& audioSource = entity.getComponent<fluxgl::AudioSource>();
                 audioSource.shouldPause = true;

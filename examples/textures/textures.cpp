@@ -38,6 +38,10 @@ class Texture : public fluxgl::Scene {
                 getContext().window.setWindowShouldClose();
             }
 
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_F11)) {
+                getContext().window.setWindowFullscreenMode(!getContext().window.getWindowFullscreenMode());
+            }
+            
             auto& meshRenderer = entity.getComponent<fluxgl::MeshRenderer>();
             fluxgl::Renderer::beginFrame();
             fluxgl::Renderer::drawMesh(

@@ -93,6 +93,37 @@ namespace fluxgl {
         glfwSetWindowIcon(m_window, 1, images);
     }
 
+    bool Window::getWindowFullscreenMode() const {
+        // Fullscreen windows are associated with a monitor
+        // For windowed mode windows, this function returns NULL. This is how to tell full screen windows from windowed mode windows.
+        GLFWmonitor* currentMonitor = glfwGetWindowMonitor(m_window);
+
+        return (!!currentMonitor);
+    }
+
+    void Window::setWindowFullscreenMode(bool fullscreen) {
+        // Get the primary monitor
+        GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+        
+        if(!primaryMonitor) {
+            FLUXGL_LOG_ERROR("No PrimaryMonitor found");
+            return; // Early exit if no monitor found
+        }
+
+        // Grab the monitor video mode then set the window inside it
+        const GLFWvidmode* videoMode = glfwGetVideoMode(primaryMonitor);
+
+        if(fullscreen) {
+            // Enter fullscreen mode with primary monitor video mode set
+            // FUTURE : Allow monitor selection from the glfwGetMonitors() list 
+            glfwSetWindowMonitor(m_window, primaryMonitor, 0, 0, videoMode->width, videoMode->height, videoMode->refreshRate);
+        } else {
+            // Exit fullscreen mode
+            // FUTURE : When app settings become a thing, remove hardcoded width/height values
+            glfwSetWindowMonitor(m_window, NULL, (videoMode->width - 800) * 0.5, (videoMode->height - 600) * 0.5, 800, 600, 0);
+        }
+    }
+
     bool Window::isMouseLocked() const {
         return glfwGetInputMode(m_window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED;
     }

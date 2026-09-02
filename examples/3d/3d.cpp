@@ -57,6 +57,10 @@ class Scene3D : public fluxgl::Scene {
         void onUpdate(float deltaTime) override {
             if(getContext().inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) getContext().window.isMouseLocked() ? getContext().window.setMouseLocked(false) : getContext().window.setWindowShouldClose();
             if(getContext().inputManager.isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) getContext().window.setMouseLocked(true);
+            
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_F11)) {
+                getContext().window.setWindowFullscreenMode(!getContext().window.getWindowFullscreenMode());
+            }
 
             for(fluxgl::Entity& entity : entities) {
                 auto& transform = entity.getComponent<fluxgl::Transform>();

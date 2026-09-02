@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added UIText, UITransform and UIRect components to allow for UI render. Positionned using screen pixels coordinates for UIs
 - Added UIButton component that detects hover and pressed states of a UITransform/UIContainer. Can be used to trigger actions in scenes and systems
 - App now loads an icon for the window automatically. It looks for the assets/img/icon.png file by default. Not parameterized yet
+- Window getFullscreenMode() and setFullscreenMode(bool) methods added
 
 ### Changed
 

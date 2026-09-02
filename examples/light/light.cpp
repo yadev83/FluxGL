@@ -118,6 +118,10 @@ class Example : public fluxgl::Scene {
             if(getContext().inputManager.isKeyPressed(GLFW_KEY_ESCAPE)) getContext().window.isMouseLocked() ? getContext().window.setMouseLocked(false) : getContext().window.setWindowShouldClose();
             if(getContext().inputManager.isMouseButtonDown(GLFW_MOUSE_BUTTON_LEFT)) getContext().window.setMouseLocked(true);
 
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_F11)) {
+                getContext().window.setWindowFullscreenMode(!getContext().window.getWindowFullscreenMode());
+            }
+
             // Animate point light around circle
             static float time = 0.0f; // animation elapsed time
             time += deltaTime;

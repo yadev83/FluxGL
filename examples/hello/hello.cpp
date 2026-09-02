@@ -37,6 +37,10 @@ class Hello : public fluxgl::Scene {
                 getContext().window.setWindowShouldClose();
             }
 
+            if(getContext().inputManager.isKeyPressed(GLFW_KEY_F11)) {
+                getContext().window.setWindowFullscreenMode(!getContext().window.getWindowFullscreenMode());
+            }
+
             auto& entityRenderer = entity.getComponent<fluxgl::MeshRenderer>();
             auto mesh = getContext().resourceManager.getResource<fluxgl::Mesh>(entityRenderer.mesh);
             auto shader = getContext().resourceManager.getResource<fluxgl::Shader>(entityRenderer.material.shader);
