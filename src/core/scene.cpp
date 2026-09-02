@@ -7,15 +7,10 @@
 #include <fluxgl/ecs/components/box_collider.h>
 #include <fluxgl/ecs/components/rigidbody.h>
 #include <fluxgl/ecs/behavior.h>
-#include <fluxgl/assets/prefab_loader.h>
 
 namespace fluxgl {
     Entity Scene::createEntity() { 
         return m_registry.createEntity();
-    }
-
-    Entity Scene::instantiate(Prefab& prefab) {
-        return getContext().prefabLoader.instantiate(&m_registry, prefab);
     }
    
     Entity Scene::getEntity(EntityID id) {

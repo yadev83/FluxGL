@@ -6,7 +6,6 @@
 
 namespace fluxgl {
     struct AppContext;
-    struct Prefab;
 
     /**
      * @brief Scene base class
@@ -29,7 +28,6 @@ namespace fluxgl {
             Registry& getRegistry();
             AppContext& getContext();
             Entity createEntity();
-            Entity instantiate(Prefab& prefab);
             Entity getEntity(EntityID id);
 
             template<typename S, typename... Args>

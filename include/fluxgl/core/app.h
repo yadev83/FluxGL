@@ -3,7 +3,6 @@
 #include <fluxgl/input/input_manager.h>
 #include <fluxgl/audio/audio_engine.h>
 #include <fluxgl/assets/resource_manager.h>
-#include <fluxgl/assets/prefab_loader.h>
 #include "window.h"
 #include "virtual_file_system.h"
 
@@ -20,7 +19,6 @@ namespace fluxgl {
 
         fluxgl::InputManager& inputManager;
         fluxgl::ResourceManager& resourceManager;
-        fluxgl::PrefabLoader& prefabLoader;
     };
 
     /**
@@ -38,7 +36,6 @@ namespace fluxgl {
             
             fluxgl::InputManager m_inputManager;
             fluxgl::ResourceManager m_resourceManager;
-            fluxgl::PrefabLoader m_prefabLoader;
 
         public:
             App(int width, int height, const char* title, VFSSettings vfsSettings = {"assets.fgld", false});
@@ -54,8 +51,6 @@ namespace fluxgl {
             const fluxgl::ResourceManager& getResourceManager() const;
             fluxgl::VirtualFileSystem& getVirtualFileSystem();
             const fluxgl::VirtualFileSystem& getVirtualFileSystem() const;
-            fluxgl::PrefabLoader& getPrefabLoader();
-            const fluxgl::PrefabLoader& getPrefabLoader() const;
 
             void run();
     };

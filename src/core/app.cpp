@@ -24,7 +24,7 @@ namespace fluxgl {
 
     void App::run() {
         try {
-            AppContext ctx { m_window, m_audioEngine, m_vfs, m_inputManager, m_resourceManager, m_prefabLoader };
+            AppContext ctx { m_window, m_audioEngine, m_vfs, m_inputManager, m_resourceManager };
 
             // Initialize subsystems
             SceneManager::get().setContext(&ctx);
@@ -108,13 +108,5 @@ namespace fluxgl {
 
     const fluxgl::VirtualFileSystem& App::getVirtualFileSystem() const {
         return m_vfs;
-    }
-
-    fluxgl::PrefabLoader& App::getPrefabLoader() {
-        return m_prefabLoader;
-    }
-
-    const fluxgl::PrefabLoader& App::getPrefabLoader() const {
-        return m_prefabLoader;
     }
 }

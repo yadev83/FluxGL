@@ -13,8 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - World unit vectors in the transform component
 - Debug renderer to draw lines, rectangles, etc... on screen for debugging purposes
 - ResourceManager can now be used to store resources for later use. Also makes ECS components lighter since they now hold resource handles instead of raw pointers. It makes initialization and prefabs easier to implement.
-- PrefabLoader added to the engine.
-  - Prefabs are json assets that can be used to generate complex entities from data instead of code
 - Lifetime system : Add a lifetime component with a duration on an entity to make it disappear after the duration is elapsed
 - Physics System : Apply basic physics to rigidbodies and adds box colliders based collision detection
 - Virtual File System : Currently targetting a disk storage provider, but will be used later for packaging assets

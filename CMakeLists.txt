@@ -75,7 +75,6 @@ target_sources(FluxGL PRIVATE
     src/audio/audio_engine.cpp
     src/ui/font.cpp
     src/assets/resource_manager.cpp
-    src/assets/prefab_loader.cpp
 )
 
 target_include_directories(FluxGL
