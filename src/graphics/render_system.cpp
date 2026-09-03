@@ -5,19 +5,20 @@
 
 #include <fluxgl/ecs/registry.h>
 #include <fluxgl/ecs/entity.h>
-#include <fluxgl/ecs/systems/render_system.h>
 
-#include <fluxgl/ecs/components/transform.h>
-#include <fluxgl/ecs/components/camera.h>
-#include <fluxgl/ecs/components/mesh_renderer.h>
-#include <fluxgl/ecs/components/light.h>
-#include <fluxgl/ecs/components/ui_transform.h>
-#include <fluxgl/ecs/components/ui_rect.h>
-#include <fluxgl/ecs/components/ui_text.h>
+#include <fluxgl/core/transform.h>
 
 #include <fluxgl/ui/font.h>
+#include <fluxgl/ui/ui_transform.h>
+#include <fluxgl/ui/ui_rect.h>
+#include <fluxgl/ui/ui_text.h>
+
 #include <fluxgl/graphics/renderer.h>
 #include <fluxgl/graphics/debug_renderer.h>
+#include <fluxgl/graphics/render_system.h>
+#include <fluxgl/graphics/camera.h>
+#include <fluxgl/graphics/mesh_renderer.h>
+#include <fluxgl/graphics/light.h>
 
 namespace fluxgl {
     void RenderSystem::onUpdate(fluxgl::Scene& scene, float dt) {

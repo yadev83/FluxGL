@@ -3,7 +3,7 @@
 #include <fluxgl/ecs/registry.h>
 #include <fluxgl/ecs/entity.h>
 
-#include <fluxgl/ecs/components/ui_transform.h>
+#include <fluxgl/ui/ui_transform.h>
 #include <fluxgl/math/aabb.h>
 
 #include <json/json.h>

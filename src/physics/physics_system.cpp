@@ -1,6 +1,6 @@
-#include <fluxgl/ecs/systems/physics_system.h>
+#include <fluxgl/physics/physics_system.h>
 #include <fluxgl/graphics/debug_renderer.h>
-#include <fluxgl/ecs/components/facing.h>
+#include <fluxgl/physics/facing.h>
 #include <fluxgl/core/scene.h>
 #include <fluxgl/core/log.h>
 

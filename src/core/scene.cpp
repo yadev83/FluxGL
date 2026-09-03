@@ -2,10 +2,10 @@
 #include <fluxgl/core/log.h>
 #include <fluxgl/core/scene.h>
 #include <fluxgl/ecs/entity.h>
-#include <fluxgl/ecs/components/transform.h>
-#include <fluxgl/ecs/components/sprite.h>
-#include <fluxgl/ecs/components/box_collider.h>
-#include <fluxgl/ecs/components/rigidbody.h>
+#include <fluxgl/core/transform.h>
+#include <fluxgl/physics/box_collider.h>
+#include <fluxgl/physics/rigidbody.h>
+#include <fluxgl/graphics/sprite.h>
 #include <fluxgl/ecs/behavior.h>
 
 namespace fluxgl {

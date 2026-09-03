@@ -1,12 +1,12 @@
-#include <fluxgl/ecs/systems/ui_system.h>
+#include <fluxgl/ui/ui_system.h>
 #include <fluxgl/core/scene.h>
 #include <fluxgl/core/app.h>
 #include <fluxgl/core/log.h>
 
 #include <fluxgl/graphics/renderer.h>
-#include <fluxgl/ecs/components/ui_transform.h>
-#include <fluxgl/ecs/components/ui_collider.h>
-#include <fluxgl/ecs/components/ui_button.h>
+#include <fluxgl/ui/ui_transform.h>
+#include <fluxgl/ui/ui_collider.h>
+#include <fluxgl/ui/ui_button.h>
 
 namespace fluxgl {
     void UISystem::onUpdate(Scene& scene, float dt) {

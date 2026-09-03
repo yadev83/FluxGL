@@ -5,7 +5,7 @@
 #include <json/json.h>
 #include <fluxgl/ecs/registry.h>
 #include <fluxgl/ecs/entity.h>
-#include <fluxgl/ecs/components/transform.h>
+#include <fluxgl/core/transform.h>
 #include <fluxgl/math/aabb.h>
 
 namespace fluxgl {

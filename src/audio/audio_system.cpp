@@ -1,5 +1,5 @@
-#include <fluxgl/ecs/systems/audio_system.h>
-#include <fluxgl/ecs/components/audio_source.h>
+#include <fluxgl/audio/audio_system.h>
+#include <fluxgl/audio/audio_source.h>
 
 #include <fluxgl/ecs/entity.h>
 #include <fluxgl/core/scene.h>

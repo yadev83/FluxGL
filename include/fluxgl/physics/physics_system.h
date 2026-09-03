@@ -4,8 +4,8 @@
 
 #include <fluxgl/ecs/entity.h>
 #include <fluxgl/ecs/system.h>
-#include <fluxgl/ecs/components/rigidbody.h>
-#include <fluxgl/ecs/components/box_collider.h>
+#include <fluxgl/physics/rigidbody.h>
+#include <fluxgl/physics/box_collider.h>
 
 namespace fluxgl {
     using CollisionPair = std::pair<EntityID, EntityID>;

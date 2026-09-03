@@ -59,11 +59,11 @@ target_sources(FluxGL PRIVATE
     src/ecs/registry.cpp
     src/ecs/entity.cpp
     src/ecs/behavior.cpp
-    src/ecs/systems/render_system.cpp
-    src/ecs/systems/lifetime_system.cpp
-    src/ecs/systems/physics_system.cpp
-    src/ecs/systems/audio_system.cpp
-    src/ecs/systems/ui_system.cpp
+    src/graphics/render_system.cpp
+    src/physics/lifetime_system.cpp
+    src/physics/physics_system.cpp
+    src/audio/audio_system.cpp
+    src/ui/ui_system.cpp
     src/input/input_manager.cpp
     src/graphics/mesh.cpp
     src/graphics/shader.cpp

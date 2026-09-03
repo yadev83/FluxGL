@@ -1,5 +1,5 @@
-#include <fluxgl/ecs/systems/lifetime_system.h>
-#include <fluxgl/ecs/components/lifetime.h>
+#include <fluxgl/physics/lifetime_system.h>
+#include <fluxgl/physics/lifetime.h>
 #include <fluxgl/ecs/entity.h>
 #include <fluxgl/core/scene.h>
 

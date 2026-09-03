@@ -1,6 +1,6 @@
 #pragma once
 
-#include <fluxgl/ecs/components/sprite.h>
+#include <fluxgl/graphics/sprite.h>
 #include <glm/glm.hpp>
 #include "mesh.h"
 #include "material.h"
