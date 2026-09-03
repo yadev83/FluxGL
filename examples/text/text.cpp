@@ -11,9 +11,6 @@ class Text : public fluxgl::Scene {
 
     public:
         void onLoad() override {
-            registerSystem<fluxgl::RenderSystem>();
-            registerSystem<fluxgl::UISystem>();
-
             getContext().resourceManager.addResource<fluxgl::Font>("arial", fluxgl::Font::loadFromMemory(getContext().vfs.read("assets/fonts/arial.ttf"), 64));
             getContext().resourceManager.addResource<fluxgl::Shader>("text", fluxgl::Shader::defaultText());
             getContext().resourceManager.addResource<fluxgl::Shader>("ui", fluxgl::Shader::defaultUi());

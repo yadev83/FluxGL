@@ -16,8 +16,6 @@ class Scene3D : public fluxgl::Scene {
 
     public:
         void onLoad() override {
-            registerSystem<fluxgl::RenderSystem>();
-
             auto& resources = getContext().resourceManager;
             auto& vfs = getContext().vfs;
 

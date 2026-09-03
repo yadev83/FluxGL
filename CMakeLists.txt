@@ -62,6 +62,7 @@ target_sources(FluxGL PRIVATE
     src/graphics/render_system.cpp
     src/physics/lifetime_system.cpp
     src/physics/physics_system.cpp
+    src/physics/follow_system.cpp
     src/audio/audio_system.cpp
     src/ui/ui_system.cpp
     src/input/input_manager.cpp

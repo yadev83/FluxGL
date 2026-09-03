@@ -11,9 +11,6 @@ class Audio : public fluxgl::Scene {
 
     public:
         void onLoad() override {
-            registerSystem<fluxgl::RenderSystem>();
-            registerSystem<fluxgl::AudioSystem>();
-
             auto& resources = getContext().resourceManager;
             auto& vfs = getContext().vfs;
 

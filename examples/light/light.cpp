@@ -23,7 +23,6 @@ class Example : public fluxgl::Scene {
     public:
         void onLoad() override {
             const glm::vec3 ambientLightColor = {0.6f, 0.2f, 0.2f};
-            registerSystem<fluxgl::RenderSystem>();
             fluxgl::Renderer::setClearColor(0.4f * ambientLightColor);
 
             auto& resources = getContext().resourceManager;

@@ -1,6 +1,13 @@
 #include <fluxgl/core/scene_manager.h>
 #include <fluxgl/core/log.h>
 
+#include <fluxgl/graphics/render_system.h>
+#include <fluxgl/audio/audio_system.h>
+#include <fluxgl/physics/physics_system.h>
+#include <fluxgl/physics/lifetime_system.h>
+#include <fluxgl/physics/follow_system.h>
+#include <fluxgl/ui/ui_system.h>
+
 namespace fluxgl {
     SceneManager& SceneManager::get() {
         static SceneManager instance;
@@ -34,6 +41,15 @@ namespace fluxgl {
 
             m_currentScene = m_nextScene;
             m_currentScene->setContext(m_appContext);
+
+            // Register core engine systems
+            m_currentScene->registerSystem<RenderSystem>();
+            m_currentScene->registerSystem<PhysicsSystem>();
+            m_currentScene->registerSystem<Follow2DSystem>();
+            m_currentScene->registerSystem<LifetimeSystem>();
+            m_currentScene->registerSystem<UISystem>();
+
+            // Load Scene
             m_currentScene->onLoad();
             m_initialized = false;
             m_nextScene = nullptr;

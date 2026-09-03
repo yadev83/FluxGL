@@ -25,6 +25,7 @@
 #include "physics/rigidbody.h"
 #include "physics/box_collider.h"
 #include "physics/facing.h"
+#include "physics/follow.h"
 #include "audio/audio_source.h"
 #include "ui/ui_transform.h"
 #include "ui/ui_rect.h"
@@ -35,6 +36,7 @@
 #include "graphics/render_system.h"
 #include "physics/lifetime_system.h"
 #include "physics/physics_system.h"
+#include "physics/follow_system.h"
 #include "audio/audio_system.h"
 #include "ui/ui_system.h"
 
