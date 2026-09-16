@@ -46,12 +46,15 @@ namespace fluxgl {
     template<typename FirstT, typename... RestT>
     std::vector<Entity> Registry::query() {
         std::vector<Entity> result;
+        std::unordered_set<EntityID> seen;
 
         for(auto& [type, storage] : m_storages) {
             for(auto& [entityID, compPtr] : storage) {
                 if(!isAliveEntity(entityID)) continue; // Skip invalid entities for queries
+                if(seen.contains(entityID)) continue;  // Skip entities already returned by another storage
                 if(hasComponent<FirstT>(entityID) && (hasComponent<RestT>(entityID) && ...)) {
-                    result.push_back(Entity(entityID, this));                         
+                    seen.insert(entityID);
+                    result.push_back(Entity(entityID, this));
                 }
             }
         }

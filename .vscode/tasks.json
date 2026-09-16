@@ -8,6 +8,18 @@
             "problemMatcher": []
         },
         {
+            "label": "configure release",
+            "type": "shell",
+            "command": "scripts/configure.sh Release",
+            "problemMatcher": []
+        },
+        {
+            "label": "configure tests",
+            "type": "shell",
+            "command": "scripts/configure-tests.sh Debug",
+            "problemMatcher": []
+        },
+        {
             "label": "build",
             "type": "shell",
             "command": "powershell",
@@ -21,12 +33,7 @@
             "group": {
                 "kind": "build",
                 "isDefault": true
-            }
-        },
-        {
-            "label": "configure release",
-            "type": "shell",
-            "command": "scripts/configure.sh Release",
+            },
             "problemMatcher": []
         },
         {
@@ -41,6 +48,38 @@
                 "cmake --build build/Release"
             ],
             "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "build tests",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-Command",
+                "cmake --build build/tests"
+            ],
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "run tests",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-Command",
+                "ctest --test-dir build/tests --output-on-failure"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
         },
         {
             "label": "clean",

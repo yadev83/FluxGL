@@ -2,8 +2,9 @@ cmake_minimum_required(VERSION 3.20)
 project(FluxGL)
 
 # Options
-option(FLUXGL_BUILD_EXAMPLES "Build examples" OFF)
+option(FLUXGL_BUILD_EXAMPLES "Build examples" ON)
 option(FLUXGL_PACK_ASSETS "Pack Assets" OFF)
+option(FLUXGL_BUILD_TESTS "Build unit tests" OFF)
 
 # Build type
 if(NOT CMAKE_BUILD_TYPE)
@@ -44,6 +45,9 @@ find_package(jsoncpp CONFIG REQUIRED)
 # Build the library
 add_library(FluxGL STATIC)
 add_library(FluxGL::FluxGL ALIAS FluxGL)
+
+# Enable debug rendering helpers inside the physics system (excluded from the core lib)
+target_compile_definitions(FluxGL PRIVATE FLUXGL_DEBUG_RENDER=1)
 
 target_sources(FluxGL PRIVATE
     src/math/aabb.cpp
@@ -91,6 +95,44 @@ target_link_libraries(FluxGL
         glm::glm
         JsonCpp::JsonCpp
 )
+
+# Core library without any OpenGL dependency, used by the unit tests
+add_library(fluxgl_core STATIC)
+target_compile_definitions(fluxgl_core PRIVATE FLUXGL_BUILD_CORE=1)
+
+target_sources(fluxgl_core PRIVATE
+    src/math/aabb.cpp
+    src/core/error.cpp
+    src/core/log.cpp
+    src/core/scene.cpp
+    src/core/virtual_file_system.cpp
+    src/core/directory_storage_provider.cpp
+    src/ecs/registry.cpp
+    src/ecs/entity.cpp
+    src/ecs/behavior.cpp
+    src/physics/physics_system.cpp
+    src/physics/lifetime_system.cpp
+    src/physics/follow_system.cpp
+    src/input/input_manager.cpp
+)
+
+target_include_directories(fluxgl_core
+    PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+)
+
+target_link_libraries(fluxgl_core
+    PUBLIC
+        glfw
+        glm::glm
+        JsonCpp::JsonCpp
+)
+
+# Build unit tests
+if(FLUXGL_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()
 
 # Build tools
 add_subdirectory(tools)

@@ -8,6 +8,7 @@
     "jsoncpp",
     "miniaudio",
     "stb",
-    "drlibs"
+    "drlibs",
+    "doctest"
   ]
 }
