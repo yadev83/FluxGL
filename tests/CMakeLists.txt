@@ -21,4 +21,10 @@ target_link_libraries(fluxgl_tests PRIVATE
     doctest::doctest
 )
 
-add_test(NAME fluxgl_tests COMMAND fluxgl_tests)
+include(CTest)
+
+# doctestConfig.cmake n'inclut que les cibles → charger le module qui définit
+# doctest_discover_tests (indispensable pour lister chaque cas dans CTest)
+include("${doctest_DIR}/doctest.cmake")
+
+doctest_discover_tests(fluxgl_tests)
