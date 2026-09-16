@@ -21,6 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added a Facing2D component to track components directions. Has to be updated manually and is drawn by the physics system.
 - Added UIText, UITransform and UIRect components to allow for UI render. Positionned using screen pixels coordinates for UIs
 - Added UIButton component that detects hover and pressed states of a UITransform/UIContainer. Can be used to trigger actions in scenes and systems
+- Added UICollider component with AABB based hit testing. Used by the UISystem to compute hovered/pressed states
+- UITransform now supports anchor and pivot points (UIAlignment), and UIText supports auto-scaling (maxWidth/maxHeight) and multiline text
+- Added Follow2D component and Follow2DSystem to smoothly follow a target entity with offset, deadzone, smoothing and look-ahead
+- Core engine systems are now auto-registered by the SceneManager (RenderSystem, PhysicsSystem, Follow2DSystem, LifetimeSystem, UISystem). Manual registerSystem() calls in scenes are no longer required
+- Mouse to world utilities : Ray struct, Camera::screenPointToRay(), Camera::screenToWorldPoint(), Camera::screenToWorldPointOnPlane(), AABB::intersects(Ray) and PhysicsSystem::raycast()/raycastAll() for picking
+- Added Renderer::getViewportPosition() and Renderer::screenToViewport() helper methods
+- Entities can now be enabled/disabled (Entity::isEnabled()) and tagged (addTag()/hasTag()/removeTag())
 - App now loads an icon for the window automatically. It looks for the assets/img/icon.png file by default. Not parameterized yet
 - Window getFullscreenMode() and setFullscreenMode(bool) methods added
 
@@ -33,6 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - A lot of exceptions are now caught for easier debugging
   - Entity removal system and isAlive/isValid checks have been improved
 - Scene Manager now properly unloads entities/systems/components/behaviors on a new scene load
+- Headers have been reorganized thematically : ecs/components/* and ecs/systems/* were moved to graphics/, physics/, audio/, ui/ and core/. Include paths were updated accordingly. This is a breaking change for existing projects
+- The prefab system has been removed (prefab_loader, Scene::loadLevel, App prefab loading)
 
 ### Fixed
 
@@ -40,6 +49,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - OrthoCam worldWidth = 24 units by default. Height is calculated based on the aspect ratio.
 - Physics system mtvY sign is now properly used for grounded checks
 - Fixed a memory leak on texture::loadFromMemory()
+- Fixed BoxCollider2D size computation
+- Fixed UICollider pivot conversion
+- Fixed UIButton hover/collision detection
+- UI rendering now uses viewport dimensions instead of framebuffer dimensions (scales height as well) and fixes UI depth sorting
 
 ## [0.4.0] - 2026-02-25
 
