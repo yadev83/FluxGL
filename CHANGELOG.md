@@ -53,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed UICollider pivot conversion
 - Fixed UIButton hover/collision detection
 - UI rendering now uses viewport dimensions instead of framebuffer dimensions (scales height as well) and fixes UI depth sorting
+- Fixed memory leaks in the Registry : component and behavior allocations (new) are now properly deleted on removeComponent, entity destruction and registry clear. Scenes now free their systems on destruction and the SceneManager frees registered scenes at shutdown
 
 ## [0.4.0] - 2026-02-25
 

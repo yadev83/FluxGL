@@ -8,6 +8,7 @@ namespace fluxgl {
         auto& storage = m_storages[typeid(ComponentT)];
 
         if(storage.find(id) == storage.end()) {
+            m_deleters[typeid(ComponentT)] = [](void* ptr) { delete static_cast<ComponentT*>(ptr); };
             storage[id] = new ComponentT(std::forward<Args>(args)...);
         }
 
@@ -37,7 +38,9 @@ namespace fluxgl {
         if(!hasComponent<ComponentT>(id)) throw std::runtime_error("Registry::RemoveComponent: Component" + std::string(typeid(ComponentT).name()) + " not found for entity " + std::to_string(id));
 
         auto& storage = m_storages[typeid(ComponentT)];
-        storage.erase(id);
+        auto it = storage.find(id);
+        delete static_cast<ComponentT*>(it->second);
+        storage.erase(it);
     }
 
     template<typename FirstT, typename... RestT>

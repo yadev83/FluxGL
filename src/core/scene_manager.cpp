@@ -14,6 +14,13 @@ namespace fluxgl {
         return instance;
     }
 
+    SceneManager::~SceneManager() {
+        for(auto& [name, scene] : m_scenes) {
+            delete scene;
+        }
+        m_scenes.clear();
+    }
+
     void SceneManager::setContext(AppContext* appContext) { 
         m_appContext = appContext; 
     }

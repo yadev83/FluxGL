@@ -9,6 +9,10 @@
 #include <fluxgl/ecs/behavior.h>
 
 namespace fluxgl {
+    Scene::~Scene() {
+        clearSystems();
+    }
+
     Entity Scene::createEntity() { 
         return m_registry.createEntity();
     }

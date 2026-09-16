@@ -67,7 +67,7 @@ namespace fluxgl {
             void lateUpdateBehaviors(float dt);
             void renderBehaviors(float dt);
 
-            virtual ~Scene() = default;
+            virtual ~Scene();
             virtual void onLoad() {}
             virtual void onDestroy() {}
             virtual void onInit() {}

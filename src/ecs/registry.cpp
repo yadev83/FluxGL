@@ -14,6 +14,30 @@ namespace fluxgl {
         FLUXGL_LOG_DEBUG("Registry initialized.Available entities: " + std::to_string(m_availableIDs.size()));
     }
 
+    Registry::~Registry() {
+        deleteAllComponents();
+        deleteAllBehaviors();
+    }
+
+    void Registry::deleteAllComponents() {
+        for(auto& [type, storage] : m_storages) {
+            auto deleterIt = m_deleters.find(type);
+            for(auto& [id, ptr] : storage) {
+                if(deleterIt != m_deleters.end()) deleterIt->second(ptr);
+            }
+        }
+        m_storages.clear();
+    }
+
+    void Registry::deleteAllBehaviors() {
+        for(auto& [id, behaviors] : m_behaviors) {
+            for(Behavior* behavior : behaviors) {
+                delete behavior;
+            }
+        }
+        m_behaviors.clear();
+    }
+
     std::vector<std::type_index> Registry::getEntityComponentTypes(EntityID id) {
         std::vector<std::type_index> result;
         
@@ -80,11 +104,20 @@ namespace fluxgl {
 
         // Delete every storage / component associated with this id
         for(auto& [type, storage] : m_storages) {
-            if(storage.find(id) == storage.end()) continue;
-            storage.erase(id);
+            auto it = storage.find(id);
+            if(it == storage.end()) continue;
+            auto deleterIt = m_deleters.find(type);
+            if(deleterIt != m_deleters.end()) deleterIt->second(it->second);
+            storage.erase(it);
         }
         
-        // Remove behaviors and tags
+        // Delete behaviors then remove entries
+        auto behaviorIt = m_behaviors.find(id);
+        if(behaviorIt != m_behaviors.end()) {
+            for(Behavior* behavior : behaviorIt->second) {
+                delete behavior;
+            }
+        }
         m_behaviors.erase(id);
         m_tags.erase(id);
         m_states.erase(id);
@@ -105,9 +138,10 @@ namespace fluxgl {
 
     void Registry::clear() {
         FLUXGL_LOG_DEBUG("Registry::clear: Clearing all entities, components and behaviors");
+        
+        deleteAllComponents();
+        deleteAllBehaviors();
         m_states.clear();
-        m_storages.clear();
-        m_behaviors.clear();
         m_tags.clear();
         m_hierarchy.clear();
         m_entitiesToDelete.clear();

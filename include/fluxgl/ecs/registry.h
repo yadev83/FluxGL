@@ -6,6 +6,7 @@
 #include <set>
 #include <string>
 #include <sstream>
+#include <functional>
 
 #define FLUXGL_MAX_ENTITIES 10000
 
@@ -25,6 +26,8 @@ namespace fluxgl {
 
             // Map a type index to a componentStorage
             std::unordered_map<std::type_index, ComponentStorage> m_storages;
+            // Type-erased deleters used to free component memory on removal
+            std::unordered_map<std::type_index, std::function<void(void*)>> m_deleters;
             std::vector<std::type_index> getEntityComponentTypes(EntityID id); // Utils to grab entity component names
             // Map entities to behaviors
             std::unordered_map<EntityID, BehaviorStorage> m_behaviors;
@@ -39,9 +42,12 @@ namespace fluxgl {
             std::set<EntityID> m_entitiesToDelete;
             void removeEntity(EntityID id); // Remove entity from the registry
             void removeEntitiesMarkedForDestruction();
+            void deleteAllComponents(); // Free every component and behavior of the registry
+            void deleteAllBehaviors();
 
         public:
             Registry();
+            ~Registry();
             void dumpEntity(std::stringstream& ss, EntityID id, int depth = 0);
             std::string toString();
 

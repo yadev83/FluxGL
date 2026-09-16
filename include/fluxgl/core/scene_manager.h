@@ -28,6 +28,7 @@ namespace fluxgl {
             float m_fixedStepAcc = 0.0f;
 
             SceneManager() = default;
+            ~SceneManager();
 
         public:
             static SceneManager& get();
