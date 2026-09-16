@@ -68,6 +68,13 @@ Légende : `[x]` fait — `[ ]` à faire
 ## Qualité / release
 
 - [x] **Fix des fuites mémoire** : `removeComponent`, `removeEntity` et `clear()` ne `delete` pas les allocations `new` des composants/behaviors → fuites à chaque destruction de scène (restart = leak)
-- [ ] Tests unitaires sur la physique et le maths (raycast, AABB, character controller)
+- [ ] Tests unitaires sur le cœur du moteur **sans GL** (framework `doctest` via vcpkg) :
+  - [ ] Infra : cible statique `fluxgl_core` (ecs, math, core, physics, ui, input) sans dépendance GLFW/GLAD + option `FLUXGL_BUILD_TESTS` + CTest
+  - [ ] ECS : registry (IDs, capacité max, destruction différée, `clear()`), composants (add/get/has/remove, libération mémoire), `query`/tags, behaviors (init unique), hiérarchie
+  - [ ] Math : `AABB` (`contains`, `intersects`, raycast, cas perpendiculaires), `Transform` (model matrix, front/right/up)
+  - [ ] Physique : gravité (static/dynamic/kinematic), résolution AABB/MTV, événements enter/stay/exit, triggers, skip parent-enfant, `raycast`/`raycastAll`, `LifetimeSystem`, `Follow2DSystem`
+  - [ ] Core : `Scene` (serveurs de systèmes), `SceneManager` (transitions, fixed timestep), VFS + `DirectoryStorageProvider`
+  - [ ] UI / Input : `UITransform` (anchor/pivot), `InputManager` (pressed/released) — exécutables headless
+- [ ] CharacterController2D / One-way platforms / Tilemap : couverts par des tests d'intégration sur la physique une fois implémentés
 - [ ] Exemple "plateforme complet" minimal (saut, one-way, animation, tilemap, caméra) servant aussi de documentation vivante
 - [ ] Bump de version + date dans `CHANGELOG.md` et `vcpkg.json` pour la prochaine release
