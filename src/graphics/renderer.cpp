@@ -219,8 +219,8 @@ namespace fluxgl {
 
         shader->setUniform("u_Projection", glm::ortho(
             0.0f,
-            (float)(m_state.framebufferWidth),
-            (float)(m_state.framebufferHeight),
+            (float)(m_state.viewportWidth),
+            (float)(m_state.viewportHeight),
             0.0f,
             -1000.0f,
             1000.0f

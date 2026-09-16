@@ -140,7 +140,7 @@ namespace fluxgl {
             auto shader = resources.getResource<Shader>(rect.shader);
             auto texture = resources.getResource<Texture>(rect.texture);
 
-            auto position = transform.getComputedPosition(rect.size, Renderer::getFramebufferSize());
+            auto position = transform.getComputedPosition(rect.size, Renderer::getViewportSize());
             position.x += (rect.size.x * 0.5f);
             position.y += (rect.size.y * 0.5f);
 
@@ -183,7 +183,7 @@ namespace fluxgl {
             // Before printing text, compute the fontSize that we will be using if autoScale is set to match maxWidth
             float renderFontSize = text.getComputedFontSize(resources);
             TextMetrics textSz = font->measureText(text.text, renderFontSize);
-            auto textPosition = transform.getComputedPosition({textSz.width, textSz.height}, Renderer::getFramebufferSize());
+            auto textPosition = transform.getComputedPosition({textSz.width, textSz.height}, Renderer::getViewportSize());
 
             float cursorX = textPosition.x;
             float cursorY = textPosition.y + textSz.lineHeight;

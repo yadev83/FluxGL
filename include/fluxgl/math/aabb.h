@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "ray.h"
 
 namespace fluxgl {
     struct AABB {
@@ -9,5 +10,6 @@ namespace fluxgl {
 
         bool contains(const glm::vec2 point) const;
         bool intersects(const AABB& other) const;
+        bool intersects(const Ray& other, float& tHit) const;
     };
 }

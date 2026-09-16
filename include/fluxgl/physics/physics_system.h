@@ -1,6 +1,7 @@
 #pragma once
 
 #include <unordered_set>
+#include <optional>
 
 #include <fluxgl/ecs/entity.h>
 #include <fluxgl/ecs/system.h>
@@ -29,6 +30,12 @@ namespace fluxgl {
         glm::vec2 mtv;
     };
 
+    struct RaycastHit2D {
+        Entity entity;
+        float distance = 0.0f;
+        glm::vec3 point = glm::vec3(0.0f);
+    };
+
     class PhysicsSystem : public System {
         private:
             std::vector<CollisionEvent> m_collisionEvents;
@@ -43,5 +50,9 @@ namespace fluxgl {
             std::vector<CollisionEvent>& getCollisions();
             void onFixedUpdate(Scene& scene, float dt) override;
             void onLateUpdate(Scene& scene, float dt) override;
+
+            // Stateless methods that can be called manually
+            static std::optional<RaycastHit2D> raycast(Registry& registry, const Ray& ray, bool ignoreTriggers = true);
+            static std::vector<RaycastHit2D> raycastAll(Registry& registry, const Ray& ray, bool ignoreTriggers = true);
     };
 }

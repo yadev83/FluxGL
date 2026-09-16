@@ -193,4 +193,62 @@ namespace fluxgl {
             }
         }
     }
+
+    std::optional<RaycastHit2D> PhysicsSystem::raycast(Registry& registry, const Ray& ray, bool ignoreTriggers) {
+        auto collidables = registry.query<BoxCollider2D, Transform>();
+
+        bool found = false;
+        RaycastHit2D closest;
+        closest.distance = std::numeric_limits<float>::infinity();
+
+        for (auto e : collidables) {
+            if (!e.isEnabled()) continue;
+
+            auto& collider = e.getComponent<BoxCollider2D>();
+            if (ignoreTriggers && collider.isTrigger) continue;
+
+            auto& transform = e.getComponent<Transform>();
+            auto aabb = collider.getAABB(transform);
+
+            float t;
+            if (!aabb.intersects(ray, t)) continue;
+            if (t < 0.0f || t >= closest.distance) continue;
+
+            closest.entity = e;
+            closest.distance = t;
+            closest.point = ray.origin + ray.direction * t;
+            found = true;
+        }
+
+        if (!found) return std::nullopt;
+        return closest;
+    }
+
+    std::vector<RaycastHit2D> PhysicsSystem::raycastAll(Registry& registry, const Ray& ray, bool ignoreTriggers) {
+        auto collidables = registry.query<BoxCollider2D, Transform>();
+
+        std::vector<RaycastHit2D> hits;
+
+        for (auto e : collidables) {
+            if (!e.isEnabled()) continue;
+
+            auto& collider = e.getComponent<BoxCollider2D>();
+            if (ignoreTriggers && collider.isTrigger) continue;
+
+            auto& transform = e.getComponent<Transform>();
+            auto aabb = collider.getAABB(transform);
+
+            float t;
+            if (!aabb.intersects(ray, t)) continue;
+            if (t < 0.0f) continue;
+
+            hits.push_back({ e, t, ray.origin + ray.direction * t });
+        }
+
+        std::sort(hits.begin(), hits.end(), [](const RaycastHit2D& a, const RaycastHit2D& b) {
+            return a.distance < b.distance;
+        });
+
+        return hits;
+    }
 }
