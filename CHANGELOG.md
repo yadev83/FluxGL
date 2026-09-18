@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Entities can now be enabled/disabled (Entity::isEnabled()) and tagged (addTag()/hasTag()/removeTag())
 - App now loads an icon for the window automatically. It looks for the assets/img/icon.png file by default. Not parameterized yet
 - Window getFullscreenMode() and setFullscreenMode(bool) methods added
+- Unit tests on the engine core **without GL** using the `doctest` framework (via vcpkg) : static `fluxgl_core` target (ecs, math, core, physics, ui, input) with no GLFW/GLAD dependency, `FLUXGL_BUILD_TESTS` option and CTest discovery (`doctest_discover_tests` → 1 CTest case per doctest test case, 62 cases)
 
 ### Changed
 
@@ -54,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed UIButton hover/collision detection
 - UI rendering now uses viewport dimensions instead of framebuffer dimensions (scales height as well) and fixes UI depth sorting
 - Fixed memory leaks in the Registry : component and behavior allocations (new) are now properly deleted on removeComponent, entity destruction and registry clear. Scenes now free their systems on destruction and the SceneManager frees registered scenes at shutdown
+- Fixed `Registry::query` returning multi-component entities in duplicate (deduplication with `std::unordered_set`), detected by the new unit tests
 
 ## [0.4.0] - 2026-02-25
 

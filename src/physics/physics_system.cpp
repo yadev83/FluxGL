@@ -1,8 +1,13 @@
 #include <fluxgl/physics/physics_system.h>
-#include <fluxgl/graphics/debug_renderer.h>
-#include <fluxgl/physics/facing.h>
+#if defined(FLUXGL_DEBUG_RENDER)
+    #include <fluxgl/graphics/debug_renderer.h>
+    #include <fluxgl/physics/facing.h>
+#endif
 #include <fluxgl/core/scene.h>
 #include <fluxgl/core/log.h>
+
+#include <algorithm>
+#include <limits>
 
 namespace fluxgl {
     bool PhysicsSystem::canBeMoved(RigidBodyType type) {
@@ -158,6 +163,7 @@ namespace fluxgl {
         }
     }
 
+    #if defined(FLUXGL_DEBUG_RENDER)
     void PhysicsSystem::onLateUpdate(Scene& scene, float dt) {
         auto& registry = scene.getRegistry();
         auto collidables = registry.query<BoxCollider2D, Transform>();
@@ -193,6 +199,11 @@ namespace fluxgl {
             }
         }
     }
+#else
+    void PhysicsSystem::onLateUpdate(Scene& scene, float dt) {
+        // Debug rendering is not compiled in the core library
+    }
+#endif
 
     std::optional<RaycastHit2D> PhysicsSystem::raycast(Registry& registry, const Ray& ray, bool ignoreTriggers) {
         auto collidables = registry.query<BoxCollider2D, Transform>();
