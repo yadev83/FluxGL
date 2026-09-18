@@ -34,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Roadmap déplacée dans `roadmaps/roadmap-v1.md` pour préparer l'accueil de plusieurs roadmaps (une par grande version du moteur)
+- Ajout de `roadmaps/ideas.md` pour les idées long terme (ex. doc Doxygen) et lien vers la roadmap/le changelog dans le README
 - Lifecycle is now a bit more precise with fixedUpdates and LateUpdates/RenderUpdates
 - Registry management has been upgraded with many improvements
   - EntityIDs are now limited to a fixed number (10000) and managed automatically by the system to avoid invalidities

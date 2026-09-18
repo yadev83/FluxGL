@@ -39,3 +39,9 @@ There are several build/configuration scripts available to you in the `scripts` 
 - `clean.sh`: Cleans the build artifacts.  
 
 If you are using Visual Studio Code, you can use the `tasks.json` commands to run the scripts in a more integrated way.
+
+## Documentation
+
+- [Roadmap v1 (platformer 2D)](roadmaps/roadmap-v1.md) — objectifs et état d'avancement de la prochaine version
+- [Idées long terme](roadmaps/ideas.md) — pistes à explorer au-delà de la v1
+- [Changelog](CHANGELOG.md) — historique des versions

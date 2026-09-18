@@ -21,7 +21,8 @@ FluxGL est un moteur graphique 2D/3D écrit en **C++23** avec **OpenGL** et **GL
 
 | Document | Chemin |
 |----------|--------|
-| Roadmap | `roadmap.md` |
+| Roadmap v1 (platformer 2D) | `roadmaps/roadmap-v1.md` |
+| Idées long terme | `roadmaps/ideas.md` |
 | Changelog | `CHANGELOG.md` |
 | Readme | `README.md` |
 | Version du package | `vcpkg.json` |
@@ -56,7 +57,7 @@ cd build/tests && ctest
 Quand une modification fait avancer le projet (nouvelle feature, fix, refactor significatif) :
 
 - **`CHANGELOG.md`** : ajouter une entrée dans la section `[Unreleased]` sous la catégorie appropriée (`Added`, `Changed`, `Fixed`). Suivre le format [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) et [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-- **`roadmap.md`** : cocher `[x]` l'item correspondant si la feature est implémentée, ou ajouter un nouvel item si nécessaire.
+- **`roadmaps/`** : cocher `[x]` l'item correspondant dans la roadmap active (actuellement `roadmaps/roadmap-v1.md`) si la feature est implémentée, ou ajouter un nouvel item si nécessaire.
 
 ### 2. Toujours faire tourner les tests
 
