@@ -82,3 +82,11 @@ Si une nouvelle feature touche le cœur du moteur (ECS, math, physique, UI, inpu
 - **Commenter les snippets complexes** : algorithmes non évidents, logique physique, ECS patterns, branches tricky
 - **Ne pas sur-commenter** : le code auto-explicatif (noms de variables/clairs, fonctions courtes) n'a pas besoin de commentaires
 - **Style** : commentaires en anglais, concis, expliquer le *pourquoi* pas le *quoi*
+
+### 5. Les idées intéressantes sont à noter
+
+Si une idée émerge mais qu'elle est hors-scope ou qu'on décide de la remettre à plus tard, la consigner dans le fichier `roadmaps/ideas.md` prévu à cet effet. Il sera ensuite dispatché sur des roadmaps plus précises
+
+### 6. Utilisation de git
+
+Créer une branche depuis `/dev` quand on attaque un gros bloc de développement et la nommer correctement (feature/ bug/) selon ce qu'elle envisage de faire. Les hotfix/ partiront exceptionnellement de `/master` et seront mergés à la fois dans dev/ et master/
